@@ -26,3 +26,48 @@ body {
 .content{
     height: 82%;
 }
+:root{
+    --primaryShadow: #0061CA;
+    --primaryBackground: transparent linear-gradient(0deg, #0279FF 0%, #00A3F3 100%);
+    --primaryBackgroundHover: transparent linear-gradient(0deg, #006BE4 0%, #02ACFF 100%);
+    --primaryColor : #fff;
+    --defaultBorder: #D0D4DF;
+    --defaultBackground: transparent linear-gradient(180deg, #FCFDFF 0%, #EAEEF5 100%);
+    --defaultShadow: #D0D4DF;
+    --defaultBackgroundHover: transparent linear-gradient(180deg, #FCFDFF 0%, #DEE5F1 100%);
+}
+
+.defaultBtn {
+    padding: 7px 20px;
+    box-shadow: inset 0 -1px 0 var(--defaultShadow);
+    background: var(--defaultBackground);
+    color: var(--defaultColor);
+    border: 1px solid var(--defaultBorder);
+    border-radius:5px;
+}
+
+.defaultBtn:hover {
+    background: var(--defaultBackgroundHover);
+    border: 1px solid var(--defaultBorder)
+}
+.primaryBtn{
+    padding: 7px 20px;
+    box-shadow: inset 0 -2px 0 var(--primaryShadow);
+    min-width: 31px;
+    width: auto;
+    text-decoration: none;
+    text-align: center;
+    appearance: none;
+    background: var(--primaryBackground);
+    color: var(--primaryColor);
+    border: 0;
+    border-radius: 5px;
+}
+.primaryBtn:hover{
+
+
+    box-shadow: inset 0 -2px 0 var(--primaryShadow);
+    background: var(--primaryBackgroundHover);
+    color: var(--primaryColor);
+    border: 0
+}
