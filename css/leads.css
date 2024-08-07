@@ -1,17 +1,45 @@
 .topRowDiv{
-    height: 10%;
+    height: 8%;
     display: flex;
     align-items: center;
 }
-.topRow{
+.topRow:first-child{
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: right;
+    justify-content: left;
     align-items: center;
     gap:2%;
-    margin-right: 2%;
+    margin-left: 2%;
 }
 li{
     list-style-type: none;
+}
+
+.createLeadContainer{
+    padding-top: 50px;
+    overflow: auto;
+    display: flex;
+    height: inherit;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+#createLeadForm{
+
+    height: 100%;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.form-elements{
+    width: 100%;
+    height: 40px;
+    margin: 5px 0px;
+    font-size: 16px;
+    padding-left: 15px;
+}
+.form-elements-div{
+    margin: 5px 0px;
 }

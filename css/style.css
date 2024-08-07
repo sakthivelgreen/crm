@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-
+:root{
+    --primaryShadow: #0061CA;
+    --primaryBackground: transparent linear-gradient(0deg, #0279FF 0%, #00A3F3 100%);
+    --primaryBackgroundHover: transparent linear-gradient(0deg, #006BE4 0%, #02ACFF 100%);
+    --primaryColor : #fff;
+    --defaultBorder: #D0D4DF;
+    --defaultBackground: transparent linear-gradient(180deg, #FCFDFF 0%, #EAEEF5 100%);
+    --defaultShadow: #D0D4DF;
+    --defaultBackgroundHover: transparent linear-gradient(180deg, #FCFDFF 0%, #DEE5F1 100%);
+}
 
 * {
     margin: 0;
@@ -26,16 +35,6 @@ body {
 .content{
     height: 82%;
 }
-:root{
-    --primaryShadow: #0061CA;
-    --primaryBackground: transparent linear-gradient(0deg, #0279FF 0%, #00A3F3 100%);
-    --primaryBackgroundHover: transparent linear-gradient(0deg, #006BE4 0%, #02ACFF 100%);
-    --primaryColor : #fff;
-    --defaultBorder: #D0D4DF;
-    --defaultBackground: transparent linear-gradient(180deg, #FCFDFF 0%, #EAEEF5 100%);
-    --defaultShadow: #D0D4DF;
-    --defaultBackgroundHover: transparent linear-gradient(180deg, #FCFDFF 0%, #DEE5F1 100%);
-}
 
 .defaultBtn {
     padding: 7px 20px;
@@ -48,7 +47,8 @@ body {
 
 .defaultBtn:hover {
     background: var(--defaultBackgroundHover);
-    border: 1px solid var(--defaultBorder)
+    border: 1px solid var(--defaultBorder);
+    cursor: pointer;
 }
 .primaryBtn{
     padding: 7px 20px;
@@ -64,10 +64,31 @@ body {
     border-radius: 5px;
 }
 .primaryBtn:hover{
-
-
     box-shadow: inset 0 -2px 0 var(--primaryShadow);
     background: var(--primaryBackgroundHover);
     color: var(--primaryColor);
-    border: 0
+    border: 0;
+    cursor: pointer;
+}
+
+.topRowDiv{
+    height: 8%;
+    display: flex;
+    align-items: center;
+}
+.topRow{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap:2%;
+    margin-right: 2%;
+}
+li{
+    list-style-type: none;
+}
+.errorInput {
+    border: red solid 1px;
+    color: red;
 }
