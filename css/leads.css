@@ -2,6 +2,7 @@
     height: 8%;
     display: flex;
     align-items: center;
+    box-shadow: 0px 0px 5px rgb(0,0,0,0.7) ;
 }
 .topRow:first-child{
     width: 100%;

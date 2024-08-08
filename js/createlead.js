@@ -16,13 +16,22 @@ const designationInput = document.querySelector("#designation");
 
 const leadCreateForm = document.querySelector("#createLeadForm");
 const saveLead = document.querySelector("#saveLeadBtn");
+const leadSaveandNew = document.querySelector("#btnSaveAndNew");
+
+let clicked = null;
 
 saveLead.addEventListener("click", () => {
+    clicked = 1;
     leadCreateForm.requestSubmit();
-
 })
+leadSaveandNew.addEventListener("click", () => {
+    clicked = 0;
+    leadCreateForm.requestSubmit();
+})
+leadCreateForm.addEventListener("submit", createLead)
 
-leadCreateForm.addEventListener("submit", (e) => {
+// Function add lead
+async function createLead(e) {
     e.preventDefault();
     let lastName = checkRequired(lastnameInput);
     let Email = checkRequired(emailInput);
@@ -41,10 +50,35 @@ leadCreateForm.addEventListener("submit", (e) => {
         address: Address,
         designation: Designation
     }
-    
-    console.log("listener");
-    // window.location.href = '/templates/leads.html'
-})
+    if (lastName && Email && Phone) {
+        try {
+            const leadFetch = await fetch("http://localhost:3000/lead", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newLead)
+            })
+            if(leadFetch.ok){
+                await showAlert("Lead Added Successfully");
+                clicked ? window.location.href = '/templates/leads.html' : window.location.href = "/templates/leads/createleads.html";
+            }else{
+                throw new Error('Failed to add lead: ' + leadFetch.statusText);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            await showAlert("Failed to add lead. Please try again.")
+        }
+    }
+    else{
+        await showAlert("Please Fill out Required Fields");
+    }
+       
+}
+function showAlert(message) {
+    return new Promise((resolve) => {
+        window.alert(message);
+        resolve();
+    });
+}
 
 function checkRequired(tag) {
     let val = tag.value;
@@ -66,7 +100,6 @@ function checkRequired(tag) {
 
         return val;
     }
-
 }
 
 
@@ -99,3 +132,4 @@ function checkemail(email, tag) {
     setSuccess(tag);
     return true;
 }
+
