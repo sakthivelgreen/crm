@@ -34,6 +34,7 @@ body {
 }
 .content{
     height: 82%;
+    width: 100%;
 }
 
 .defaultBtn {
@@ -90,5 +91,7 @@ li{
 }
 .errorInput {
     border: red solid 1px;
-    color: red;
+}
+.errorInput::placeholder{
+    color:red;
 }

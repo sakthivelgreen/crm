@@ -1,23 +1,26 @@
-.topRowDiv{
+.topRowDiv {
     height: 8%;
     display: flex;
     align-items: center;
-    box-shadow: 0px 0px 5px rgb(0,0,0,0.7) ;
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.7);
+    background-color: #fff;
 }
-.topRow:first-child{
+
+.topRow:first-child {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: left;
     align-items: center;
-    gap:2%;
+    gap: 2%;
     margin-left: 2%;
 }
-li{
+
+li {
     list-style-type: none;
 }
 
-.createLeadContainer{
+.createLeadContainer {
     padding-top: 50px;
     overflow: auto;
     display: flex;
@@ -26,7 +29,21 @@ li{
     justify-content: center;
     align-items: center;
 }
-#createLeadForm{
+
+#body {
+    background-color: #EDF0F4;
+}
+
+.container {
+    height: 73%;
+}
+
+.spacing {
+    width: 100%;
+    height: 8%;
+}
+
+#createLeadForm {
 
     height: 100%;
     width: 350px;
@@ -34,13 +51,92 @@ li{
     flex-direction: column;
     gap: 5px;
 }
-.form-elements{
+
+.form-elements {
     width: 100%;
     height: 40px;
     margin: 5px 0px;
     font-size: 16px;
     padding-left: 15px;
 }
-.form-elements-div{
+
+.form-elements-div {
     margin: 5px 0px;
+}
+
+.leadContainer {
+
+    padding: 1% 2%;
+    height: 100%;
+    width: 100%;
+    gap: 1%;
+    display: flex;
+    overflow-x: scroll;
+}
+
+#filterContainer {
+    background-color: #fff;
+    border-radius: 15px 15px 0px 0px;
+    /* border: 2px solid royalblue; */
+    width: 30%;
+    height: 100%;
+    display: block;
+    transition: width 0.5s ease;
+    overflow: hidden;
+}
+
+#leadListContainer {
+    background-color: #fff;
+    border-radius: 15px 15px 0px 0px;
+    width: 100%;
+    overflow: scroll;
+    height: 100%;
+    display: block;
+    /* border: 2px saddlebrown solid; */
+}
+
+#filter {
+    border: 1px solid black;
+    padding: 2px;
+    padding-left: 3px;
+    border-radius: 5px;
+}
+
+#filter:hover,
+.active {
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.7) inset;
+}
+
+#leadListTable {
+    background-color: #fff;
+    border-collapse: collapse;
+    width: 100%;
+
+}
+
+#leadListTable thead th {
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+}
+
+#leadListTable tr,
+#leadListTable thead th {
+    box-shadow: 1px 1px 1px rgb(0, 0, 0, 0.1);
+}
+
+#leadListTable tr:hover {
+    background-color: #f7f9fb;
+    color: #338cf0;
+}
+
+#leadListTable td,
+#leadListTable thead th {
+    /* border: 1px solid #ddd; */
+
+    padding: 8px;
+}
+
+#leadListTable span {
+    cursor: pointer;
 }

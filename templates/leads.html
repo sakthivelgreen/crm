@@ -4,36 +4,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/leads.css">
+    <link rel="stylesheet" href="/css/style.css">
     <title>Leads</title>
 </head>
 
-<body>
+<body id="body">
     <div class="nav">
         <object class="navObject" data="/templates/header.html" type="text/html" name="nav"></object>
     </div>
     <div class="topRowDiv">
         <ul class="topRow">
             <li>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="110 80 20 10" width="30" height="30">
+                <svg class="active" viewBox="110 80 20 10" width="30" height="30" id="filter">
                     <path style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:10"
                         d="m116.7 85.9-5-6.2h14l-5 6v4.1l-4 3z" />
                 </svg>
             </li>
             <li><select class="defaultBtn" name="leadFileter" id="leadFilter">
-                <option value="allLeads" selected>All Leads</option>
-            </select></li>
+                    <option value="allLeads" selected>All Leads</option>
+                </select></li>
         </ul>
         <ul class="topRow">
             <li><button id="createLeadBtn" class="primaryBtn">Create Lead</button></li>
             <li><button class="defaultBtn">Actions</button></li>
         </ul>
     </div>
-    <div class="content">
-
+    <div class="container">
+        <div class="spacing"></div>
+        <div class="leadContainer">
+            <div id="filterContainer"></div>
+            <div id="leadListContainer">
+                <table id="leadListTable"></table>
+            </div>
+        </div>
     </div>
-    <script src="/js/leads.js"></script>
+    <script src="/js/leads.js" defer></script>
 </body>
 
 </html>
