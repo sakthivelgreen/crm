@@ -1,0 +1,144 @@
+#ListContainer {
+    background-color: #EDF0F4;
+}
+
+.kanbanView {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    position: relative;
+    overflow: auto;
+    padding: 10px;
+}
+
+.stages {
+    border-radius: 5px;
+    flex-shrink: 0;
+    position: relative;
+    min-height: 100%;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.stageTitleDiv {
+    border-radius: 5px 5px 0 0;
+    padding: 10px;
+    position: relative;
+    width: 100%;
+    height: 15%;
+    background-color: #afe0ebac;
+    border-top: 4px solid #87d8ebac;
+}
+
+.stageDetailsDiv {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.stageDetailsDiv>span {
+    font-size: 14px;
+}
+
+.scorePercentage {
+    position: relative;
+    padding: 0px 10px;
+}
+
+.scorePercentage::before {
+    content: " ";
+    height: 3px;
+    width: 3px;
+    position: absolute;
+    background-color: #726f6f;
+    left: 0;
+    bottom: 25%;
+    border-radius: 50%;
+}
+
+.stageTitleDiv.success {
+    border-top: 4px solid mediumseagreen;
+    background-color: lightgreen;
+}
+
+.stageTitleDiv.reject {
+    border-top: 4px solid #F34040;
+    background-color: #F08080;
+}
+
+.stageBodyDiv {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: auto;
+    border-radius: 5px;
+}
+
+.stageBodyDiv.noContent {
+    flex: 1;
+    display: flex;
+    background-color: #e1e6ec;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.count {
+    padding: 0px 5px;
+    border-radius: 50%;
+    background-color: #6eb7db;
+}
+
+.count.success {
+    background-color: mediumseagreen;
+}
+
+.count.reject {
+    background-color: #F34040;
+}
+
+.dealsBox:hover {
+    background-color: #fffffc;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+}
+
+.dealsBox {
+    cursor: move;
+    background-color: #fffffd;
+    border-radius: 5px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    height: max-content;
+}
+
+.dealsBox span:not(:empty) {
+    padding: 2px;
+}
+
+.dealsBox:hover .dealaccount,
+.dealsBox:hover .dealname,
+.dealsBox:hover .dealcontact {
+    color: #006BE4;
+}
+
+.dealname,
+.dealaccount,
+.dealcontact {
+    width: max-content;
+    cursor: pointer;
+}
+
+.dealclosingdate {
+    color: #F34040;
+}
+
+.dragging {
+    opacity: 0.9;
+}

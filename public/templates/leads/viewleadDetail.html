@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/leads.css">
+    <link rel="stylesheet" href="/css/viewDetail.css">
+    <title>View Lead</title>
+</head>
+
+<body id="body">
+    <div class="nav">
+        <object class="navObject" data="/templates/header.html" type="text/html" name="nav" width="100%"></object>
+    </div>
+    <div class="topRowDiv">
+        <ul class="topRow1">
+            <li>
+                <button id="backArrowBtn" class="defaultBtn">
+                    <svg height="25px" width="25px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.7 6.3l-4.4 4.4 4.4 4.4-1.4 1.4-5.6-5.6 5.6-5.6 1.4 1.4z" fill="currentColor" />
+                    </svg>
+                </button>
+            </li>
+
+        </ul>
+        <ul class="topRow2">
+            <li><button id="convertLead" class="defaultBtn">Convert</button></li>
+            <li><button id="editLead" class="defaultBtn">Edit</button></li>
+            <li><button class="defaultBtn options"><svg height="24px" width="24px" viewBox="0 0 24 24">
+                        <circle cx="6" cy="12" r="2" fill="currentColor" />
+                        <circle cx="12" cy="12" r="2" fill="currentColor" />
+                        <circle cx="18" cy="12" r="2" fill="currentColor" />
+                    </svg></button>
+                <ul id="dropDown1">
+                    <li id="deleteBtn"><span>Delete</span></li>
+                    <hr>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="viewLeadContainer">
+            <div class="quickLink"></div>
+            <div class="viewLeadDetails">
+                <div class="overviewBar"></div>
+                <section class="details">
+                    <table id="leadTable"></table>
+                </section>
+                <section id="logs">
+
+                </section>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/js/leads/viewlead.js" defer></script>
+</body>
+
+</html>

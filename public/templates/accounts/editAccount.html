@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Account</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/leads.css">
+    <style>
+        #createAccountForm {
+            height: 100%;
+            width: 75%;
+            display: flex;
+            flex-direction: row;
+            gap: 2%;
+            position: relative;
+        }
+
+        .contactList {
+            position: absolute;
+            width: 30%;
+            background-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            height: 250px;
+            overflow: auto;
+        }
+
+        .contactList>p {
+            padding: 10px;
+        }
+
+        .contactList>p:hover {
+            background-color: #f7f9fb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <object class="navObject" data="/templates/header.html" type="text/html" name="nav" width="100%"></object>
+    </div>
+    <div class="topRowDiv">
+        <ul class="topRow1">
+            <li>
+                <h3>Edit Account</h3>
+            </li>
+            <li><select name="layout" id="layoutSelect" class="defaultBtn">
+                    <option value="standard">Standard</option>
+                </select></li>
+            <li><a href="#">Edit Page Layout</a></li>
+        </ul>
+        <ul class="topRow2">
+            <li><button class="defaultBtn" id="cancelBtn">Cancel</button></li>
+            <li><button class="defaultBtn" id="btnSaveAndNew">Save and New</button></li>
+            <li><button id="saveAccountBtn" class="primaryBtn" type="button">Save</button></li>
+        </ul>
+    </div>
+    <div class="content">
+
+        <div class="createAccountContainer">
+            <form id="createAccountForm">
+                <div class="Organization">
+                    <div class="form-elements-div">
+                        <label for="companyname">Organisation Name</label>
+                        <input type="text" name="companyname" id="companyname" class="form-elements">
+                    </div>
+
+                    <div class="form-elements-div">
+                        <label for="orgEmail">Organisation Email</label>
+                        <input type="text" name="orgEmail" id="orgEmail" class="form-elements">
+                    </div>
+
+                    <div class="form-elements-div">
+                        <label for="orgphone">Telephone</label>
+                        <input type="text" name="orgphone" id="orgphone" class="form-elements" maxlength="10">
+                    </div>
+
+                    <div class="form-elements-div">
+                        <label for="address">Address</label>
+                        <textarea name="address" id="orgaddress" class="form-elements" cols="30" rows="50"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script src="/js/accounts/editAccount.js"></script>
+</body>
+
+</html>

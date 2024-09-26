@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nav</title>
+    <link rel="stylesheet" href="/css/meetings.css">
+</head>
+
+<body>
+    <nav>
+        <div class="left">
+            <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
+                        src="/static/newMeetingIconWithName.png"></a></span>
+        </div>
+        <div class="right">
+            <button id="createMeetingButton">Create Meeting</button>
+        </div>
+        <a href="/templates/meetings/createMeetings.html" target="_parent" hidden id="link"></a>
+    </nav>
+    <script>
+        document.querySelector('#createMeetingButton').addEventListener("click", () => {
+            document.querySelector('#link').click();
+        })
+    </script>
+</body>
+
+</html>

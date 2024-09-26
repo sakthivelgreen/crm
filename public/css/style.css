@@ -1,0 +1,355 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+:root {
+    --primaryShadow: #0061CA;
+    --primaryBackground: transparent linear-gradient(0deg, #0279FF 0%, #00A3F3 100%);
+    --primaryBackgroundHover: transparent linear-gradient(0deg, #006BE4 0%, #02ACFF 100%);
+    --primaryColor: #fff;
+    --defaultBorder: #D0D4DF;
+    --defaultBackground: transparent linear-gradient(180deg, #FCFDFF 0%, #EAEEF5 100%);
+    --defaultShadow: #D0D4DF;
+    --defaultBackgroundHover: transparent linear-gradient(180deg, #FCFDFF 0%, #DEE5F1 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Open Sans", sans-serif;
+
+}
+
+
+body {
+    height: 100vh;
+    width: 100vw;
+    min-width: 768px;
+}
+
+.navObject {
+    background-color: #313949;
+    height: 100%;
+    width: 100%
+}
+
+.nav {
+    height: 8%;
+}
+
+.content {
+    height: 82%;
+    width: 100%;
+}
+
+.defaultBtn {
+    max-height: 32px;
+    padding: 7px 20px;
+    box-shadow: inset 0 -1px 0 var(--defaultShadow);
+    background: var(--defaultBackground);
+    color: var(--defaultColor);
+    border: 1px solid var(--defaultBorder);
+    border-radius: 5px;
+}
+
+.defaultBtn:hover {
+    background: var(--defaultBackgroundHover);
+    border: 1px solid var(--defaultBorder);
+    cursor: pointer;
+}
+
+.primaryBtn {
+    max-height: 32px;
+    padding: 7px 20px;
+    box-shadow: inset 0 -2px 0 var(--primaryShadow);
+    min-width: 31px;
+    width: auto;
+    text-decoration: none;
+    text-align: center;
+    appearance: none;
+    background: var(--primaryBackground);
+    color: var(--primaryColor);
+    border: 0;
+    border-radius: 5px;
+}
+
+.primaryBtn:hover {
+    box-shadow: inset 0 -2px 0 var(--primaryShadow);
+    background: var(--primaryBackgroundHover);
+    color: var(--primaryColor);
+    border: 0;
+    cursor: pointer;
+}
+
+.Container {
+
+    padding: 1% 2%;
+    height: 95%;
+    width: 100%;
+    gap: 1%;
+    display: flex;
+    overflow-x: scroll;
+}
+
+#filterContainer {
+    background-color: #fff;
+    border-radius: 15px 15px 0px 0px;
+    /* border: 2px solid royalblue; */
+    width: 30%;
+    height: 100%;
+    display: block;
+    transition: width 0.5s ease;
+    overflow: hidden;
+    padding: 2%;
+}
+
+#filterContainer>ul {
+    width: 100%;
+}
+
+#filterContainer ul li {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#ListContainer {
+    background-color: #fff;
+    border-radius: 15px 15px 0px 0px;
+    width: 100%;
+    overflow: scroll;
+    height: 100%;
+    display: block;
+    /* border: 2px saddlebrown solid; */
+}
+
+#filter {
+    cursor: pointer;
+    border: 1px solid black;
+    padding: 2px;
+    padding-left: 3px;
+    border-radius: 5px;
+}
+
+#filter:hover,
+.active {
+    box-shadow: 0px 0px 4px rgb(0, 0, 0, 0.5) inset;
+}
+
+#body {
+    background-color: #EDF0F4;
+}
+
+.options {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topRowDiv {
+    height: 8%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.7);
+    background-color: #fff;
+}
+
+.topRowDiv {
+    height: 8%;
+    display: flex;
+    align-items: center;
+}
+
+.topRow1,
+.topRow2 {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 2%;
+    margin-left: 2%;
+}
+
+.topRow2 {
+    justify-content: right;
+    margin-right: 2%;
+}
+
+.optionsRow {
+    width: 100%;
+    display: none;
+    margin: 0 5%;
+    gap: 2%;
+}
+
+li {
+    list-style-type: none;
+}
+
+.errorInput {
+    border: red solid 1px;
+}
+
+.errorInput::placeholder {
+    color: red;
+}
+
+#backArrowBtn {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 1px solid black;
+    outline: 0;
+}
+
+#backArrowBtn:hover {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.7) inset;
+    cursor: pointer;
+}
+
+#dropDown1,
+#dropDown2 {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    text-align: left;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    z-index: 11;
+}
+
+#dropDown1 {
+    top: 16%;
+    right: 2%;
+}
+
+
+#dropDown1 li,
+#dropDown2 li {
+    cursor: pointer;
+    padding: 5px;
+    padding-left: 15px;
+}
+
+#dropDown1 li:hover,
+#dropDown2 li:hover {
+    background-color: #c7dfeb;
+}
+
+.spacing {
+    width: 100%;
+    height: 5%;
+}
+
+.mainContainer {
+    height: 80%;
+}
+
+#ListTable {
+    background-color: #fff;
+    border-collapse: collapse;
+    width: 100%;
+
+}
+
+#ListTable thead th {
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+}
+
+#ListTable tr,
+#ListTable thead th {
+    box-shadow: 1px 1px 1px rgb(0, 0, 0, 0.1);
+}
+
+#ListTable tr:hover {
+    background-color: #f7f9fb;
+    color: #338cf0;
+}
+
+#ListTable td,
+#ListTable thead th {
+    /* border: 1px solid #ddd; */
+    padding: 8px;
+}
+
+#ListTable span {
+    cursor: pointer;
+    padding: 5px;
+}
+
+#searchInput {
+    all: unset;
+    border: 1px solid black;
+    height: 30px;
+    border-radius: 5px;
+    padding-left: 30px;
+    font-size: 16px;
+    background-image: url("/static/search.png");
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position-y: center;
+    background-position-x: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+dialog {
+    padding: 2%;
+    position: absolute;
+    width: 50%;
+    top: 5%;
+    left: 25%;
+    border: 0;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.7);
+}
+
+dialog input {
+    height: 30px;
+    width: 100%;
+    margin: 10px 0px;
+}
+
+.dialogContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.disabled:hover {
+    cursor: not-allowed;
+    /* pointer-events: none; */
+    cursor: no-drop;
+}
+
+input,
+select {
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 5px;
+    outline: 0px;
+}
+
+input:required,
+select:required {
+    background-color: #fff;
+    border: 1px solid #000;
+    border-left: 3px solid red;
+    outline: 0px;
+    border-radius: 5px;
+}

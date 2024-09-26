@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Deal</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/leads.css ">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+    <dialog id="popUp"></dialog>
+
+    <div class="nav">
+        <object data="/templates/header.html" type="text/html" class="navObject" name="nav"></object>
+    </div>
+    <div class="topRowDiv">
+        <ul class="topRow1">
+            <li>
+                <h3>Create Deal</h3>
+            </li>
+            <li hidden><select name="layout" id="layoutSelect" class="defaultBtn">
+                    <option value="standard">Standard</option>
+                </select></li>
+            <li hidden><a href="#">Edit Page Layout</a></li>
+        </ul>
+        <ul class="topRow2">
+            <li><button class="defaultBtn" id="cancelBtn">Cancel</button></li>
+            <li><button class="defaultBtn" id="btnSaveAndNew">Save and New</button></li>
+            <li><button id="saveDealBtn" class="primaryBtn" type="button">Save</button></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="createDealContainer">
+            <form id="createAccountForm">
+                <div class="deal">
+                    <div class="form-elements-div">
+                        <label for="dealName">Deal Name</label>
+                        <input type="text" name="dealName" id="dealName" class="form-elements" required>
+                    </div>
+
+                    <div class="form-elements-div">
+                        <label for="dealOwner">Deal Owner</label>
+                        <input type="text" name="dealOwner" id="dealOwner" class="form-elements">
+                    </div>
+
+                    <div class="form-elements-div">
+                        <label for="amount">Amount</label>
+                        <input type="text" name="amount" id="amount" class="form-elements" maxlength="10" required>
+                    </div>
+
+                    <div class="form-elements-div">
+                        <label for="closingDate">Closing Date</label>
+                        <input type="text" name="closingDate" id="closingDate" class="form-elements" required>
+                    </div>
+                </div>
+                <div class="details">
+                    <div class="form-elements-div">
+                        <label for="contactPerson">Contact Person</label>
+                        <input type="text" name="contactPerson" id="contactPerson" class="form-elements" required>
+                        <div class="contactListDiv" style="display: none;">
+                            <ul id="contactsUL"></ul>
+                        </div>
+                    </div>
+                    <div class="form-elements-div">
+                        <label for="account">Account Name</label>
+                        <input type="text" name="account" id="account" class="form-elements">
+                        <div class="accountListDiv" style="display:none;">
+                            <ul id="accountsUL"></ul>
+                        </div>
+                    </div>
+                    <div class="form-elements-div">
+                        <label for="pipeline">Pipeline</label>
+                        <select name="pipeline" id="pipeline" class="form-elements">
+                        </select>
+                    </div>
+                    <div class="form-elements-div">
+                        <label for="stage">Stage</label>
+                        <select name="stage" id="stage" class="form-elements">
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/js/deals/createDeal.js" type="module" defer></script>
+
+</body>
+
+</html>
