@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
     try {
         const response = await axios.post("https://accounts.zoho.in/oauth/v2/token", null, {
             params: {
-                refresh_token: process.env.REFRESH_TOKEN,
+                refresh_token: process.env.ZOHO_MEETING_REFRESH_TOKEN,
                 client_id: process.env.CLIENT_ID,
                 client_secret: process.env.CLIENT_SECRET,
                 redirect_uri: process.env.REDIRECT_URI,
