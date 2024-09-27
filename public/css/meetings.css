@@ -5,12 +5,11 @@
 }
 
 body {
-    background-color: #fafafa;
+    background-color: #f5f8fd;
     height: 100vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 }
 
 nav {
@@ -74,9 +73,9 @@ a {
 }
 
 aside {
-    z-index: 100;
     position: relative;
     height: 100%;
+    min-width: 5em;
     width: 5em;
     color: white;
 }
@@ -88,24 +87,25 @@ aside>object {
 }
 
 main {
+    position: relative;
     height: 100%;
-    flex: 1;
     display: flex;
     flex-direction: column;
-    width: 100%;
+    flex: 1;
+    overflow: hidden;
 }
 
 .container {
     position: relative;
-    flex: 1;
     display: flex;
     margin: 0;
+    flex: 1;
 }
 
 #meetingMainElement>ul {
     position: relative;
     padding: 0px 1em;
-    background-color: #f1f1f1;
+    background-color: #f5f8fd;
     height: 3em;
     display: flex;
     align-items: center;
@@ -119,19 +119,23 @@ main {
     font-weight: bold;
 }
 
-#meetingMainElement ul li {
+
+.li.activeLink {
+    border-bottom: #0061CA 2px solid;
+}
+
+#meetingUpcomingPastUL li {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
 }
 
-.li.activeLink {
-    border-bottom: #0061CA 2px solid;
-}
-
-#upcomingMeetingsUL {
-    height: 100%;
+#upcomingMeetingsDiv {
+    padding-top: 25px;
+    position: relative;
+    width: 100%;
+    padding: 0 20px;
 }
 
 #createMeetingButton,
@@ -148,4 +152,109 @@ main {
 #createMeetingSubmitButton:hover {
     cursor: pointer;
     background: transparent linear-gradient(0deg, #006BE4 0%, #02ACFF 100%);
+}
+
+.meetingListItem {
+    margin: 10px 0px;
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 35px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.meetingListItem:hover {
+    cursor: pointer;
+    outline: #0279FF 1px solid;
+}
+
+.liDiv {
+    width: 230px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.liDiv:nth-child(2) {
+    flex-shrink: 3;
+    width: 150px;
+}
+
+.liDiv:first-child {
+    flex-shrink: 0;
+    width: 200px;
+}
+
+.liDiv:last-child {
+    width: 150px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#meetingStartButton {
+    all: unset;
+    padding: 3px 15px;
+    border: #006BE4 1px solid;
+    border-radius: 25px;
+    color: #006BE4;
+}
+
+#meetingStartButton:hover {
+    border: none;
+    outline: 1px solid #0279FF;
+    background: #016be5;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+#div1Meeting {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.dateAndTime {
+    display: flex;
+    flex-direction: column;
+}
+
+#meetingOptions {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+#meetingOptions:hover {
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+#upcomingMeetingList {
+    width: 100%;
+    flex: 1;
+}
+
+#presenterImage {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    margin: 10px;
+}
+
+#meetingsToday:not(:empty)::before {
+    content: "Today";
+}
+
+#meetingsTomorrow:not(:empty)::before {
+    content: "Tomorrow";
+}
+
+#meetingsThisMonth:not(:empty)::before {
+    content: "This Month";
+}
+
+.meetingsList {
+    margin-top: 10px;
 }

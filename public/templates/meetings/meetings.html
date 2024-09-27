@@ -23,13 +23,17 @@
             <object data="/templates/meetings/sidebar.html" type="text/html" name="meetingsidebar"></object>
         </aside>
         <main id="meetingMainElement">
-            <Ul>
+            <Ul id="meetingUpcomingPastUL">
                 <li class="li"><a href="/templates/meetings/meetings.html" id="upcomingMeetings">Upcoming</a>
                 </li>
                 <li class="li"><a href="/templates/meetings/pastmeetings.html" id="completedMeetings">Past</a></li>
             </Ul>
-            <div class="content" id="upcomingMeetingList">
-                <ul id="upcomingMeetingsUL"></ul>
+            <div id="upcomingMeetingList">
+                <div id="upcomingMeetingsDiv" class="UlMeetingListClass">
+                    <div id="meetingsToday" class="meetingsList"></div>
+                    <div id="meetingsTomorrow" class="meetingsList"></div>
+                    <div id="meetingsThisMonth" class="meetingsList"></div>
+                </div>
             </div>
         </main>
     </div>

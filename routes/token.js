@@ -19,8 +19,6 @@ router.post('/', async (req, res) => {
             }
         });
         const obj = response.data
-        console.log(obj.access_token);
-        res.cookie('token', obj.access_token, { httpOnly: true, secure: false, maxAge: 3600000 });
         res.json(obj);
     } catch (error) {
         res.json(error)

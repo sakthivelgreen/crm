@@ -11,7 +11,6 @@ router.use(async (req, res, next) => {
     Access_Token = req.cookies.token;
     if (!Access_Token) {
         let result = await token(req, res);
-        console.log(result);
         if (result.success) {
             Access_Token = result.token;
             next();
@@ -27,6 +26,7 @@ const token = async (req, res) => {
     try {
         let response = await axios.post(`${process.env.BASE_URL}/token`);
         let obj = response.data;
+        await res.cookie('token', obj.access_token, { httpOnly: true, secure: false, maxAge: 3600000 });
         return {
             "success": true,
             "token": obj.access_token

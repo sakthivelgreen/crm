@@ -20,9 +20,12 @@ export const anchorTags = {
 
 export const divElements = {
     upcomingMeetingsDiv: document.querySelector("#upcomingMeetingList"),
-    popup: document.querySelector("#popup")
+    popup: document.querySelector("#popup"),
+    upcomingMeetingsDiv: document.querySelector("#upcomingMeetingsDiv"),
+    meetingsToday: document.querySelector("#meetingsToday"),
+    meetingsTomorrow: document.querySelector("#meetingsTomorrow"),
+    meetingThisMonth: document.querySelector("#meetingsThisMonth")
 }
 
 export const ulElements = {
-    upcomingMeetingsUl: document.querySelector("#upcomingMeetingsUL")
 }
