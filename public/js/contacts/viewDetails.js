@@ -10,7 +10,7 @@ backBtn.addEventListener("click", () => {
 })
 
 
-let url = "http://127.0.0.1:3000/contacts/" + contactID;
+let url = "/mongodb/contacts/" + contactID;
 
 fetchContacts();
 
@@ -89,14 +89,14 @@ deleteContact.addEventListener("click", async (e) => {
     let confirmation = confirm("Are you sure? Delete Contact");
     if (confirmation) {
         try {
-            let response = await fetch("http://localhost:3000/accounts");
+            let response = await fetch("/mongodb/accounts");
             if (!response.ok) throw new Error(`Error Fetching accounts`);
             let accounts = await response.json()
             await Promise.all(accounts.map(async (account) => {
                 if (account.contacts.includes(contactID)) {
                     account.contacts = account.contacts.filter(id => id !== contactID)
                 }
-                let updateResponse = await fetch("http://localhost:3000/accounts/" + account.id, {
+                let updateResponse = await fetch("/mongodb/accounts/" + account.id, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",

@@ -19,7 +19,7 @@ const orgAddressInput = document.querySelector("#orgAddress");
 let errorSpan = document.querySelector("#accError");
 const contactSaveandNew = document.querySelector("#btnSaveAndNew");
 
-let url = "http://127.0.0.1:3000/contacts/" + contactID;
+let url = "/mongodb/contacts/" + contactID;
 fetchContacts();
 async function fetchContacts() {
     let contacts = [];
@@ -39,7 +39,7 @@ async function fetchContacts() {
 
         let response2;
         if (orgId.length !== 0) {
-            response2 = await fetch("http://127.0.0.1:3000/accounts/" + orgId)
+            response2 = await fetch("/mongodb/accounts/" + orgId)
             if (!response2.ok) throw new Error("Error in fetching account " + response2.statusText);
         }
         let org = response2 !== undefined ? await response2.json() : 0;
@@ -286,7 +286,7 @@ companynameInput.addEventListener("blur", () => {
 let accounts = async () => {
 
     try {
-        let response = await fetch("http://localhost:3000/accounts", {
+        let response = await fetch("/mongodb/accounts", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -406,7 +406,7 @@ createAccount.addEventListener("submit", (e) => {
 async function funPostAccount(obj, account, method, operation) {
     if (method === "POST") {
         try {
-            let response = await fetch("http://localhost:3000/accounts", {
+            let response = await fetch("/mongodb/accounts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -422,7 +422,7 @@ async function funPostAccount(obj, account, method, operation) {
         }
     } else if (method === "PUT") {
         try {
-            let response = await fetch("http://localhost:3000/accounts/" + account, {
+            let response = await fetch("/mongodb/accounts/" + account, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -434,7 +434,7 @@ async function funPostAccount(obj, account, method, operation) {
                 result["contacts"].push(obj);
             } else if (operation === "POP") result["contacts"].pop(obj);
             try {
-                let response2 = await fetch("http://localhost:3000/accounts/" + account, {
+                let response2 = await fetch("/mongodb/accounts/" + account, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",

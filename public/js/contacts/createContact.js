@@ -208,7 +208,7 @@ fieldSet.addEventListener("change", () => {
 
 async function funPostContact(newContact, method) {
     try {
-        const contactFetch = await fetch("http://localhost:3000/contacts", {
+        const contactFetch = await fetch("/mongodb/contacts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newContact)
@@ -235,7 +235,7 @@ async function funPostContact(newContact, method) {
 async function funPostAccount(obj, account, method) {
     if (method === 0) {
         try {
-            let response = await fetch("http://localhost:3000/accounts", {
+            let response = await fetch("/mongodb/accounts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -251,7 +251,7 @@ async function funPostAccount(obj, account, method) {
         }
     } else if (method === 1) {
         try {
-            let response = await fetch("http://localhost:3000/accounts/" + account, {
+            let response = await fetch("/mongodb/accounts/" + account, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -261,7 +261,7 @@ async function funPostAccount(obj, account, method) {
             let result = await response.json();
             result["contacts"].push(obj);
             try {
-                let response2 = await fetch("http://localhost:3000/accounts/" + account, {
+                let response2 = await fetch("/mongodb/accounts/" + account, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
@@ -323,7 +323,7 @@ companynameInput.addEventListener("blur", () => {
 let accounts = async () => {
 
     try {
-        let response = await fetch("http://localhost:3000/accounts", {
+        let response = await fetch("/mongodb/accounts", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"

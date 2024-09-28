@@ -9,7 +9,7 @@ const kanbanView = document.querySelector(".kanbanView");
 const view = document.querySelector("#view");
 let pipelinesArray;
 
-let dealsREST = new REST("http://localhost:3000/deals")
+let dealsREST = new REST("/mongodb/deals")
 let deals;
 dealsREST.get().then((obj) => {
     deals = obj;
@@ -19,13 +19,13 @@ dealsREST.get().then((obj) => {
 
 function display() {
     // for getting pipelines from resource server;
-    let getPipelineREST = new REST('http://localhost:3000/pipelines');
+    let getPipelineREST = new REST('/mongodb/pipelines');
     getPipelineREST.get().then((obj) => {
         pipelinesArray = obj;
 
         pipelinesArray.forEach(pipeline => {
             for (const pipelineName in pipeline) {
-                if (pipelineName === "id") continue;
+                if (pipelineName === "_id") continue;
                 const option = document.createElement("option");
                 option.value = pipelineName;
                 option.textContent = pipelineName.charAt(0).toUpperCase() + pipelineName.slice(1).toLowerCase();

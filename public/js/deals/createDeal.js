@@ -17,8 +17,8 @@ function formatDate(date) {
 
 // declarations
 
-let contacts = new REST("http://localhost:3000/contacts");
-let accounts = new REST("http://localhost:3000/accounts");
+let contacts = new REST("/mongodb/contacts");
+let accounts = new REST("/mongodb/accounts");
 
 const dateInput = document.querySelector("#closingDate");
 const cancelBtn = document.querySelector("#cancelBtn");
@@ -41,7 +41,7 @@ const contactsUL = document.querySelector("#contactsUL");
 cancelBtn.addEventListener("click", () => window.location.href = `/templates/deals.html`)
 
 // Getting Pipelines
-let piplines = new REST("http://localhost:3000/pipelines");
+let piplines = new REST("/mongodb/pipelines");
 piplines.get().then((obj) => {
     obj.forEach(data => {
         for (const pipeline in data) {
@@ -121,7 +121,7 @@ function createDeal(e) {
         contactID: contactId || "",
         accountID: accountId || ""
     }
-    let result = new REST("http://localhost:3000/deals");
+    let result = new REST("/mongodb/deals");
     if (dealName && dealAmount && dealContact && date !== "") {
         result.post(dealObj).then(() => {
             const message = document.createElement("span");

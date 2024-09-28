@@ -10,7 +10,7 @@ async function fetchContacts() {
     let Contacts = [];
     try {
         // Fetching Contacts from db.json
-        const response = await fetch("http://localhost:3000/contacts", {
+        const response = await fetch("/mongodb/contacts", {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
@@ -192,7 +192,7 @@ function processCheckBox(head, body) {
     const deleteBtn = document.querySelector("#deleteBtn"); // targetting delete button 
 
     let confirmDel;         // variable to get confirmation from user
-    let url = `http://localhost:3000/contact/?id=`;
+    let url = `/mongodb/contact/`;
 
 
     // delete button click event listener
@@ -217,7 +217,7 @@ function processCheckBox(head, body) {
 async function funDelete(param) {
     try {
         // Fetch all accounts
-        let response = await fetch("http://localhost:3000/accounts");
+        let response = await fetch("/mongodb/accounts");
         if (!response.ok) throw new Error(`Error fetching accounts: ${response.statusText}`);
         let accounts = await response.json();
 
@@ -226,7 +226,7 @@ async function funDelete(param) {
             if (account.contacts.includes(param)) {
                 account.contacts = account.contacts.filter(id => id !== param);
 
-                let updateResponse = await fetch(`http://localhost:3000/accounts/${account.id}`, {
+                let updateResponse = await fetch(`/mongodb/accounts/${account.id}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
@@ -239,7 +239,7 @@ async function funDelete(param) {
         }));
 
         // Delete the contact
-        let delFetch = await fetch(`http://localhost:3000/contacts/${param}`, {
+        let delFetch = await fetch(`/mongodb/contacts/${param}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" }
         });
