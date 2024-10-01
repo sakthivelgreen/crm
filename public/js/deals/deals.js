@@ -169,7 +169,7 @@ function dealsFunction(pipeline, stage, stageBody) {
         let dealVariable = deals[deal];
         if (deals[deal].dealpipeline === pipeline && deals[deal].dealstage === stage) {
             const dealDiv = document.createElement("div");
-            dealDiv.id = deals[deal].id;
+            dealDiv.id = deals[deal]._id;
             dealDiv.className = "dealsBox";
             dealDiv.draggable = "true";
             stageBody.appendChild(dealDiv);
@@ -248,10 +248,13 @@ function CheckData(id = null) {
 // Stage Update Function
 async function updateStage(id, stage) {
     for (const deal of deals) {
-        if (deal.id === id) {
+        if (deal._id === id) {
+            let obj = deal;
+            delete obj._id; // to store in mongodb id should not be given in update object because id cannot modified in MongoDB
             if (deal.dealstage !== stage) {
                 deal.dealstage = stage;
-                await dealsREST.put(id, deal).then((res) => {
+                console.log("Working", id, deal);
+                await dealsREST.put(id, obj).then((res) => {
                     return true;
                 })
             }

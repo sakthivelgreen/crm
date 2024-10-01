@@ -14,7 +14,16 @@
         <object class="navObject" data="/templates/header.html" type="text/html" name="nav" width="100%"></object>
     </div>
     <div class="meetingsNavbar">
-        <object data="/templates/meetings/navbar.html" type="text/html" name="meetingNav"></object>
+        <nav>
+            <div class="left">
+                <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
+                            src="/static/newMeetingIconWithName.png"></a></span>
+            </div>
+            <div class="right">
+                <button id="createWebinarButton" class="MeetingPrimaryButton">Create Webinar</button>
+            </div>
+            <a href="/templates/meetings/createMeetings.html" target="_parent" hidden id="link"></a>
+        </nav>
     </div>
     <div class="container">
         <aside>
