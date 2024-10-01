@@ -1,6 +1,8 @@
-import { anchorTags, buttons, forms, ulElements, divElements, popupElements, meetingModulePopupElements } from "../declarations.js";
 import REST from "../rest.js";
+import { anchorTags, buttons, forms, ulElements, divElements, popupElements, meetingModulePopupElements } from "../declarations.js";
+import { currDate, timeOptions, dateOptions, dateFormat, getTimeWithAMPM } from "../commonFunctions.js";
 anchorTags.upcomingMeetingsNav.parentElement.classList.add("activeLink");
+
 let meetingsObj = {};
 const getMeetings = async () => {
     try {
@@ -16,10 +18,10 @@ getMeetings()
         meetingsObj = meetingsObj.sort((a, b) => a.startTimeMillisec - b.startTimeMillisec);
     })
     .then(() => { listMeetings() })
-const hasNoChildNodes = [divElements.meetingsToday, divElements.meetingsTomorrow, divElements.meetingThisMonth].every(el => !el.hasChildNodes());
-if (hasNoChildNodes) {
-    divElements.upcomingMeetingsDiv.classList.add("no")
-}
+// const hasNoChildNodes = [divElements.meetingsToday, divElements.meetingsTomorrow, divElements.meetingThisMonth].every(el => !el.hasChildNodes());
+// if (hasNoChildNodes) {
+//     divElements.upcomingMeetingsDiv.classList.add("no")
+// }
 const listMeetings = () => {
     for (const meeting of meetingsObj) {
         if ((Date.now() - meeting.startTimeMillisec) < 0) {
@@ -113,7 +115,7 @@ let createMeetingForm =
     `<form >
         <div class="form-elements-div">
             <label for="meetingTopic">MeetingName</label>
-            <input type="text" name="meetingTopic" id="meetingTopic" class="form-elements">
+            <input type="text" name="meetingTopic" id="meetingTopic" class="form-elements" required>
         </div>
         <div class="form-elements-div">
             <label for="meetingAgenda">Agenda</label>
@@ -129,7 +131,7 @@ let createMeetingForm =
         </div>
         <div class="form-elements-div">
             <label for="meetingDurationHours">Duration</label>
-            <select id="meetingDurationHours></select> <span>hr</span>
+            <select id="meetingDurationHours"></select> <span>hr</span>
             <select id="meetingDurationMinutes"></select> <span>min</span>
         </div>
         <div class="form-elements-div">
@@ -145,6 +147,13 @@ let createMeetingForm =
 
 popupElements.meetingCreatePopupDiv.innerHTML = createMeetingForm;
 buttons.meetingCreateButton.addEventListener("click", (e) => {
+
+    // Set Default date and time as current
+    timeOptions.hour12 = false;
+    meetingModulePopupElements.meetingTime().value = dateFormat(currDate, timeOptions)
+    meetingModulePopupElements.meetingDate().value = dateFormat(currDate, dateOptions, 'en-US')
+
+    // Opening popup
     popupElements.meetingCreatePopupDiv.showModal();
 })
 
@@ -155,52 +164,8 @@ meetingModulePopupElements.closeMeetingCreateFormButton().addEventListener("clic
     }
     popupElements.meetingCreatePopupDiv.close()
 })
-//----------------------------------------------------------------------////
 
-
-// // Inject the form into the popup
-// popupElements.meetingCreatePopupDiv.innerHTML = createMeetingForm;
-
-// // Show the popup when the meeting create button is clicked
-// buttons.meetingCreateButton.addEventListener("click", () => {
-//     popupElements.meetingCreatePopupDiv.showModal();
-// });
-
-// // Function to add the close button event listener
-// function addCloseButtonListener() {
-//     const closeButton = document.getElementById("closeMeetingCreateFormButton");
-//     if (closeButton) {
-//         closeButton.addEventListener("click", () => {
-//             popupElements.meetingCreatePopupDiv.close();
-//         });
-//     } else {
-//         // Retry after 500 milliseconds until the button is available
-//         setTimeout(addCloseButtonListener, 500);
-//     }
-// }
-
-// // Start checking for the close button
-// addCloseButtonListener();
-
-// // Function to add the close button event listener
-// function addCloseButtonListener() {
-//     const closeButton = buttons.closeMeetingCreateFormButton();
-//     if (closeButton) {
-//         closeButton.addEventListener("click", () => {
-//             popupElements.meetingCreatePopupDiv.close();
-//         });
-//     } else {
-//         // Retry after a short delay until the button is available
-//         setTimeout(addCloseButtonListener, 500);
-//     }
-// }
-
-// // Start checking for the close button
-// addCloseButtonListener();
-
-//-------------------------------------------------------------------------------//
 // create Meeting
-
 // ------------------------- for Participants ----------------------------------//
 let ParticipantsEmail = [];
 meetingModulePopupElements.meetingParticipants().addEventListener("focus", () => {
@@ -246,10 +211,50 @@ function listParticipants() {
 
 // -------------------------- End Participants -----------------------------------//
 
-// -------------------------------for Time ---------------------------------------//
-let currDate = new Date();
-console.log(currDate.toLocaleTimeString());
+// --------------------------- Durations Tag ----------------------------------- //
 
-console.log(currDate.toLocaleTimeString());
+for (let index = 0; index < 24; index++) {
+    index.toString().padStart(2, '0')
+    let options = document.createElement("option");
+    options.value = index;
+    options.textContent = index;
+    meetingModulePopupElements.meetingDurationHours().appendChild(options);
+}
 
-meetingModulePopupElements.meetingTime().value = currDate.toLocaleTimeString()
+[0, 15, 30, 45].map(ele => {
+    ele = ele.toString().padStart(2, '0');
+    let options = document.createElement("option");
+    options.value = ele;
+    options.textContent = ele;
+    if (ele === "00") options.selected = true;
+    meetingModulePopupElements.meetingDurationMinutes().appendChild(options)
+})
+
+// --------------------------- End Duration ------------------------------------ //
+
+// ----------------------------- shedule Button ----------------------------------//
+meetingModulePopupElements.createMeetingSubmitButton().addEventListener("click", () => {
+    let participants = [];
+    if (ParticipantsEmail.length > 0) {
+        ParticipantsEmail.forEach(ele => {
+            participants.push({ "email": ele })
+        })
+    }
+    if (meetingModulePopupElements.meetingTopic().value !== "") {
+        let obj = {
+            "session": {
+                "topic": `${meetingModulePopupElements.meetingTopic().value}`,
+                "agenda": `${meetingModulePopupElements.meetingAgenda().value}`,
+                "presenter": 123456789,
+                "startTime": `${meetingModulePopupElements.meetingDate().value} ${getTimeWithAMPM(meetingModulePopupElements.meetingTime().value)}`,
+                "duration": 3600000,
+                "timezone": "Asia/Calcutta",
+                "participants": participants
+            }
+        }
+    } else {
+        alert("Fill the Required Fields");
+    }
+})
+
+// --------------------------- end Schedule Button ---------------------------//
