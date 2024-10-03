@@ -284,7 +284,7 @@ meetingModulePopupElements.createMeetingSubmitButton().addEventListener("click",
     } else {
         alert("Fill the Required Fields");
     }
-    participants.length > 0 ? obj.participants = participants : null
+    participants.length > 0 ? obj.session.participants = participants : null
     createMeeting(obj);
 })
 
