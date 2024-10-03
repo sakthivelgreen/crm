@@ -7,9 +7,11 @@
     <title>Meetings</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/meetings.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
+    <dialog id="meetingCreatePopup"></dialog>
     <div class="nav">
         <object class="navObject" data="/templates/header.html" type="text/html" name="nav" width="100%"></object>
     </div>
@@ -30,7 +32,7 @@
             <object data="/templates/meetings/sidebar.html" type="text/html" name="meetingsidebar"></object>
         </aside>
         <main id="meetingMainElement">
-            <Ul>
+            <Ul id="meetingUpcomingPastUL">
                 <li class="li"><a href="/templates/meetings/meetings.html" id="upcomingMeetings">Upcoming</a></li>
                 <li class="li"><a href="/templates/meetings/pastmeetings.html" id="completedMeetings">Past</a></li>
             </Ul>
@@ -39,7 +41,7 @@
             </div>
         </main>
     </div>
-
+    <script type="module" src="/js/meetings/pastmeetings.js"></script>
 </body>
 
 </html>

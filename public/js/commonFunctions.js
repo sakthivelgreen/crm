@@ -21,7 +21,6 @@ export const getTimeWithAMPM = (time) => {
     let date1 = new Date();
     date1.setHours(hour);
     date1.setMinutes(minute);
-    console.log(date1);
     let timeFormatted = new Intl.DateTimeFormat('en-US', {
         hour: '2-digit',
         minute: 'numeric',

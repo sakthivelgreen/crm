@@ -275,3 +275,134 @@ main {
 .meetingsList {
     margin-top: 10px;
 }
+
+.form-elements {
+    width: 100%;
+    height: 35px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.form-Buttons {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+}
+
+
+#participantsList li {
+    display: flex;
+    gap: 5px;
+    padding: 2px 10px;
+    border-radius: 15px;
+    border: 1px solid #9f9f9f;
+    background-color: #f3f3f3;
+    width: max-content;
+    height: min-content;
+}
+
+/* #participantsList:not(:empty) {
+    padding: 2px 0px;
+    display: flex;
+    flex-wrap: wrap;
+} */
+
+
+#participantsList li i:hover {
+    cursor: pointer;
+    color: #E62020;
+
+}
+
+#participantsList {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 10px 0px;
+    padding: 5px;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+#meetingParticipants {
+    height: min-content;
+    min-width: 100px;
+    margin: 0;
+    outline: none;
+    border: none;
+    flex: 1;
+}
+
+#addParticipants {
+    /* all: unset;
+    width: 15%;
+    outline: none;
+    border: none;
+    border-radius: 0;
+    border-left: 1px solid #000;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0px 5px 5px 0px; */
+    display: none;
+}
+
+/* #addParticipants:hover {
+    color: #fff;
+    background-color: #1560bd;
+} */
+
+#meetingCreatePopup {
+    height: 85vh;
+    padding: 20px;
+    background: #fff;
+    display: none;
+    position: absolute;
+    z-index: 9;
+    font-size: 14px;
+    width: 400px;
+    left: 35%;
+    top: 10%;
+    border-radius: 15px;
+    overflow: auto;
+}
+
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 8;
+
+}
+
+.hidden {
+    display: none;
+}
+
+.form-elements-div {
+    margin: 10px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.Duration {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Duration span {
+    width: 50%;
+}
+
+.Duration span select {
+    width: 70%;
+    height: 35px;
+    text-align: center;
+}

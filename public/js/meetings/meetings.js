@@ -1,6 +1,7 @@
 import REST from "../rest.js";
 import { anchorTags, buttons, forms, ulElements, divElements, popupElements, meetingModulePopupElements } from "../declarations.js";
 import { currDate, timeOptions, dateOptions, dateFormat, getTimeWithAMPM } from "../commonFunctions.js";
+
 anchorTags.upcomingMeetingsNav.parentElement.classList.add("activeLink");
 
 let meetingsObj = {};
@@ -123,47 +124,47 @@ let createMeetingForm =
         </div>
         <div class="form-elements-div">
             <label for="meetingDate">Date</label>
-            <input type="text" name="meetingDate" id="meetingDate" class="form-elements">
+            <input type="text" name="meetingDate" id="meetingDate" class="form-elements" required>
         </div>
         <div class="form-elements-div">
             <label for="meetingTime">Time</label>
-            <input type="time" name="meetingTime" id="meetingTime" class="form-elements">
+            <input type="time" name="meetingTime" id="meetingTime" class="form-elements" required>
         </div>
         <div class="form-elements-div">
-            <label for="meetingDurationHours">Duration</label>
-            <select id="meetingDurationHours"></select> <span>hr</span>
-            <select id="meetingDurationMinutes"></select> <span>min</span>
+        <label for="meetingDurationHours">Duration</label>
+            <div class="Duration">
+                <span><select id="meetingDurationHours"></select> hr</span>
+                <span><select id="meetingDurationMinutes"></select> min</span>
+            </div>
         </div>
         <div class="form-elements-div">
             <label for="meetingParticipants">Participants</label>
-            <input type="email" name="meetingParticipants" id="meetingParticipants" class="form-elements">
-            <button id="addParticipants" type="button" class="meetingSecondaryButton">Add</button>
-            <div id="participantsList" class="form-elements">
+            <div id="participantsList">
+                <input type="email" name="meetingParticipants" id="meetingParticipants" class="form-elements">
             </div>
+            <button id="addParticipants" type="button">Add</button>
         </div>
-        <button id="createMeetingSubmitButton" class="meetingPrimaryButton" type="button">Shedule</button>
-        <button id="closeMeetingCreateFormButton" class="meetingSecondaryButton" type="button">Cancel</button>
+        <div class="form-Buttons">
+            <button id="createMeetingSubmitButton" class="meetingPrimaryButton" type="button">Shedule</button>
+            <button id="closeMeetingCreateFormButton" class="meetingSecondaryButton" type="button">Cancel</button>
+        </div>
     </form >`;
 
 popupElements.meetingCreatePopupDiv.innerHTML = createMeetingForm;
 buttons.meetingCreateButton.addEventListener("click", (e) => {
-
-    // Set Default date and time as current
-    timeOptions.hour12 = false;
-    meetingModulePopupElements.meetingTime().value = dateFormat(currDate, timeOptions)
-    meetingModulePopupElements.meetingDate().value = dateFormat(currDate, dateOptions, 'en-US')
-
+    document.getElementById('backdrop').classList.remove('hidden');
     // Opening popup
-    popupElements.meetingCreatePopupDiv.showModal();
+    popupElements.meetingCreatePopupDiv.style.display = 'block';
 })
 
 meetingModulePopupElements.closeMeetingCreateFormButton().addEventListener("click", () => {
     document.querySelector('form').reset()
-    while (meetingModulePopupElements.participantsList().hasChildNodes()) {
-        meetingModulePopupElements.participantsList().removeChild(meetingModulePopupElements.participantsList().firstChild)
-    }
-    popupElements.meetingCreatePopupDiv.close()
+    removeAllParticipants();
+    ParticipantsEmail = [];
+    document.getElementById('backdrop').classList.add('hidden');
+    popupElements.meetingCreatePopupDiv.style.display = 'none';
 })
+
 
 // create Meeting
 // ------------------------- for Participants ----------------------------------//
@@ -183,8 +184,9 @@ function handleKeydown(e) {
 meetingModulePopupElements.addParticipants().addEventListener("click", (e) => {
 
     if (meetingModulePopupElements.meetingParticipants().value !== "" && !ParticipantsEmail.includes(meetingModulePopupElements.meetingParticipants().value)) {
+        meetingModulePopupElements.meetingParticipants().value = meetingModulePopupElements.meetingParticipants().value.trim();
         if (meetingModulePopupElements.meetingParticipants().validity.valid) {
-            ParticipantsEmail.push(meetingModulePopupElements.meetingParticipants().value);
+            ParticipantsEmail.push(meetingModulePopupElements.meetingParticipants().value.trim());
             listParticipants()
             meetingModulePopupElements.meetingParticipants().value = ""
             meetingModulePopupElements.meetingParticipants().focus()
@@ -195,38 +197,59 @@ meetingModulePopupElements.addParticipants().addEventListener("click", (e) => {
 })
 
 function listParticipants() {
-    while (meetingModulePopupElements.participantsList().hasChildNodes()) {
-        meetingModulePopupElements.participantsList().removeChild(meetingModulePopupElements.participantsList().firstChild)
-    }
+    removeAllParticipants();
     ParticipantsEmail.forEach(ele => {
         const i = document.createElement("i");
         i.textContent = "\u2716";
         const li = document.createElement("li");
         li.textContent = `${ele}`
         li.appendChild(i)
-        meetingModulePopupElements.participantsList().appendChild(li);
+        meetingModulePopupElements.participantsList().insertBefore(li, meetingModulePopupElements.participantsList().lastElementChild);
     })
-
+    removeParticipantsEventListener();
 }
+
+// ---------- function remove participants --------------------//
+
+const removeAllParticipants = () => {
+    let div = meetingModulePopupElements.participantsList();
+    let li = div.querySelectorAll('li');
+    li.forEach(item => {
+        item.remove();
+    })
+}
+const removeParticipantsEventListener = () => {
+    meetingModulePopupElements.participantsList().addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (e.target.tagName == 'I') {
+            let li = e.target.parentNode;
+            ParticipantsEmail = ParticipantsEmail.filter(ele => ele !== li.firstChild.textContent);
+            listParticipants()
+        }
+    })
+}
+
+
+// --------------- end reomve participants --------------------//
 
 // -------------------------- End Participants -----------------------------------//
 
 // --------------------------- Durations Tag ----------------------------------- //
 
 for (let index = 0; index < 24; index++) {
-    index.toString().padStart(2, '0')
     let options = document.createElement("option");
     options.value = index;
+    index = index.toString().padStart(2, '0')
     options.textContent = index;
     meetingModulePopupElements.meetingDurationHours().appendChild(options);
 }
 
 [0, 15, 30, 45].map(ele => {
-    ele = ele.toString().padStart(2, '0');
     let options = document.createElement("option");
     options.value = ele;
+    ele = ele.toString().padStart(2, '0');
     options.textContent = ele;
-    if (ele === "00") options.selected = true;
+    if (ele === "30") options.selected = true;
     meetingModulePopupElements.meetingDurationMinutes().appendChild(options)
 })
 
@@ -240,21 +263,62 @@ meetingModulePopupElements.createMeetingSubmitButton().addEventListener("click",
             participants.push({ "email": ele })
         })
     }
+    if (meetingModulePopupElements.meetingDurationHours().value == 0 && meetingModulePopupElements.meetingDurationMinutes().value == 0) {
+        alert("Duration cannot be 0!");
+        meetingModulePopupElements.meetingDurationMinutes().value = 30;
+        return;
+    }
+    let duration = (meetingModulePopupElements.meetingDurationHours().value * 60 * 60 * 1000) + (meetingModulePopupElements.meetingDurationMinutes().value * 60 * 1000)
+    let obj;
     if (meetingModulePopupElements.meetingTopic().value !== "") {
-        let obj = {
+        obj = {
             "session": {
                 "topic": `${meetingModulePopupElements.meetingTopic().value}`,
                 "agenda": `${meetingModulePopupElements.meetingAgenda().value}`,
-                "presenter": 123456789,
+                "presenter": 60030984640,
                 "startTime": `${meetingModulePopupElements.meetingDate().value} ${getTimeWithAMPM(meetingModulePopupElements.meetingTime().value)}`,
-                "duration": 3600000,
-                "timezone": "Asia/Calcutta",
-                "participants": participants
+                "duration": `${duration}`,
+                "timezone": "Asia/Calcutta"
             }
         }
     } else {
         alert("Fill the Required Fields");
     }
+    participants.length > 0 ? obj.participants = participants : null
+    createMeeting(obj);
 })
 
+// ---------------------- Main Function -----------------------//
+let MeetingApi = new REST('/meetings');
+const createMeeting = async (obj) => {
+    try {
+        console.log(obj);
+
+        MeetingApi.post(obj)
+            .then(() => {
+                popupElements.meetingCreatePopupDiv.style.display = 'none';
+                document.getElementById('backdrop').classList.add('hidden');
+                alert('Meeting Created');
+            })
+            .then(() => {
+                window.location.reload();
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+    } catch (e) {
+        throw new Error(`Error: ${e}`);
+    }
+}
+
+// ---------------------- End Main Function -------------------//
+
 // --------------------------- end Schedule Button ---------------------------//
+
+// --------------------------------- Date ------------------------------------//
+
+flatpickr(meetingModulePopupElements.meetingDate(), {
+    minDate: "today",
+    dateFormat: "M d, Y"
+})
+// ------------------------------- End Date ---------------------------------//
