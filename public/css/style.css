@@ -186,10 +186,6 @@ li {
     list-style-type: none;
 }
 
-.errorInput {
-    border: red solid 1px;
-}
-
 .errorInput::placeholder {
     color: red;
 }
@@ -352,4 +348,8 @@ select:required {
     border-left: 3px solid red;
     outline: 0px;
     border-radius: 5px;
+}
+
+.errorInput {
+    border: red solid 1px;
 }

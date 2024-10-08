@@ -2,6 +2,7 @@ export const forms = {
     meetingName: document.querySelector("#meetingTopic"),
     meetingKey: document.querySelector("#meetingKey"),
     meetingDueDate: document.querySelector("#meetingDate"),
+    meetingCreateForm: () => document.querySelector("#meetingCreateForm")
 }
 
 export const buttons = {

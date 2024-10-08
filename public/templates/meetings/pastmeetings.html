@@ -11,7 +11,8 @@
 </head>
 
 <body>
-    <dialog id="meetingCreatePopup"></dialog>
+    <div id="backdrop" class="backdrop hidden"></div>
+    <div id="meetingCreatePopup"></div>
     <div class="nav">
         <object class="navObject" data="/templates/header.html" type="text/html" name="nav" width="100%"></object>
     </div>
@@ -21,10 +22,7 @@
                 <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
                             src="/static/newMeetingIconWithName.png"></a></span>
             </div>
-            <div class="right">
-                <button id="createMeetingButton">Create Meeting</button>
-            </div>
-            <a href="/templates/meetings/createMeetings.html" target="_parent" hidden id="link"></a>
+            <div class="right"></div>
         </nav>
     </div>
     <div class="container">
@@ -32,10 +30,19 @@
             <object data="/templates/meetings/sidebar.html" type="text/html" name="meetingsidebar"></object>
         </aside>
         <main id="meetingMainElement">
-            <Ul id="meetingUpcomingPastUL">
-                <li class="li"><a href="/templates/meetings/meetings.html" id="upcomingMeetings">Upcoming</a></li>
-                <li class="li"><a href="/templates/meetings/pastmeetings.html" id="completedMeetings">Past</a></li>
-            </Ul>
+            <div class="nav2">
+                <div class="nav2Left">
+                    <Ul id="meetingUpcomingPastUL">
+                        <li class="li"><a href="/templates/meetings/meetings.html" id="upcomingMeetings">Upcoming</a>
+                        </li>
+                        <li class="li"><a href="/templates/meetings/pastmeetings.html" id="completedMeetings">Past</a>
+                        </li>
+                    </Ul>
+                </div>
+                <div class="nav2Right">
+                    <button id="createMeetingButton" class="MeetingPrimaryButton">Create Meeting</button>
+                </div>
+            </div>
             <div class="content">
 
             </div>

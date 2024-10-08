@@ -1,10 +1,10 @@
 import REST from "../rest.js";
-import { anchorTags, buttons, forms, ulElements, divElements, popupElements, meetingModulePopupElements } from "../declarations.js";
-import { currDate, timeOptions, dateOptions, dateFormat, getTimeWithAMPM } from "../commonFunctions.js";
+import { anchorTags, buttons, forms, divElements, popupElements, meetingModulePopupElements } from "../declarations.js";
+import { getTimeWithAMPM, inputValidationEmpty } from "../commonFunctions.js";
 
 anchorTags.upcomingMeetingsNav.parentElement.classList.add("activeLink");
 
-let meetingsObj = {};
+let meetingsObj;
 const getMeetings = async () => {
     try {
         let response = await axios.get(`/meetings`);
@@ -71,7 +71,6 @@ const meetingListItemStructure = (meeting) => {
                     <span id="meetingTime">${meeting.sTime}</span>
                 </div>
             </div>
-
             <div class="liDiv">
                 <span id="meetingTopic">${meeting.topic}</span>
             </div>
@@ -113,7 +112,7 @@ const imgUrl = (timePeriod) => {
 
 // Popup for create Meeting
 let createMeetingForm =
-    `<form >
+    `<form id='meetingCreateForm'>
         <div class="form-elements-div">
             <label for="meetingTopic">MeetingName</label>
             <input type="text" name="meetingTopic" id="meetingTopic" class="form-elements" required>
@@ -131,7 +130,7 @@ let createMeetingForm =
             <input type="time" name="meetingTime" id="meetingTime" class="form-elements" required>
         </div>
         <div class="form-elements-div">
-        <label for="meetingDurationHours">Duration</label>
+            <label for="meetingDurationHours">Duration</label>
             <div class="Duration">
                 <span><select id="meetingDurationHours"></select> hr</span>
                 <span><select id="meetingDurationMinutes"></select> min</span>
@@ -176,13 +175,21 @@ meetingModulePopupElements.meetingParticipants().addEventListener("blur", () => 
     meetingModulePopupElements.meetingParticipants().removeEventListener("keydown", handleKeydown);
 });
 function handleKeydown(e) {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" || e.key === ',') {
         meetingModulePopupElements.addParticipants().click();
         e.preventDefault();
     }
+    if (document.activeElement !== meetingModulePopupElements.meetingParticipants()) {
+        meetingModulePopupElements.addParticipants().click();
+        e.preventDefault();
+    }
+
+    if (meetingModulePopupElements.meetingParticipants().value === "" && e.keyCode === 8) {
+        ParticipantsEmail.pop();
+        listParticipants()
+    }
 }
 meetingModulePopupElements.addParticipants().addEventListener("click", (e) => {
-
     if (meetingModulePopupElements.meetingParticipants().value !== "" && !ParticipantsEmail.includes(meetingModulePopupElements.meetingParticipants().value)) {
         meetingModulePopupElements.meetingParticipants().value = meetingModulePopupElements.meetingParticipants().value.trim();
         if (meetingModulePopupElements.meetingParticipants().validity.valid) {
@@ -269,8 +276,16 @@ meetingModulePopupElements.createMeetingSubmitButton().addEventListener("click",
         return;
     }
     let duration = (meetingModulePopupElements.meetingDurationHours().value * 60 * 60 * 1000) + (meetingModulePopupElements.meetingDurationMinutes().value * 60 * 1000)
-    let obj;
-    if (meetingModulePopupElements.meetingTopic().value !== "") {
+    let obj, validity;
+    let form = forms.meetingCreateForm();
+    let inputs = form.querySelectorAll("input[required]");
+    console.log(inputs);
+
+    inputs.forEach((input) => {
+        validity = inputValidationEmpty(input)
+        console.log(validity);
+    })
+    if (!validity) {
         obj = {
             "session": {
                 "topic": `${meetingModulePopupElements.meetingTopic().value}`,
@@ -282,8 +297,11 @@ meetingModulePopupElements.createMeetingSubmitButton().addEventListener("click",
             }
         }
     } else {
-        alert("Fill the Required Fields");
+        console.log("hi");
+        return;
+
     }
+
     participants.length > 0 ? obj.session.participants = participants : null
     createMeeting(obj);
 })

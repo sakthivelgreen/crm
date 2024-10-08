@@ -12,39 +12,48 @@
 </head>
 
 <body>
-    <div id="backdrop" class="backdrop hidden"></div>
-    <div id="meetingCreatePopup"></div>
-    <div class="nav">
-        <object class="navObject" data="/templates/header.html" type="text/html" name="nav" width="100%"></object>
-    </div>
-    <div class="meetingsNavbar">
-        <nav>
-            <div class="left">
-                <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
-                            src="/static/newMeetingIconWithName.png"></a></span>
-            </div>
-            <div class="right">
-                <button id="createMeetingButton" class="MeetingPrimaryButton">Create Meeting</button>
-            </div>
-            <a href="/templates/meetings/createMeetings.html" target="_parent" hidden id="link"></a>
-        </nav>
-    </div>
-    <div class="container">
-        <aside>
-            <object data="/templates/meetings/sidebar.html" type="text/html" name="meetingsidebar"></object>
-        </aside>
-        <main id="meetingMainElement">
-            <Ul id="meetingUpcomingPastUL">
-                <li class="li"><a href="/templates/meetings/meetings.html" id="upcomingMeetings">Upcoming</a>
-                </li>
-                <li class="li"><a href="/templates/meetings/pastmeetings.html" id="completedMeetings">Past</a></li>
-            </Ul>
-            <div id="upcomingMeetingsDiv" class="UlMeetingListClass">
-                <div id="meetingsToday" class="meetingsList"></div>
-                <div id="meetingsTomorrow" class="meetingsList"></div>
-                <div id="meetingsThisMonth" class="meetingsList"></div>
-            </div>
-        </main>
+    <div class="wrapper">
+        <div id="backdrop" class="backdrop hidden"></div>
+        <div id="meetingCreatePopup"></div>
+        <div class="nav">
+            <object class="navObject" data="/templates/header.html" type="text/html" name="nav" width="100%"></object>
+        </div>
+        <div class="meetingsNavbar">
+            <nav>
+                <div class="left">
+                    <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
+                                src="/static/newMeetingIconWithName.png"></a></span>
+                </div>
+                <div class="right"></div>
+            </nav>
+        </div>
+        <div class="container">
+            <aside>
+                <object data="/templates/meetings/sidebar.html" type="text/html" name="meetingsidebar"></object>
+            </aside>
+            <main id="meetingMainElement">
+                <div class="nav2">
+                    <div class="nav2Left">
+                        <Ul id="meetingUpcomingPastUL">
+                            <li class="li"><a href="/templates/meetings/meetings.html"
+                                    id="upcomingMeetings">Upcoming</a>
+                            </li>
+                            <li class="li"><a href="/templates/meetings/pastmeetings.html"
+                                    id="completedMeetings">Past</a>
+                            </li>
+                        </Ul>
+                    </div>
+                    <div class="nav2Right">
+                        <button id="createMeetingButton" class="MeetingPrimaryButton">Create Meeting</button>
+                    </div>
+                </div>
+                <div id="upcomingMeetingsDiv" class="UlMeetingListClass">
+                    <div id="meetingsToday" class="meetingsList"></div>
+                    <div id="meetingsTomorrow" class="meetingsList"></div>
+                    <div id="meetingsThisMonth" class="meetingsList"></div>
+                </div>
+            </main>
+        </div>
     </div>
     <script src="/js/meetings/meetings.js" defer type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

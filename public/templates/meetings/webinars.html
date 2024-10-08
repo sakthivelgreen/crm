@@ -20,7 +20,6 @@
                             src="/static/newMeetingIconWithName.png"></a></span>
             </div>
             <div class="right">
-                <button id="createWebinarButton" class="MeetingPrimaryButton">Create Webinar</button>
             </div>
             <a href="/templates/meetings/createMeetings.html" target="_parent" hidden id="link"></a>
         </nav>
@@ -30,10 +29,19 @@
             <object data="/templates/meetings/sidebar.html" type="text/html" name="meetingsidebar"></object>
         </aside>
         <main id="meetingMainElement">
-            <Ul>
-                <li><a href="#" id="upcomingWebinars">Upcoming</a></li>
-                <li><a href="#" id="completedWebinars">Past</a></li>
-            </Ul>
+            <div class="nav2">
+                <div class="nav2Left">
+                    <Ul id="webinarUpcomingPastUL">
+                        <li class="li"><a href="#" id="upcomingWebinars">Upcoming</a>
+                        </li>
+                        <li class="li"><a href="#" id="completedWebinars">Past</a>
+                        </li>
+                    </Ul>
+                </div>
+                <div class="nav2Right">
+                    <button id="createWebinarButton" class="MeetingPrimaryButton">Create Webinar</button>
+                </div>
+            </div>
         </main>
     </div>
     <script type="module" src="/js/declarations.js" defer></script>

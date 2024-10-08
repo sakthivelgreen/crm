@@ -28,3 +28,13 @@ export const getTimeWithAMPM = (time) => {
     });
     return timeFormatted.format(date1);
 }
+
+export const inputValidationEmpty = (input) => {
+    if (input.value !== "") {
+        input.classList.remove('errorInput');
+        return false;
+    } else {
+        input.classList.add('errorInput');
+        return true;
+    }
+}
