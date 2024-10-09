@@ -1,6 +1,6 @@
 import REST from "../rest.js";
 import { anchorTags, buttons, forms, divElements, popupElements, meetingModulePopupElements } from "../declarations.js";
-import { getTimeWithAMPM, inputValidationEmpty } from "../commonFunctions.js";
+import { currDate, getTimeWithAMPM, inputValidationEmpty } from "../commonFunctions.js";
 
 anchorTags.upcomingMeetingsNav.parentElement.classList.add("activeLink");
 
@@ -23,13 +23,13 @@ getMeetings()
 // if (hasNoChildNodes) {
 //     divElements.upcomingMeetingsDiv.classList.add("no")
 // }
-const listMeetings = () => {
+const listMeetings = async () => {
     for (const meeting of meetingsObj) {
         if ((Date.now() - meeting.startTimeMillisec) < 0) {
             const meetingItem = document.createElement('li');
             meetingItem.id = meeting.meetingKey;
             meetingItem.className = "meetingListItem";
-            meetingItem.innerHTML = meetingListItemStructure(meeting);
+            meetingItem.innerHTML = await meetingListItemStructure(meeting);
             switch (meeting.eventTime) {
                 case "Today":
                     divElements.meetingsToday.appendChild(meetingItem)
@@ -37,29 +37,48 @@ const listMeetings = () => {
                 case "Tomorrow":
                     divElements.meetingsTomorrow.appendChild(meetingItem)
                     break;
+                case "This Week":
+                    divElements.meetingsThisWeek.appendChild(meetingItem)
+                    break;
                 case "This Month":
-                    divElements.meetingThisMonth.appendChild(meetingItem)
+                    divElements.meetingsThisMonth.appendChild(meetingItem)
                     break;
                 default:
                     break;
             }
+            let link = await getSpecificMeeting(meeting.meetingKey)
+            enableMeetingButton(link);
             meetingItem.addEventListener("click", async (e) => {
                 if (e.target.id === "meetingStartButton") {
-                    try {
-                        let response = await fetch(`/meetings/${meeting.meetingKey}`);
-                        let obj = await response.json();
-                        window.open(`${obj.session.startLink}`, "_blank ");
-                    } catch (error) {
-                        console.log(error)
-                        throw new Error("Error");
-                    }
+                    window.open(`${link.startLink}`, "_blank ");
                     e.stopPropagation();
+                } else if (e.target.parentElement.className === "meetingOptions") {
+                    console.log("hi");
+                } else {
+                    window.location.href = `/templates/meetings/meetingDetail.html?id=${meetingItem.id}`;
                 }
             })
         }
     }
 }
-const meetingListItemStructure = (meeting) => {
+const getSpecificMeeting = async (meetingKey) => {
+    try {
+        let response = await fetch(`/meetings/${meetingKey}`);
+        let obj = await response.json();
+        return obj.session;
+    } catch (error) {
+        console.log(error)
+        throw new Error("Error");
+    }
+}
+const enableMeetingButton = (obj) => {
+    let time = obj.startTimeMillisec - (10 * 60 * 1000)
+    if (currDate.getTime() >= time) {
+        buttons.meetingStartButton().disabled = false;
+    }
+}
+
+const meetingListItemStructure = async (meeting) => {
     let imgSrc = imgUrl(meeting.timePeriod); // For image url morning, afternoon, evening and night
     const structure = `
             <div class="liDiv" id="div1Meeting">
@@ -81,8 +100,8 @@ const meetingListItemStructure = (meeting) => {
             </div>
 
             <div class="liDiv">
-                <button id="meetingStartButton">Start</button>
-                <span id="meetingOptions">
+                <button id="meetingStartButton" disabled>Start</button>
+                <span class="meetingOptions">
                     <svg width="30" height="30" viewBox="0 0 10 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="5" cy="9" r="1" fill="#4588F0" stroke="#4588F0" stroke-width="2" />
                         <circle cx="5" cy="15" r="1" fill="#4588F0" stroke="#4588F0" stroke-width="2" />
@@ -144,7 +163,7 @@ let createMeetingForm =
             <button id="addParticipants" type="button">Add</button>
         </div>
         <div class="form-Buttons">
-            <button id="createMeetingSubmitButton" class="meetingPrimaryButton" type="button">Shedule</button>
+            <button id="createMeetingSubmitButton" class="meetingPrimaryButton" type="button">Schedule</button>
             <button id="closeMeetingCreateFormButton" class="meetingSecondaryButton" type="button">Cancel</button>
         </div>
     </form >`;
@@ -237,7 +256,7 @@ const removeParticipantsEventListener = () => {
 }
 
 
-// --------------- end reomve participants --------------------//
+// --------------- end remove participants --------------------//
 
 // -------------------------- End Participants -----------------------------------//
 
@@ -262,7 +281,7 @@ for (let index = 0; index < 24; index++) {
 
 // --------------------------- End Duration ------------------------------------ //
 
-// ----------------------------- shedule Button ----------------------------------//
+// ----------------------------- schedule Button ----------------------------------//
 meetingModulePopupElements.createMeetingSubmitButton().addEventListener("click", () => {
     let participants = [];
     if (ParticipantsEmail.length > 0) {

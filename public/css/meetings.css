@@ -96,6 +96,7 @@ main {
     display: flex;
     flex-direction: column;
     width: 100%;
+    overflow-x: auto;
 }
 
 .container {
@@ -259,6 +260,15 @@ main {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
+#meetingStartButton:disabled {
+    all: unset;
+    border-radius: 25px;
+    border: 1px solid gray;
+    padding: 5px 15px;
+    color: white;
+    background-color: gray;
+}
+
 #div1Meeting {
     display: flex;
     flex-direction: row;
@@ -270,13 +280,13 @@ main {
     flex-direction: column;
 }
 
-#meetingOptions {
+.meetingOptions {
     width: 30px;
     height: 30px;
     border-radius: 50%;
 }
 
-#meetingOptions:hover {
+.meetingOptions:hover {
     cursor: pointer;
     background: rgba(0, 0, 0, 0.05);
 }
@@ -303,6 +313,10 @@ main {
 
 #meetingsThisMonth:not(:empty)::before {
     content: "This Month";
+}
+
+#meetingsThisWeek:not(:empty)::before {
+    content: "This Week";
 }
 
 .meetingsList {

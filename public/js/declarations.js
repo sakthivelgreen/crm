@@ -8,7 +8,7 @@ export const forms = {
 export const buttons = {
     meetingCancelButton: document.querySelector("#meetingCancelButton"),
     meetingRescheduleButton: document.querySelector("#meetingRescheduleButton"),
-    meetingStartButton: document.querySelector("#meetingStartButton"),
+    meetingStartButton: () => document.querySelector("#meetingStartButton"),
     meetingJoinButton: document.querySelector("#meetingJoinButton"),
     meetingCreateButton: document.querySelector("#createMeetingButton"),
     meetingCreateSubmitButton: document.querySelector("#createMeetingSubmitButton"),
@@ -24,7 +24,8 @@ export const divElements = {
     upcomingMeetingsDiv: document.querySelector("#upcomingMeetingsDiv"),
     meetingsToday: document.querySelector("#meetingsToday"),
     meetingsTomorrow: document.querySelector("#meetingsTomorrow"),
-    meetingThisMonth: document.querySelector("#meetingsThisMonth")
+    meetingsThisMonth: document.querySelector("#meetingsThisMonth"),
+    meetingsThisWeek: document.querySelector("#meetingsThisWeek")
 }
 
 export const ulElements = {

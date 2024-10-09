@@ -12,6 +12,7 @@ export default class REST {
             if (id !== null) {
                 url += `/${id}`;
             }
+            console.log(url);
             let response = await fetch(this.url, {
                 method: "GET",
                 headers: {
