@@ -16,7 +16,9 @@ export const buttons = {
 
 export const anchorTags = {
     upcomingMeetingsNav: document.querySelector("#upcomingMeetings"),
-    completedMeetingsNav: document.querySelector("#completedMeetings")
+    completedMeetingsNav: document.querySelector("#completedMeetings"),
+    pastMeetingNotes: () => document.querySelector("#pastMeetingNotes"),
+    pastMeetingChats: () => document.querySelector("#pastMeetingChats")
 }
 
 export const divElements = {
@@ -25,7 +27,10 @@ export const divElements = {
     meetingsToday: document.querySelector("#meetingsToday"),
     meetingsTomorrow: document.querySelector("#meetingsTomorrow"),
     meetingsThisMonth: document.querySelector("#meetingsThisMonth"),
-    meetingsThisWeek: document.querySelector("#meetingsThisWeek")
+    meetingsThisWeek: document.querySelector("#meetingsThisWeek"),
+    meetingsLater: document.querySelector("#meetingsLater"),
+    meetingsLastWeek: document.querySelector("#meetingsLastWeek"),
+    meetingsYesterday: document.querySelector("#meetingsYesterday")
 }
 
 export const ulElements = {

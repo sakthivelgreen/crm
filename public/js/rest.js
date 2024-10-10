@@ -3,16 +3,32 @@ export default class REST {
         this.url = url;
     }
     /**
-     * For Get Resquest
+     * For Get Request
      * async method
      */
+    async getByID(id) {
+        try {
+            let response = await fetch(this.url + `/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!response.ok) throw new Error(`Error Getting Data from URL: ${this.url}, ${response.statusText}`);
+
+            let result = await response.json();
+            return result;
+        } catch (error) {
+            console.error('Fetch error:', error); // Log the error for debugging
+            throw new Error(`Error: ${error.message}`); // Preserve the original message
+        }
+    }
     async get(id = null) {
         try {
             let url = this.url;
             if (id !== null) {
                 url += `/${id}`;
             }
-            console.log(url);
             let response = await fetch(this.url, {
                 method: "GET",
                 headers: {

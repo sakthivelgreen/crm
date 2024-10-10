@@ -25,7 +25,7 @@ getMeetings()
 // }
 const listMeetings = async () => {
     for (const meeting of meetingsObj) {
-        if ((Date.now() - meeting.startTimeMillisec) < 0) {
+        if ((Date.now() - (meeting.startTimeMillisec + meeting.duration)) < 0) {
             const meetingItem = document.createElement('li');
             meetingItem.id = meeting.meetingKey;
             meetingItem.className = "meetingListItem";
@@ -42,6 +42,9 @@ const listMeetings = async () => {
                     break;
                 case "This Month":
                     divElements.meetingsThisMonth.appendChild(meetingItem)
+                    break;
+                case "Later":
+                    divElements.meetingsLater.appendChild(meetingItem)
                     break;
                 default:
                     break;

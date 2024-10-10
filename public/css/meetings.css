@@ -164,7 +164,8 @@ main {
     align-items: center;
 }
 
-#upcomingMeetingsDiv {
+#upcomingMeetingsDiv,
+.content {
     /* flex: 1; */
     padding-top: 25px;
     position: relative;
@@ -281,6 +282,7 @@ main {
 }
 
 .meetingOptions {
+    visibility: hidden;
     width: 30px;
     height: 30px;
     border-radius: 50%;
@@ -311,12 +313,24 @@ main {
     content: "Tomorrow";
 }
 
+#meetingsYesterday:not(:empty)::before {
+    content: "Yesterday";
+}
+
 #meetingsThisMonth:not(:empty)::before {
     content: "This Month";
 }
 
 #meetingsThisWeek:not(:empty)::before {
     content: "This Week";
+}
+
+#meetingsLastWeek:not(:empty)::before {
+    content: "Last Week";
+}
+
+#meetingsLater:not(:empty)::before {
+    content: "Later";
 }
 
 .meetingsList {
