@@ -9,6 +9,8 @@ export const buttons = {
     meetingCancelButton: document.querySelector("#meetingCancelButton"),
     meetingRescheduleButton: document.querySelector("#meetingRescheduleButton"),
     meetingStartButton: () => document.querySelector("#meetingStartButton"),
+    meetingRepeatButton: () => document.querySelector("#meetingRepeatButton"),
+    meetingEditButton: () => document.querySelector("#meetingEditButton"),
     meetingJoinButton: document.querySelector("#meetingJoinButton"),
     meetingCreateButton: document.querySelector("#createMeetingButton"),
     meetingCreateSubmitButton: document.querySelector("#createMeetingSubmitButton"),
@@ -18,7 +20,8 @@ export const anchorTags = {
     upcomingMeetingsNav: document.querySelector("#upcomingMeetings"),
     completedMeetingsNav: document.querySelector("#completedMeetings"),
     pastMeetingNotes: () => document.querySelector("#pastMeetingNotes"),
-    pastMeetingChats: () => document.querySelector("#pastMeetingChats")
+    pastMeetingChats: () => document.querySelector("#pastMeetingChats"),
+    goBack: () => document.querySelector("#goBack")
 }
 
 export const divElements = {
@@ -40,7 +43,7 @@ export const popupElements = {
     meetingCreatePopupDiv: document.querySelector("#meetingCreatePopup"),
 }
 
-export const meetingModulePopupElements = {
+export const meetingModuleElements = {
     meetingTopic: () => document.querySelector("#meetingTopic"),
     meetingAgenda: () => document.querySelector("#meetingAgenda"),
     meetingDate: () => document.querySelector("#meetingDate"),
@@ -53,4 +56,13 @@ export const meetingModulePopupElements = {
     meetingParticipants: () => document.querySelector("#meetingParticipants"),
     createMeetingSubmitButton: () => document.getElementById("createMeetingSubmitButton"),
     closeMeetingCreateFormButton: () => document.getElementById("closeMeetingCreateFormButton"),
+    MeetingType: () => document.querySelector("#MeetingType"),
+    meetingCompleted: () => document.querySelector("#meetingCompleted"),
+    meetingRegion: () => document.querySelector("#meetingRegion"),
+    hostMail: () => document.querySelector("#hostMail"),
+    joinLink: () => document.querySelector("#joinLink"),
+    meetingKey: () => document.querySelector("#meetingKey"),
+    meetingPassword: () => document.querySelector("#meetingPassword"),
+    meetingReminderDiv: () => document.querySelector("#meetingReminderDiv"),
+    reminderCount: () => document.querySelector("#reminderCount")
 }

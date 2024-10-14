@@ -1,5 +1,5 @@
 import REST from "../rest.js";
-import { anchorTags, buttons, forms, divElements, popupElements, meetingModulePopupElements } from "../declarations.js";
+import { anchorTags, buttons, forms, divElements, popupElements, meetingModuleElements } from "../declarations.js";
 import { currDate, getTimeWithAMPM, inputValidationEmpty } from "../commonFunctions.js";
 
 anchorTags.upcomingMeetingsNav.parentElement.classList.add("activeLink");
@@ -160,6 +160,7 @@ let createMeetingForm =
         </div>
         <div class="form-elements-div">
             <label for="meetingParticipants">Participants</label>
+            <span style="font-size:12px;margin:0;">Press <code>Enter</code> to add Participants</span>
             <div id="participantsList">
                 <input type="email" name="meetingParticipants" id="meetingParticipants" class="form-elements">
             </div>
@@ -178,7 +179,7 @@ buttons.meetingCreateButton.addEventListener("click", (e) => {
     popupElements.meetingCreatePopupDiv.style.display = 'block';
 })
 
-meetingModulePopupElements.closeMeetingCreateFormButton().addEventListener("click", () => {
+meetingModuleElements.closeMeetingCreateFormButton().addEventListener("click", () => {
     document.querySelector('form').reset()
     removeAllParticipants();
     ParticipantsEmail = [];
@@ -190,35 +191,35 @@ meetingModulePopupElements.closeMeetingCreateFormButton().addEventListener("clic
 // create Meeting
 // ------------------------- for Participants ----------------------------------//
 let ParticipantsEmail = [];
-meetingModulePopupElements.meetingParticipants().addEventListener("focus", () => {
-    meetingModulePopupElements.meetingParticipants().addEventListener("keydown", handleKeydown);
+meetingModuleElements.meetingParticipants().addEventListener("focus", () => {
+    meetingModuleElements.meetingParticipants().addEventListener("keydown", handleKeydown);
 });
-meetingModulePopupElements.meetingParticipants().addEventListener("blur", () => {
-    meetingModulePopupElements.meetingParticipants().removeEventListener("keydown", handleKeydown);
+meetingModuleElements.meetingParticipants().addEventListener("blur", () => {
+    meetingModuleElements.meetingParticipants().removeEventListener("keydown", handleKeydown);
 });
 function handleKeydown(e) {
     if (e.key === "Enter" || e.key === ',') {
-        meetingModulePopupElements.addParticipants().click();
+        meetingModuleElements.addParticipants().click();
         e.preventDefault();
     }
-    if (document.activeElement !== meetingModulePopupElements.meetingParticipants()) {
-        meetingModulePopupElements.addParticipants().click();
+    if (document.activeElement !== meetingModuleElements.meetingParticipants()) {
+        meetingModuleElements.addParticipants().click();
         e.preventDefault();
     }
 
-    if (meetingModulePopupElements.meetingParticipants().value === "" && e.keyCode === 8) {
+    if (meetingModuleElements.meetingParticipants().value === "" && e.keyCode === 8) {
         ParticipantsEmail.pop();
         listParticipants()
     }
 }
-meetingModulePopupElements.addParticipants().addEventListener("click", (e) => {
-    if (meetingModulePopupElements.meetingParticipants().value !== "" && !ParticipantsEmail.includes(meetingModulePopupElements.meetingParticipants().value)) {
-        meetingModulePopupElements.meetingParticipants().value = meetingModulePopupElements.meetingParticipants().value.trim();
-        if (meetingModulePopupElements.meetingParticipants().validity.valid) {
-            ParticipantsEmail.push(meetingModulePopupElements.meetingParticipants().value.trim());
+meetingModuleElements.addParticipants().addEventListener("click", (e) => {
+    if (meetingModuleElements.meetingParticipants().value !== "" && !ParticipantsEmail.includes(meetingModuleElements.meetingParticipants().value)) {
+        meetingModuleElements.meetingParticipants().value = meetingModuleElements.meetingParticipants().value.trim();
+        if (meetingModuleElements.meetingParticipants().validity.valid) {
+            ParticipantsEmail.push(meetingModuleElements.meetingParticipants().value.trim());
             listParticipants()
-            meetingModulePopupElements.meetingParticipants().value = ""
-            meetingModulePopupElements.meetingParticipants().focus()
+            meetingModuleElements.meetingParticipants().value = ""
+            meetingModuleElements.meetingParticipants().focus()
         } else {
             alert("invalid Email")
         }
@@ -233,7 +234,7 @@ function listParticipants() {
         const li = document.createElement("li");
         li.textContent = `${ele}`
         li.appendChild(i)
-        meetingModulePopupElements.participantsList().insertBefore(li, meetingModulePopupElements.participantsList().lastElementChild);
+        meetingModuleElements.participantsList().insertBefore(li, meetingModuleElements.participantsList().lastElementChild);
     })
     removeParticipantsEventListener();
 }
@@ -241,14 +242,14 @@ function listParticipants() {
 // ---------- function remove participants --------------------//
 
 const removeAllParticipants = () => {
-    let div = meetingModulePopupElements.participantsList();
+    let div = meetingModuleElements.participantsList();
     let li = div.querySelectorAll('li');
     li.forEach(item => {
         item.remove();
     })
 }
 const removeParticipantsEventListener = () => {
-    meetingModulePopupElements.participantsList().addEventListener('click', (e) => {
+    meetingModuleElements.participantsList().addEventListener('click', (e) => {
         e.stopPropagation();
         if (e.target.tagName == 'I') {
             let li = e.target.parentNode;
@@ -270,7 +271,7 @@ for (let index = 0; index < 24; index++) {
     options.value = index;
     index = index.toString().padStart(2, '0')
     options.textContent = index;
-    meetingModulePopupElements.meetingDurationHours().appendChild(options);
+    meetingModuleElements.meetingDurationHours().appendChild(options);
 }
 
 [0, 15, 30, 45].map(ele => {
@@ -278,31 +279,27 @@ for (let index = 0; index < 24; index++) {
     options.value = ele;
     ele = ele.toString().padStart(2, '0');
     options.textContent = ele;
-    if (ele === "30") options.selected = true;
-    meetingModulePopupElements.meetingDurationMinutes().appendChild(options)
+    // if (ele === "30") options.selected = true;
+    meetingModuleElements.meetingDurationMinutes().appendChild(options)
 })
 
 // --------------------------- End Duration ------------------------------------ //
 
 // ----------------------------- schedule Button ----------------------------------//
-meetingModulePopupElements.createMeetingSubmitButton().addEventListener("click", () => {
+meetingModuleElements.createMeetingSubmitButton().addEventListener("click", () => {
     let participants = [];
     if (ParticipantsEmail.length > 0) {
         ParticipantsEmail.forEach(ele => {
             participants.push({ "email": ele })
         })
     }
-    if (meetingModulePopupElements.meetingDurationHours().value == 0 && meetingModulePopupElements.meetingDurationMinutes().value == 0) {
-        alert("Duration cannot be 0!");
-        meetingModulePopupElements.meetingDurationMinutes().value = 30;
-        return;
-    }
-    let duration = (meetingModulePopupElements.meetingDurationHours().value * 60 * 60 * 1000) + (meetingModulePopupElements.meetingDurationMinutes().value * 60 * 1000)
     let obj, validity;
     let form = forms.meetingCreateForm();
     let inputs = form.querySelectorAll("input[required]");
-    console.log(inputs);
-
+    if (meetingModuleElements.meetingDurationHours().value == 0 && meetingModuleElements.meetingDurationMinutes().value == 0) {
+        meetingModuleElements.meetingDurationMinutes().value = 30;
+    }
+    let duration = (meetingModuleElements.meetingDurationHours().value * 60 * 60 * 1000) + (meetingModuleElements.meetingDurationMinutes().value * 60 * 1000)
     inputs.forEach((input) => {
         validity = inputValidationEmpty(input)
         console.log(validity);
@@ -310,10 +307,10 @@ meetingModulePopupElements.createMeetingSubmitButton().addEventListener("click",
     if (!validity) {
         obj = {
             "session": {
-                "topic": `${meetingModulePopupElements.meetingTopic().value}`,
-                "agenda": `${meetingModulePopupElements.meetingAgenda().value}`,
+                "topic": `${meetingModuleElements.meetingTopic().value}`,
+                "agenda": `${meetingModuleElements.meetingAgenda().value}`,
                 "presenter": 60030984640,
-                "startTime": `${meetingModulePopupElements.meetingDate().value} ${getTimeWithAMPM(meetingModulePopupElements.meetingTime().value)}`,
+                "startTime": `${meetingModuleElements.meetingDate().value} ${getTimeWithAMPM(meetingModuleElements.meetingTime().value)}`,
                 "duration": `${duration}`,
                 "timezone": "Asia/Calcutta"
             }
@@ -357,7 +354,7 @@ const createMeeting = async (obj) => {
 
 // --------------------------------- Date ------------------------------------//
 
-flatpickr(meetingModulePopupElements.meetingDate(), {
+flatpickr(meetingModuleElements.meetingDate(), {
     minDate: "today",
     dateFormat: "M d, Y"
 })

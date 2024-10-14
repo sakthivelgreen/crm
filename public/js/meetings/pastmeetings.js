@@ -11,7 +11,7 @@ MeetingAPI.get().then(Obj => {
     Meetings = Meetings.sort((a, b) => a.startTimeMillisec - b.startTimeMillisec);
 }).then(async () => {
     for (const Meeting of Meetings) {
-        if (Meeting.startTimeMillisec < currDate.getTime()) {
+        if ((Meeting.startTimeMillisec + Meeting.duration) < currDate.getTime()) {
             const meetingItem = document.createElement('li');
             meetingItem.id = Meeting.meetingKey;
             meetingItem.className = "meetingListItem";
@@ -41,9 +41,9 @@ MeetingAPI.get().then(Obj => {
             }
             meetingItem.addEventListener("click", async (e) => {
                 e.stopPropagation();
-                if (e.target.id === "pastMeetingNotes") {
+                if (e.target.className === "pastMeetingNotes") {
                     console.log("Notes");
-                } else if (e.target.id === "pastMeetingChats") {
+                } else if (e.target.className === "pastMeetingChats") {
                     console.log("Chats")
                 } else if (e.target.parentElement.className === "meetingOptions") {
                     console.log("hi");
@@ -77,8 +77,8 @@ const meetingListItemStructure = async (meeting) => {
             </div>
 
             <div class="liDiv">
-                <span><a href="#" disabled id="pastMeetingNotes" >Notes</a></span>
-                <span><a href= "#" disabled id="pastMeetingChats" >Chats</a></span> 
+                <span><a href="#" disabled class="pastMeetingNotes" >Notes</a></span>
+                <span><a href= "#" disabled class="pastMeetingChats" >Chats</a></span> 
                 <span class="meetingOptions">
                     <svg width="30" height="30" viewBox="0 0 10 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="5" cy="9" r="1" fill="#4588F0" stroke="#4588F0" stroke-width="2" />
