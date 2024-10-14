@@ -25,8 +25,8 @@ export const anchorTags = {
 }
 
 export const divElements = {
-    upcomingMeetingsDiv: document.querySelector("#upcomingMeetingList"),
-    upcomingMeetingsDiv: document.querySelector("#upcomingMeetingsDiv"),
+    // upcomingMeetingsDiv: document.querySelector("#upcomingMeetingList"),
+    upcomingMeetingsDiv: () => document.querySelector("#upcomingMeetingsDiv"),
     meetingsToday: document.querySelector("#meetingsToday"),
     meetingsTomorrow: document.querySelector("#meetingsTomorrow"),
     meetingsThisMonth: document.querySelector("#meetingsThisMonth"),

@@ -175,6 +175,16 @@ main {
     overflow: auto;
 }
 
+.UlMeetingListClass.noMeetings {
+    background-color: #fff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    justify-content: safe;
+}
+
 .MeetingPrimaryButton,
 #createMeetingSubmitButton {
     color: #fff;

@@ -19,10 +19,7 @@ getMeetings()
         meetingsObj = meetingsObj.sort((a, b) => a.startTimeMillisec - b.startTimeMillisec);
     })
     .then(() => { listMeetings() })
-// const hasNoChildNodes = [divElements.meetingsToday, divElements.meetingsTomorrow, divElements.meetingThisMonth].every(el => !el.hasChildNodes());
-// if (hasNoChildNodes) {
-//     divElements.upcomingMeetingsDiv.classList.add("no")
-// }
+    .then(() => { checkData() })
 const listMeetings = async () => {
     for (const meeting of meetingsObj) {
         if ((Date.now() - (meeting.startTimeMillisec + meeting.duration)) < 0) {
@@ -130,6 +127,33 @@ const imgUrl = (timePeriod) => {
             break;
     }
 }
+
+function checkData() {
+    const upcomingMeetingsDiv = document.querySelector("#upcomingMeetingsDiv");
+    // Check if the element exists
+    if (upcomingMeetingsDiv) {
+        const childNodes = upcomingMeetingsDiv.childNodes;
+
+        // Check if there are child nodes, and whether each child node is empty (i.e., contains no text or other elements)
+        const allChildrenEmpty = Array.from(childNodes).every(child => {
+            // Check if a node is an element node and if it has no child elements or text
+            return child.nodeType === Node.TEXT_NODE && child.textContent.trim() === '' ||
+                (child.nodeType === Node.ELEMENT_NODE && !child.hasChildNodes());
+        });
+        const text = document.createElement('p');
+        text.textContent = "No Upcoming Meetings";
+        const img = document.createElement("img");
+        img.src = '../../static/no-upcoming-meeting.svg';
+        if (allChildrenEmpty) {
+            divElements.upcomingMeetingsDiv().classList.add("noMeetings")
+            divElements.upcomingMeetingsDiv().appendChild(img);
+            divElements.upcomingMeetingsDiv().appendChild(text);
+        }
+    }
+}
+
+
+
 
 
 // Popup for create Meeting
