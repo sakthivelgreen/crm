@@ -104,11 +104,13 @@ export class PopUp extends HTMLElement {
             OkButton.addEventListener('click', () => {
                 resolve(true);
                 popup.close();
+                this.remove();
             });
 
             cancelButton.addEventListener('click', () => {
                 resolve(false);
                 popup.close();
+                this.remove();
             });
             const closeOnEscape = (event) => {
                 if (event.key === "Escape") {
