@@ -61,5 +61,22 @@ function events(obj) {
             }
         })
     })
+    buttons.meetingCancelButton().addEventListener("click", () => {
+        const popup = new PopUp(`Delete ${obj.topic}`, `Delete`, `red`);
+        document.body.insertBefore(popup, document.body.firstChild);
+        popup.confirm()
+            .then(() => {
+                deleteMeeting(obj)
+            })
+    })
+}
 
+const deleteMeeting = (obj) => {
+    MeetingAPI.delete(obj.meetingKey)
+        .then(() => {
+            window.open(`/templates/meetings/meetings.html`, "_self");
+        })
+        .catch((e) => {
+            console.log(e);
+        })
 }

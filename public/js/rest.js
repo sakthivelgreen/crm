@@ -15,7 +15,6 @@ export default class REST {
                 }
             });
             if (!response.ok) throw new Error(`Error Getting Data from URL: ${this.url}, ${response.statusText}`);
-
             let result = await response.json();
             return result;
         } catch (error) {
@@ -53,8 +52,7 @@ export default class REST {
                 }
             })
             if (!response.ok) throw new Error(`Error Getting Data in url:${this.url}, ${response.statusText}`);
-            let result = await response.json();
-            return result;
+            return true;
         } catch (error) {
             throw new Error(`Error: ${error}`);
 

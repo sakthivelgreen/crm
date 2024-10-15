@@ -197,7 +197,7 @@ let createMeetingForm =
     </form >`;
 
 popupElements.meetingCreatePopupDiv.innerHTML = createMeetingForm;
-buttons.meetingCreateButton.addEventListener("click", (e) => {
+buttons.meetingCreateButton().addEventListener("click", (e) => {
     document.getElementById('backdrop').classList.remove('hidden');
     // Opening popup
     popupElements.meetingCreatePopupDiv.style.display = 'block';

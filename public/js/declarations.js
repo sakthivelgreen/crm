@@ -1,19 +1,19 @@
 export const forms = {
-    meetingName: document.querySelector("#meetingTopic"),
-    meetingKey: document.querySelector("#meetingKey"),
-    meetingDueDate: document.querySelector("#meetingDate"),
+    meetingName: () => document.querySelector("#meetingTopic"),
+    meetingKey: () => document.querySelector("#meetingKey"),
+    meetingDueDate: () => document.querySelector("#meetingDate"),
     meetingCreateForm: () => document.querySelector("#meetingCreateForm")
 }
 
 export const buttons = {
-    meetingCancelButton: document.querySelector("#meetingCancelButton"),
-    meetingRescheduleButton: document.querySelector("#meetingRescheduleButton"),
+    meetingCancelButton: () => document.querySelector("#meetingCancelButton"),
+    meetingRescheduleButton: () => document.querySelector("#meetingRescheduleButton"),
     meetingStartButton: () => document.querySelector("#meetingStartButton"),
     meetingRepeatButton: () => document.querySelector("#meetingRepeatButton"),
     meetingEditButton: () => document.querySelector("#meetingEditButton"),
-    meetingJoinButton: document.querySelector("#meetingJoinButton"),
-    meetingCreateButton: document.querySelector("#createMeetingButton"),
-    meetingCreateSubmitButton: document.querySelector("#createMeetingSubmitButton"),
+    meetingJoinButton: () => document.querySelector("#meetingJoinButton"),
+    meetingCreateButton: () => document.querySelector("#createMeetingButton"),
+    meetingCreateSubmitButton: () => document.querySelector("#createMeetingSubmitButton"),
 }
 
 export const anchorTags = {
