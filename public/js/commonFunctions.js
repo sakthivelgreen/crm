@@ -38,3 +38,8 @@ export const inputValidationEmpty = (input) => {
         return true;
     }
 }
+function clearPopUp() {
+    while (popupElements.popup().hasChildNodes()) {
+        popupElements.popup().removeChild(popupElements.popup().firstChild);
+    }
+}

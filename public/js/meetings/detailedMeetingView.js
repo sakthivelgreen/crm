@@ -1,5 +1,6 @@
 import REST from "../rest.js";
-import { anchorTags, buttons, meetingModuleElements } from "../declarations.js";
+import { anchorTags, buttons, meetingModuleElements, popupElements } from "../declarations.js";
+import { PopUp } from "../../components/popup.js";
 const url = window.location.search;
 const urlParams = new URLSearchParams(url);
 const meetingId = urlParams.get('id');
@@ -28,7 +29,8 @@ const mainFunction = (data) => {
     anchorTags.goBack().addEventListener("click", () => {
         window.history.back();
     })
-    addResponseDetails(data)
+    addResponseDetails(data);
+    events(data);
 }
 function addResponseDetails(obj) {
     meetingModuleElements.meetingDate().textContent = obj.timeFormat;
@@ -44,6 +46,20 @@ function addResponseDetails(obj) {
         p.textContent = reminder.timeFormat;
         meetingModuleElements.meetingReminderDiv().appendChild(p);
     }
+}
 
+function events(obj) {
+    buttons.meetingStartButton().addEventListener("click", () => {
+        const popup = new PopUp();
+        popup.message = `Start Meeting Immediately`;
+        popup.success = `Start`;
+        popup.color = `blue`;
+        document.body.insertBefore(popup, document.body.firstChild);
+        popup.confirm().then(ok => {
+            if (ok) {
+                window.open(obj.startLink, "_blank");
+            }
+        })
+    })
 
 }
