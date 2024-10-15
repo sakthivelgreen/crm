@@ -65,8 +65,8 @@ function events(obj) {
         const popup = new PopUp(`Delete ${obj.topic}`, `Delete`, `red`);
         document.body.insertBefore(popup, document.body.firstChild);
         popup.confirm()
-            .then(() => {
-                deleteMeeting(obj)
+            .then((ok) => {
+                if (ok) deleteMeeting(obj);
             })
     })
 }

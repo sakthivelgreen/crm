@@ -92,7 +92,7 @@ aside>object {
     height: 100%;
 }
 
-main {
+#meetingMainElement {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -644,4 +644,13 @@ main {
     display: flex;
     flex-direction: row;
     gap: 20px;
+}
+
+#createMeetingMainElement {
+    flex: 1;
+}
+
+.MeetingFormDiv {
+    position: relative;
+    overflow-y: auto;
 }

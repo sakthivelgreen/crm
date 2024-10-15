@@ -41,7 +41,6 @@ export const ulElements = {
 
 export const popupElements = {
     popup: () => document.querySelector("#PopUP"),
-    meetingCreatePopupDiv: document.querySelector("#meetingCreatePopup"),
 }
 
 export const meetingModuleElements = {

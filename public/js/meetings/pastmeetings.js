@@ -1,4 +1,4 @@
-import { anchorTags, divElements } from "../declarations.js";
+import { anchorTags, buttons, divElements } from "../declarations.js";
 import REST from '../rest.js';
 import { currDate } from "../commonFunctions.js";
 
@@ -105,3 +105,7 @@ const imgUrl = (timePeriod) => {
             break;
     }
 }
+
+buttons.meetingCreateButton().addEventListener("click", () => {
+    window.open("/templates/meetings/createMeetings.html", "_self");
+})
