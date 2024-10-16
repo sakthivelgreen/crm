@@ -2,6 +2,7 @@
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+    font-size: 16px;
 }
 
 body {
@@ -9,58 +10,42 @@ body {
 }
 
 .wrapper {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    width: 100%;
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
 }
 
 
 nav {
-    justify-content: space-between;
-    margin: 0;
     position: relative;
-    width: 100%;
-    height: 100%;
     background-color: #fff;
+    margin: 0;
+    padding: 0;
+    height: 3.5em;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    justify-content: space-between;
 }
 
 nav .left {
-    margin-left: 10px;
+    position: relative;
+    height: 100%;
+    padding-left: 10px;
+    width: 50%;
+    display: flex;
+    align-items: center;
 }
 
 nav .right {
+    position: relative;
+    height: 100%;
     padding-right: 1em;
+    width: 50%;
+    display: flex;
+    align-items: center;
 }
 
 #meetings img {
     height: 1.5em;
-}
-
-.meetingsNavbar {
-    height: 8%;
-}
-
-.meetingsNavbar>object {
-
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-#sidebarAside {
-    position: relative;
-    height: 100%;
-    background-color: #1b2a3f;
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
-    padding: 1em;
-    align-items: center;
 }
 
 li {
@@ -71,26 +56,21 @@ a {
     text-decoration: none;
 }
 
-#sidebarAside li a {
-    color: white;
-}
 
 aside {
-    min-width: 5em;
-    width: 5em;
     position: relative;
+    width: 5em;
     height: 100%;
-    max-height: 100%;
-    color: white;
-    margin: 0;
-    overflow: hidden;
+    background-color: #1b2a3f;
 }
 
-aside>object {
+.container {
     position: relative;
-    width: 100%;
     height: 100%;
+    width: 100%;
+    display: flex;
 }
+
 
 #meetingMainElement {
     position: relative;
@@ -100,12 +80,6 @@ aside>object {
     overflow-x: auto;
 }
 
-.container {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    height: 84%;
-}
 
 #meetingMainElement>ul {
     position: relative;
@@ -647,10 +621,20 @@ aside>object {
 }
 
 #createMeetingMainElement {
-    flex: 1;
+    overflow: auto;
+    position: relative;
+    width: 100%;
 }
 
 .MeetingFormDiv {
+    width: 60%;
+    margin: auto;
+    overflow: auto;
+}
+
+#meetingCreateForm {
     position: relative;
     overflow-y: auto;
+    height: max-content;
+    width: 100%
 }

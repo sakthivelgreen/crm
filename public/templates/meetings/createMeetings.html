@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Meeting</title>
-    <script type="module" src="/components/navbar.js"></script>
+    <script type="module" src="../../components/navbar.js"></script>
+    <script type="module" src="../../components/custom_sidebar.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/meetings.css">
@@ -16,18 +17,16 @@
 <body>
     <div class="wrapper">
         <navbar-element></navbar-element>
-        <div class="meetingsNavbar">
-            <nav>
-                <div class="left">
-                    <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
-                                src="/static/newMeetingIconWithName.png" alt="meeting-ico"></a></span>
-                </div>
-                <div class="right"></div>
-            </nav>
-        </div>
+        <nav>
+            <div class="left">
+                <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
+                            src="/static/newMeetingIconWithName.png" alt="meeting-ico"></a></span>
+            </div>
+            <div class="right"></div>
+        </nav>
         <div class="container">
             <aside>
-                <object data="/templates/meetings/sidebar.html" type="text/html" name="meetingsidebar"></object>
+                <custom-sidebar></custom-sidebar>
             </aside>
             <main id="createMeetingMainElement">
                 <div class="nav2">
@@ -78,6 +77,7 @@
             </main>
         </div>
     </div>
+
     </div>
 </body>
 

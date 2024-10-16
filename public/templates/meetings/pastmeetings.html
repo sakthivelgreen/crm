@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/meetings.css">
     <script type="module" src="/components/navbar.js"></script>
+    <script type="module" src="../../components/custom_sidebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
@@ -24,7 +25,7 @@
     </div>
     <div class="container">
         <aside>
-            <object data="/templates/meetings/sidebar.html" type="text/html" name="meetingsidebar"></object>
+            <custom-sidebar></custom-sidebar>
         </aside>
         <main id="meetingMainElement">
             <div class="nav2">
