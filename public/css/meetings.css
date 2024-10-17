@@ -12,6 +12,8 @@ body {
 .wrapper {
     height: 100vh;
     width: 100vw;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -60,15 +62,14 @@ a {
 aside {
     position: relative;
     width: 5em;
-    height: 100%;
     background-color: #1b2a3f;
 }
 
 .container {
     position: relative;
-    height: 100%;
     width: 100%;
     display: flex;
+    flex: auto;
 }
 
 
@@ -129,10 +130,13 @@ aside {
 }
 
 .nav2Left {
+    display: flex;
+    align-items: center;
     width: 50%;
 }
 
 .nav2Right {
+    gap: 10px;
     width: 50%;
     display: flex;
     justify-content: flex-end;
@@ -161,18 +165,18 @@ aside {
 
 .MeetingPrimaryButton,
 #createMeetingSubmitButton {
-    color: #fff;
-    background: transparent linear-gradient(0deg, #0279FF 0%, #00A3F3 100%);
-    padding: 10px 15px;
-    border-radius: 25px;
+    color: #0279FF;
+    background: #fff;
+    padding: 3px 9px;
+    border-radius: 30px;
     outline: 0;
-    border: 0;
+    border: 1px solid #0279FF;
 }
 
 .meetingSecondaryButton {
     color: #000;
-    padding: 10px 20px;
-    border-radius: 25px;
+    padding: 3px 9px;
+    border-radius: 30px;
     outline: 1px solid;
     border: 0;
     background: none;
@@ -188,7 +192,8 @@ aside {
 .MeetingPrimaryButton:hover,
 #createMeetingSubmitButton:hover {
     cursor: pointer;
-    background: transparent linear-gradient(0deg, #006BE4 0%, #02ACFF 100%);
+    background: #006BE4;
+    color: #fff;
 }
 
 .meetingListItem {
@@ -627,14 +632,14 @@ aside {
 }
 
 .MeetingFormDiv {
-    width: 60%;
+    width: 100%;
     margin: auto;
-    overflow: auto;
+    padding: 20px;
+    height: 400px;
+    overflow-y: auto;
 }
 
 #meetingCreateForm {
     position: relative;
-    overflow-y: auto;
-    height: max-content;
-    width: 100%
+    width: 50%;
 }

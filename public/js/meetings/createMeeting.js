@@ -2,6 +2,7 @@ import { meetingModuleElements, forms } from "../declarations.js";
 import { getTimeWithAMPM, inputValidationEmpty } from "../commonFunctions.js";
 import REST from "../rest.js";
 
+// ------------------------ Participants ---------------------------------- //
 let ParticipantsEmail = [];
 meetingModuleElements.meetingParticipants().addEventListener("focus", () => {
     meetingModuleElements.meetingParticipants().addEventListener("keydown", handleKeydown);
@@ -18,8 +19,11 @@ function handleKeydown(e) {
         meetingModuleElements.addParticipants().click();
         e.preventDefault();
     }
+    if (e.code === "Space" && meetingModuleElements.meetingParticipants().value === "") {
+        meetingModuleElements.meetingParticipants().value = "";
+    }
+    if (e.keyCode === 8) {
 
-    if (meetingModuleElements.meetingParticipants().value === "" && e.keyCode === 8) {
         ParticipantsEmail.pop();
         listParticipants()
     }
@@ -91,7 +95,7 @@ for (let index = 0; index < 24; index++) {
     options.value = ele;
     ele = ele.toString().padStart(2, '0');
     options.textContent = ele;
-    // if (ele === "30") options.selected = true;
+    if (ele === "30") options.selected = true;
     meetingModuleElements.meetingDurationMinutes().appendChild(options)
 })
 
@@ -128,7 +132,6 @@ meetingModuleElements.createMeetingSubmitButton().addEventListener("click", () =
             }
         }
     } else {
-        console.log("hi");
         return;
 
     }
@@ -145,12 +148,10 @@ const createMeeting = async (obj) => {
 
         MeetingApi.post(obj)
             .then(() => {
-                popupElements.meetingCreatePopupDiv.style.display = 'none';
-                document.getElementById('backdrop').classList.add('hidden');
                 alert('Meeting Created');
             })
             .then(() => {
-                window.location.reload();
+                window.open('/templates/meetings/meetings.html', '_self');
             })
             .catch((e) => {
                 console.log(e)
@@ -171,3 +172,12 @@ flatpickr(meetingModuleElements.meetingDate(), {
     dateFormat: "M d, Y"
 })
 // ------------------------------- End Date ---------------------------------//
+
+
+//  ----------------- Close and back login -------------------------  //
+
+meetingModuleElements.closeMeetingCreateFormButton().addEventListener('click', (e) => {
+    e.preventDefault();
+    let link = document.referrer;
+    window.open(link, '_self')
+})
