@@ -69,6 +69,7 @@ function events(obj) {
                 if (ok) deleteMeeting(obj);
             })
     })
+    buttons.meetingEditButton().addEventListener('click', () => { window.open(`/templates/meetings/EditMeetings.html?id=${meetingId}`, '_self') });
 }
 
 const deleteMeeting = (obj) => {

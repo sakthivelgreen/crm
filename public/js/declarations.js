@@ -64,5 +64,6 @@ export const meetingModuleElements = {
     meetingKey: () => document.querySelector("#meetingKey"),
     meetingPassword: () => document.querySelector("#meetingPassword"),
     meetingReminderDiv: () => document.querySelector("#meetingReminderDiv"),
-    reminderCount: () => document.querySelector("#reminderCount")
+    reminderCount: () => document.querySelector("#reminderCount"),
+    EditMeetingSubmitButton: () => document.querySelector("#EditMeetingSubmitButton")
 }

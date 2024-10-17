@@ -43,3 +43,15 @@ function clearPopUp() {
         popupElements.popup().removeChild(popupElements.popup().firstChild);
     }
 }
+
+export const getParams = (url) => {
+    return Object.fromEntries(new URLSearchParams(url));
+}
+
+export function back(item) {
+    item.addEventListener('click', (e) => {
+        e.preventDefault();
+        let link = document.referrer;
+        window.open(link, '_self')
+    })
+}

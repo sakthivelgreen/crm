@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Meeting</title>
+    <script type="module" src="../../components/navbar.js"></script>
+    <script type="module" src="../../components/custom_sidebar.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/meetings.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script type="module" src="../../js/meetings/editMeeting.js" defer></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <navbar-element></navbar-element>
+        <nav>
+            <div class="left">
+                <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
+                            src="/static/newMeetingIconWithName.png" alt="meeting-ico"></a></span>
+            </div>
+            <div class="right"></div>
+        </nav>
+        <div class="container">
+            <aside>
+                <custom-sidebar></custom-sidebar>
+            </aside>
+            <main id="createMeetingMainElement">
+                <div class="nav2">
+                    <div class="nav2Left">
+                        <h3>Edit Meeting</h3>
+                    </div>
+                    <div class="nav2Right">
+                        <button id="EditMeetingSubmitButton" class="meetingPrimaryButton" type="button">Save</button>
+                        <button id="closeMeetingCreateFormButton" class="meetingSecondaryButton"
+                            type="button">Cancel</button>
+                    </div>
+                </div>
+                <div class="MeetingFormDiv">
+                    <form id='meetingCreateForm'>
+                        <div class="form-elements-div">
+                            <label for="meetingTopic">MeetingName</label>
+                            <input type="text" name="meetingTopic" id="meetingTopic" class="form-elements" required>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="meetingAgenda">Agenda</label>
+                            <input type="text" name="meetingAgenda" id="meetingAgenda" class="form-elements">
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="meetingDate">Date</label>
+                            <input type="text" name="meetingDate" id="meetingDate" class="form-elements" required>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="meetingTime">Time</label>
+                            <input type="time" name="meetingTime" id="meetingTime" class="form-elements" required>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="meetingDurationHours">Duration</label>
+                            <div class="Duration">
+                                <span><select id="meetingDurationHours"></select> hr</span>
+                                <span><select id="meetingDurationMinutes"></select> min</span>
+                            </div>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="meetingParticipants">Participants</label>
+                            <span style="font-size:12px;margin:0;">Press <code>Enter</code> to add Participants</span>
+                            <div id="participantsList">
+                                <input type="email" name="meetingParticipants" id="meetingParticipants"
+                                    class="form-elements">
+                            </div>
+                            <button id="addParticipants" type="button">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    </div>
+</body>
+
+</html>
