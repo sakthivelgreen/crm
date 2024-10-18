@@ -49,5 +49,5 @@ optionsSpecific.onblur = () => {
     setTimeout(() => {
         let menu = document.getElementById("dropDown2");
         menu.style.display = "none";
-    }, 100)
+    }, 300)
 }

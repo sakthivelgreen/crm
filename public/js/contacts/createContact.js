@@ -24,6 +24,11 @@ const saveContact = document.querySelector("#saveContactBtn");
 const contactSaveandNew = document.querySelector("#btnSaveAndNew");
 let errorSpan = document.querySelector("#accError");
 
+let ORG = document.querySelector("#organisation");
+let IND = document.querySelector("#individual");
+const ORGForm = document.querySelector(".orgForm");
+const fieldSet = document.querySelector("fieldset");
+
 let clicked = null;
 
 saveContact.addEventListener("click", () => {
@@ -192,11 +197,7 @@ function checkemail(email, tag) {
 
 
 // Dynamic Fields for Individual and Organisation
-let ORG = document.querySelector("#organisation");
-let IND = document.querySelector("#individual");
-const ORGForm = document.querySelector(".orgForm");
 ORGForm.style.display = "none";
-const fieldSet = document.querySelector("fieldset");
 fieldSet.addEventListener("change", () => {
     if (IND.checked) {
         ORGForm.style.display = "none";
@@ -260,6 +261,7 @@ async function funPostAccount(obj, account, method) {
             if (!response.ok) throw new Error("Error in updating contacts id accounts module");
             let result = await response.json();
             result["contacts"].push(obj);
+            delete result._id;
             try {
                 let response2 = await fetch("/mongodb/accounts/" + account, {
                     method: "PUT",
@@ -335,14 +337,14 @@ let accounts = async () => {
         }
         let result = await response.json();
         filterContent(result)
-        dropDwon(result)
+        dropDown(result)
         return;
     } catch (error) {
 
     }
 }
 
-function dropDwon(result) {
+function dropDown(result) {
     while (ulAccount.hasChildNodes()) {
         ulAccount.removeChild(ulAccount.firstChild)
     }
@@ -354,7 +356,7 @@ function dropDwon(result) {
             accountExist = true;
             errorSpan.style.display = "none";
             companynameInput.value = object.organisation_name;
-            orgID.value = object.id;
+            orgID.value = object._id;
             orgAddressInput.value = object.organisation_address;
             orgEmailInput.value = object.organisation_email;
             orgPhoneInput.value = object.organisation_phone;
@@ -388,7 +390,7 @@ function filterContent(accounts) {
             noMatches.textContent = `No results found`;
             ulAccount.appendChild(noMatches);
         }
-        else dropDwon(searchAccount)
+        else dropDown(searchAccount)
     })
 
 }
@@ -435,7 +437,15 @@ createAccount.addEventListener("submit", (e) => {
         }
         let success = funPostAccount(accObj, 200, 0);
         if (success) {
+            accNameInput.value = "";
+            accEmailInput.value = "";
+            accIncomeInput.value = "";
+            companynameInput.value = accName;
+            orgID.value = success;
+            orgEmailInput.value = accEmail;
+            orgIncomeInput.value = accIncome;
             accPopup.close()
+            accounts()
         }
     }
 })
