@@ -1,9 +1,11 @@
+import { deleteID } from "./accountModule.js";
+
 // getting id
 let queryString = window.location.search;
 let urlParams = new URLSearchParams(queryString);
 let id = urlParams.get("id");
 
-let url = "http://localhost:3000/accounts/";
+let url = "/mongodb/accounts/";
 
 // declarations
 const form = document.querySelector("form");
@@ -66,22 +68,23 @@ saveAccountBtn.addEventListener("click", () => {
 function updateAccount(obj) {
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-        obj.organisation_name = orgNameInput.value,
-            obj.organisation_email = orgEmailInput.value,
-            obj.organisation_phone = orgPhoneInput.value,
-            obj.organisation_address = orgAddressInput.value,
-            storeData(obj);
+        obj.organisation_name = orgNameInput.value;
+        obj.organisation_email = orgEmailInput.value;
+        obj.organisation_phone = orgPhoneInput.value;
+        obj.organisation_address = orgAddressInput.value;
+        storeData(obj);
     })
 }
 
 async function storeData(obj) {
     try {
-        let response = await fetch("http://localhost:3000/accounts/" + id, {
+        let res = deleteID(obj);
+        let response = await fetch("/mongodb/accounts/" + id, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(res)
         })
         if (response.ok) {
             if (switchVariable === 0) window.location.href = "/templates/accounts.html";

@@ -1,8 +1,10 @@
+import { deleteID } from './accountModule.js'
+
 // Getting Id from url
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let accountID = urlParams.get('id');
-let url = "http://127.0.0.1:3000/accounts/";
+let url = "/mongodb/accounts/";
 
 
 // Targetting html Elements
@@ -163,7 +165,7 @@ async function processContactDetails(contactsArray) {
 // Fetch Contacts Using ID (Function)
 async function getContactObject(id) {
     try {
-        let response = await fetch("http://localhost:3000/contacts/" + id, {
+        let response = await fetch("/mongodb/contacts/" + id, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -218,7 +220,7 @@ function setRedirect() {
 }
 
 async function deleteContact(AccID) {
-    let response = await fetch("http://localhost:3000/contacts")
+    let response = await fetch("/mongodb/contacts")
     if (!response.ok) throw new Error(response.statusText);
     let resp = await response.json();
     for (const res of resp) {
@@ -227,12 +229,13 @@ async function deleteContact(AccID) {
             res['companyname'] = "";
         }
         try {
-            let response = await fetch("http://localhost:3000/contacts/" + res["id"], {
+            let obj = deleteID(res);
+            let response = await fetch("/mongodb/contacts/" + res["_id"], {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(res)
+                body: JSON.stringify(obj)
             })
             if (!response.ok) {
                 throw new Error(`Error ${response.statusText}`);

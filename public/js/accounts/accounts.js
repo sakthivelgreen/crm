@@ -224,6 +224,7 @@ function processCheckBox(head, body) {
                 try {
                     await Promise.all(checkBoxArray.map(ele => funDelete(ele)));
                     alert("Delete Success");
+                    window.location.reload();
                 } catch (error) {
                     alert("Error in deletion: " + error.message);
                 }
