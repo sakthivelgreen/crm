@@ -27,6 +27,7 @@ body {
     width: 100vw;
     display: flex;
     flex-direction: column;
+    min-width: 768px;
 }
 
 .content {

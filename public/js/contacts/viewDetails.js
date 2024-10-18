@@ -25,16 +25,11 @@ async function fetchContacts() {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
-        if (response.status === 404 && isRunning === true) {
-            alert("Delete Success")
-            window.location.href = `/templates/contacts.html`
-            return;
-        }
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         contacts = await response.json();
-        getLeads(contacts);
+        getContacts(contacts);
     }
     catch (error) {
         console.error('Error fetching Contacts:', error);
@@ -48,7 +43,7 @@ const table = document.querySelector("#contactTable");
 const tbody = document.createElement("tbody");
 table.appendChild(tbody);
 // get contact
-function getLeads(contact) {
+function getContacts(contact) {
     titleElement.textContent = `${contact.firstname} ${contact.lastname}`;
     for (const key in contact) {
         if (key === "id") continue;
@@ -96,12 +91,15 @@ deleteContact.addEventListener("click", async (e) => {
                 if (account.contacts.includes(contactID)) {
                     account.contacts = account.contacts.filter(id => id !== contactID)
                 }
-                let updateResponse = await fetch("/mongodb/accounts/" + account.id, {
+                let obj = {}
+                obj = Object.assign(obj, account);
+                delete obj._id;
+                let updateResponse = await fetch("/mongodb/accounts/" + account._id, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(account)
+                    body: JSON.stringify(obj)
                 })
                 if (!updateResponse.ok) {
                     throw new Error(`Error in updating Account ${account.id}: ${updateResponse.statusText}`);
@@ -115,7 +113,7 @@ deleteContact.addEventListener("click", async (e) => {
                 }
             });
             if (!deleteContact.ok) throw new Error(`Error is Deleting contact${contactID} : ${deleteContact.statusText}`);
-
+            window.open('/templates/contacts.html', '_self');
         } catch (error) {
             console.error(error);
         }

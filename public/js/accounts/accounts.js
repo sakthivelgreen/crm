@@ -59,16 +59,16 @@ async function processAccounts(accountsData) {
         let value = accountsData[obj];
         const checkBoxTd = document.createElement("td");
         tr.appendChild(checkBoxTd);
-        tr.id = value.id;
+        tr.id = value._id;
         for (const account in Arr) {
             if (!(Arr[account] === "contacts")) {
                 const td = document.createElement("td");
                 td.className = head.next().value;
                 tr.appendChild(td);
-                if (td.className === "email") td.innerHTML = `<span id="${value.id}" class="${td.className}Span">${value[td.className]}</span>`;
-                else if (td.className === "phone") td.innerHTML = `<span id="${value.id}" class="${td.className}Span">${value[td.className]}</span>`;
-                else td.innerHTML = `<span id="${value.id}" class="${td.className}">${value[td.className]}</span>`;
-                checkBoxTd.innerHTML = `<input type="checkbox" id=${value["id"]} class ="checkBox">`;
+                if (td.className === "email") td.innerHTML = `<span id="${value._id}" class="${td.className}Span">${value[td.className]}</span>`;
+                else if (td.className === "phone") td.innerHTML = `<span id="${value._id}" class="${td.className}Span">${value[td.className]}</span>`;
+                else td.innerHTML = `<span id="${value._id}" class="${td.className}">${value[td.className]}</span>`;
+                checkBoxTd.innerHTML = `<input type="checkbox" id=${value["_id"]} class ="checkBox">`;
                 checkBoxTd.className = `checkbox`;
                 checkBoxTd.addEventListener("click", (e) => {
                     e.stopPropagation();
@@ -94,6 +94,7 @@ async function processAccounts(accountsData) {
                 }
             });
             let data = await response.json();
+
             return `${data.firstname} ${data.lastname}`; // Assuming the API returns an object with a `name` property
         } catch (error) {
             console.error('Error fetching contact name:', error);
@@ -243,13 +244,15 @@ async function funDelete(param) {
             if (contact['organisation_id'].includes(param)) {
                 contact['organisation_id'] = contact['organisation_id'].filter(id => id !== param);
                 contact['companyname'] = "";
-
-                let updateResponse = await fetch(`/mongodb/contacts/${contact["id"]}`, {
+                let obj = {};
+                obj = Object.assign(obj, contact);
+                delete obj._id;
+                let updateResponse = await fetch(`/mongodb/contacts/${contact["_id"]}`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify(contact)
+                    body: JSON.stringify(obj)
                 });
                 if (!updateResponse.ok) throw new Error(`Error updating contact ${contact["id"]}: ${updateResponse.statusText}`);
             }
@@ -268,17 +271,6 @@ async function funDelete(param) {
 }
 
 const optionRow = document.querySelector(".optionsRow");
-function contactOptions() {
-    if (checkBoxArray.length !== 0) {
-        optionRow.style.display = "flex";
-        row1.style.display = "none";
-        row2.style.display = "none";
-    } else {
-        optionRow.style.display = "none";
-        row1.style.display = "flex";
-        row2.style.display = "flex";
-    }
-}
 
 
 // New Account Creation

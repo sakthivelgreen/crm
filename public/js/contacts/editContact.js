@@ -1,3 +1,5 @@
+// import { deleteID } from "./contactModule.js";
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let contactID = urlParams.get('id');
@@ -58,7 +60,7 @@ function setContacts(contact, org) {
         orgEmailInput.value = org["organisation_email"];
         orgIncomeInput.value = org["organisation_income"];
         orgAddressInput.value = org["organisation_address"];
-        orgID.value = org["id"]
+        orgID.value = org._id
     }
 
     for (const key in contact) {
@@ -89,6 +91,7 @@ function setContacts(contact, org) {
                 addressInput.value = contact[key];
                 break;
             default:
+                console.log(key);
                 console.log("default in set Contacts field function")
         }
 
@@ -165,12 +168,14 @@ contactSaveForm.addEventListener("submit", async (e) => {
 })
 
 async function updateRecord(updateContact) {
-
+    let obj = {};
+    obj = Object.assign(obj, updateContact);
+    delete obj._id;
     try {
         const contactFetch = await fetch(url, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updateContact)
+            body: JSON.stringify(obj)
         })
         if (contactFetch.ok) {
             showAlert("Updated Successfully");
@@ -298,14 +303,14 @@ let accounts = async () => {
         }
         let result = await response.json();
         filterContent(result)
-        dropDwon(result)
+        dropDown(result)
         return;
     } catch (error) {
 
     }
 }
 
-function dropDwon(result) {
+function dropDown(result) {
     while (ulAccount.hasChildNodes()) {
         ulAccount.removeChild(ulAccount.firstChild)
     }
@@ -317,7 +322,7 @@ function dropDwon(result) {
             accountExist = true;
             errorSpan.style.display = "none";
             companynameInput.value = object.organisation_name;
-            orgID.value = object.id;
+            orgID.value = object._id;
             orgAddressInput.value = object.organisation_address;
             orgEmailInput.value = object.organisation_email;
             orgPhoneInput.value = object.organisation_phone;
@@ -351,7 +356,7 @@ function filterContent(accounts) {
             noMatches.textContent = `No results found`;
             ulAccount.appendChild(noMatches);
         }
-        else dropDwon(searchAccount)
+        else dropDown(searchAccount)
     })
 
 }
@@ -404,6 +409,9 @@ createAccount.addEventListener("submit", (e) => {
 })
 
 async function funPostAccount(obj, account, method, operation) {
+    let res = {};
+    res = Object.assign(res, obj);
+    delete res._id;
     if (method === "POST") {
         try {
             let response = await fetch("/mongodb/accounts", {
@@ -411,7 +419,7 @@ async function funPostAccount(obj, account, method, operation) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(obj)
+                body: JSON.stringify(res)
             })
             if (account === 200) return true;
             let result = await response.json();
@@ -430,10 +438,11 @@ async function funPostAccount(obj, account, method, operation) {
             })
             if (!response.ok) throw new Error("Error in updating contacts id accounts module " + response.statusText);
             let result = await response.json();
-            if (operation === "PUSH") {
-                result["contacts"].push(obj);
-            } else if (operation === "POP") result["contacts"].pop(obj);
+            if (operation === "PUSH") result["contacts"].push(obj);
+            else if (operation === "POP") result["contacts"].pop(obj);
             try {
+                delete result._id;
+                console.log(result);
                 let response2 = await fetch("/mongodb/accounts/" + account, {
                     method: "PUT",
                     headers: {
