@@ -163,7 +163,7 @@ aside {
     justify-content: safe;
 }
 
-.meetingPrimaryButton,
+.MeetingPrimaryButton,
 #createMeetingSubmitButton {
     color: #0279FF;
     background: #fff;
@@ -189,7 +189,7 @@ aside {
     outline: 1px solid gray;
 }
 
-.meetingPrimaryButton:hover,
+.MeetingPrimaryButton:hover,
 #createMeetingSubmitButton:hover {
     cursor: pointer;
     background: #006BE4;

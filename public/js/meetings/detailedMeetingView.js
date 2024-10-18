@@ -20,15 +20,18 @@ const mainFunction = (data) => {
         meetingModuleElements.meetingCompleted().style.display = "inline-flex";
         buttons.meetingRepeatButton().hidden = false;
         back_url = `/templates/meetings/pastmeetings.html`;
+        anchorTags.goBack().addEventListener("click", () => {
+            window.open(back_url, '_self');
+        })
     } else {
         meetingModuleElements.meetingCompleted().style.display = "none";
         buttons.meetingStartButton().hidden = false;
         buttons.meetingEditButton().hidden = false;
         back_url = `/templates/meetings/meetings.html`;
+        anchorTags.goBack().addEventListener("click", () => {
+            window.open(back_url, '_self');
+        })
     }
-    anchorTags.goBack().addEventListener("click", () => {
-        window.history.back();
-    })
     addResponseDetails(data);
     events(data);
 }
@@ -69,6 +72,7 @@ function events(obj) {
                 if (ok) deleteMeeting(obj);
             })
     })
+    buttons.meetingRepeatButton().addEventListener('click', () => { window.open(`/templates/meetings/createMeetings.html?id=${meetingId}`) });
     buttons.meetingEditButton().addEventListener('click', () => { window.open(`/templates/meetings/EditMeetings.html?id=${meetingId}`, '_self') });
 }
 

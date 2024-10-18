@@ -48,7 +48,7 @@ MeetingAPI.get().then(Obj => {
                 } else if (e.target.parentElement.className === "meetingOptions") {
                     console.log("hi");
                 } else {
-                    window.location.href = `/templates/meetings/meetingDetail.html?id=${meetingItem.id}`;
+                    window.location.href = `/templates/meetings/meetingsDetail.html?id=${meetingItem.id}`;
                 }
             })
         }

@@ -1,5 +1,6 @@
 import { meetingModuleElements, forms } from "../declarations.js";
-import { getTimeWithAMPM, inputValidationEmpty } from "../commonFunctions.js";
+import { getTimeWithAMPM, inputValidationEmpty, timeOptions, dateFormat, dateOptions } from "../commonFunctions.js";
+
 let ParticipantsEmail = [];
 
 export const participantEvents = () => {
@@ -123,7 +124,7 @@ export function handleMeetingObj() {
     }
     let duration = (meetingModuleElements.meetingDurationHours().value * 60 * 60 * 1000) + (meetingModuleElements.meetingDurationMinutes().value * 60 * 1000)
     inputs.forEach((input) => {
-        validity = inputValidationEmpty(input)
+        validity = inputValidationEmpty(input);
     })
     if (!validity) {
         obj = {
@@ -142,4 +143,33 @@ export function handleMeetingObj() {
     }
     participants.length > 0 ? obj.session.participants = participants : null;
     return obj;
+}
+
+export const setDuration = (obj) => {
+    let duration = ((obj.duration / 60) / 60) / 1000;
+    let arr = duration.toString().split('.');
+    let minObj = {
+        0: 0,
+        25: 15,
+        5: 30,
+        75: 45
+    }
+    meetingModuleElements.meetingDurationHours().value = arr[0];
+    meetingModuleElements.meetingDurationMinutes().value = minObj[arr[1]];
+}
+
+export const setTime = (obj) => {
+    timeOptions.hour12 = false;
+    const time = dateFormat(obj.startTimeMillisec, timeOptions)
+    meetingModuleElements.meetingTime().value = time;
+}
+
+export const setDate = (obj) => {
+    const date = dateFormat(obj.startTimeMillisec, dateOptions)
+    meetingModuleElements.meetingDate().value = date;
+}
+
+export const setMeetingValues = (obj) => {
+    meetingModuleElements.meetingTopic().value = obj.topic;
+    meetingModuleElements.meetingAgenda().value = obj.agenda;
 }

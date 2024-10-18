@@ -1,5 +1,5 @@
-import { getParams, timeOptions, dateFormat, dateOptions, back } from "../commonFunctions.js";
-import { duration, participantEvents, handleMeetingObj } from "./meetingModule.js";
+import { getParams, back } from "../commonFunctions.js";
+import { duration, participantEvents, handleMeetingObj, setDuration, setDate, setTime, setMeetingValues } from "./meetingModule.js";
 import REST from "../rest.js";
 import { meetingModuleElements } from "../declarations.js";
 
@@ -20,27 +20,13 @@ MeetingApi.getByID(Params.id)
 function mainFunction(data) {
     participantEvents();
     duration();
+    setDuration(data);
     setTime(data);
     setDate(data);
     setMeetingValues(data);
     EditMeetingSave();
 }
 
-const setTime = (obj) => {
-    timeOptions.hour12 = false;
-    const time = dateFormat(obj.startTimeMillisec, timeOptions)
-    meetingModuleElements.meetingTime().value = time;
-}
-
-const setDate = (obj) => {
-    const date = dateFormat(obj.startTimeMillisec, dateOptions)
-    meetingModuleElements.meetingDate().value = date;
-}
-
-const setMeetingValues = (obj) => {
-    meetingModuleElements.meetingTopic().value = obj.topic;
-    meetingModuleElements.meetingAgenda().value = obj.agenda;
-}
 
 const EditMeetingSave = () => {
     meetingModuleElements.EditMeetingSubmitButton().addEventListener('click', (e) => {
