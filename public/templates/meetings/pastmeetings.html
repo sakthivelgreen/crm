@@ -13,43 +13,47 @@
 </head>
 
 <body>
-    <navbar-element></navbar-element>
-    <div class="meetingsNavbar">
-        <nav>
-            <div class="left">
-                <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
-                            src="/static/newMeetingIconWithName.png" alt="meeting-ico"></a></span>
-            </div>
-            <div class="right"></div>
-        </nav>
-    </div>
-    <div class="container">
-        <aside>
-            <custom-sidebar></custom-sidebar>
-        </aside>
-        <main id="meetingMainElement">
-            <div class="nav2">
-                <div class="nav2Left">
-                    <Ul id="meetingUpcomingPastUL">
-                        <li class="li"><a href="/templates/meetings/meetings.html" id="upcomingMeetings">Upcoming</a>
-                        </li>
-                        <li class="li"><a href="/templates/meetings/pastmeetings.html" id="completedMeetings">Past</a>
-                        </li>
-                    </Ul>
+    <div class="wrapper">
+        <navbar-element></navbar-element>
+        <div class="meetingsNavbar">
+            <nav>
+                <div class="left">
+                    <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
+                                src="/static/newMeetingIconWithName.png" alt="meeting-ico"></a></span>
                 </div>
-                <div class="nav2Right">
-                    <button id="createMeetingButton" class="MeetingPrimaryButton">Create Meeting</button>
+                <div class="right"></div>
+            </nav>
+        </div>
+        <div class="container">
+            <aside>
+                <custom-sidebar></custom-sidebar>
+            </aside>
+            <main id="meetingMainElement">
+                <div class="nav2">
+                    <div class="nav2Left">
+                        <Ul id="meetingUpcomingPastUL">
+                            <li class="li"><a href="/templates/meetings/meetings.html"
+                                    id="upcomingMeetings">Upcoming</a>
+                            </li>
+                            <li class="li"><a href="/templates/meetings/pastmeetings.html"
+                                    id="completedMeetings">Past</a>
+                            </li>
+                        </Ul>
+                    </div>
+                    <div class="nav2Right">
+                        <button id="createMeetingButton" class="MeetingPrimaryButton">Create Meeting</button>
+                    </div>
                 </div>
-            </div>
-            <div class="content">
-                <div id="meetingsToday" class="meetingsList"></div>
-                <div id="meetingsYesterday" class="meetingsList"></div>
-                <div id="meetingsThisWeek" class="meetingsList"></div>
-                <div id="meetingsLastWeek" class="meetingsList"></div>
-                <div id="meetingsThisMonth" class="meetingsList"></div>
-                <div id="meetingsLater" class="meetingsList"></div>
-            </div>
-        </main>
+                <div class="content">
+                    <div id="meetingsToday" class="meetingsList"></div>
+                    <div id="meetingsYesterday" class="meetingsList"></div>
+                    <div id="meetingsThisWeek" class="meetingsList"></div>
+                    <div id="meetingsLastWeek" class="meetingsList"></div>
+                    <div id="meetingsThisMonth" class="meetingsList"></div>
+                    <div id="meetingsLater" class="meetingsList"></div>
+                </div>
+            </main>
+        </div>
     </div>
     <script type="module" src="/js/meetings/pastmeetings.js"></script>
 </body>

@@ -12,25 +12,27 @@
 </head>
 
 <body>
-    <navbar-element></navbar-element>
-    <div class="meetingsNavbar">
-        <nav>
-            <div class="left">
-                <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
-                            src="/static/newMeetingIconWithName.png"></a></span>
-            </div>
-            <div class="right">
-            </div>
-            <a href="/templates/meetings/createMeetings.html" target="_parent" hidden id="link"></a>
-        </nav>
-    </div>
-    <div class="container">
-        <aside>
-            <custom-sidebar></custom-sidebar>
-        </aside>
-        <main id="meetingMainElement">
+    <div class="wrapper">
+        <navbar-element></navbar-element>
+        <div class="meetingsNavbar">
+            <nav>
+                <div class="left">
+                    <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
+                                src="/static/newMeetingIconWithName.png"></a></span>
+                </div>
+                <div class="right">
+                </div>
+                <a href="/templates/meetings/createMeetings.html" target="_parent" hidden id="link"></a>
+            </nav>
+        </div>
+        <div class="container">
+            <aside>
+                <custom-sidebar></custom-sidebar>
+            </aside>
+            <main id="meetingMainElement">
 
-        </main>
+            </main>
+        </div>
     </div>
     <script type="module" src="/js/declarations.js" defer></script>
 </body>

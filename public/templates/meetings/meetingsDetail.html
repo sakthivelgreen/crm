@@ -13,125 +13,127 @@
 </head>
 
 <body>
-    <navbar-element></navbar-element>
-    <div class="meetingsNavbar">
-        <nav>
-            <div class="left">
-                <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
-                            src="/static/newMeetingIconWithName.png" alt="meeting-ico"></a></span>
-            </div>
-            <div class="right"></div>
-        </nav>
-    </div>
-    <div class="container">
-        <aside>
-            <custom-sidebar></custom-sidebar>
-        </aside>
-        <main id="detailed_Meeting_View_MainElement">
-            <div class="detailsTitleBar">
-                <div class="details_TitleBar_Left">
-                    <div class="TitleContainer">
-                        <div>
-                            <span id="goBack">
-                                <img src="../../static/back.svg" alt="Back">
-                            </span>
-                            <span id="meetingTopic"></span>
-                            <span id="meetingTypeIcon">
-                                <img src="" alt="" id="MeetingType">
-                            </span>
-                        </div>
-                        <div id="meetingCompleted" style="display: none;">Completed</div>
-                    </div>
+    <div class="wrapper">
+        <navbar-element></navbar-element>
+        <div class="meetingsNavbar">
+            <nav>
+                <div class="left">
+                    <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
+                                src="/static/newMeetingIconWithName.png" alt="meeting-ico"></a></span>
                 </div>
-                <div class="details_TitleBar_Right">
-                    <button id="meetingStartButton" hidden>Start Meeting</button>
-                    <button id="meetingEditButton" hidden>Edit</button>
-                    <button id="meetingRepeatButton" hidden>Repeat Meeting</button>
-                    <button id="meetingCancelButton">Cancel</button>
-                </div>
-            </div>
-            <div class="meetingContentOuterDiv">
-                <div class="meetingContentInnerDiv">
-                    <div class="calender">
-                        <div class="left-ico">
+                <div class="right"></div>
+            </nav>
+        </div>
+        <div class="container">
+            <aside>
+                <custom-sidebar></custom-sidebar>
+            </aside>
+            <main id="detailed_Meeting_View_MainElement">
+                <div class="detailsTitleBar">
+                    <div class="details_TitleBar_Left">
+                        <div class="TitleContainer">
                             <div>
-                                <img src="../../static/calendar.svg" alt="Calendar" height="25px" width="25px">
+                                <span id="goBack">
+                                    <img src="../../static/back.svg" alt="Back">
+                                </span>
+                                <span id="meetingTopic"></span>
+                                <span id="meetingTypeIcon">
+                                    <img src="" alt="" id="MeetingType">
+                                </span>
                             </div>
-                        </div>
-                        <div class="right-content">
-                            <div class="meetingTimings">
-                                <div id="meetingDate"></div>
-                                <div id="meetingRegion"></div>
-                            </div>
+                            <div id="meetingCompleted" style="display: none;">Completed</div>
                         </div>
                     </div>
-                    <div class="Host">
-                        <div class="left-ico">
-                            <div>
-                                <img src="../../static/cohost-icon.svg" alt="Calendar" height="25px" width="25px">
-                            </div>
-                        </div>
-                        <div class="right-content">
-                            <div class="meetingHostDetails">
-                                <div id="Host">
-                                    <p>Host</p>
-                                    <p id="hostMail"></p>
+                    <div class="details_TitleBar_Right">
+                        <button id="meetingStartButton" hidden>Start Meeting</button>
+                        <button id="meetingEditButton" hidden>Edit</button>
+                        <button id="meetingRepeatButton" hidden>Repeat Meeting</button>
+                        <button id="meetingCancelButton">Cancel</button>
+                    </div>
+                </div>
+                <div class="meetingContentOuterDiv">
+                    <div class="meetingContentInnerDiv">
+                        <div class="calender">
+                            <div class="left-ico">
+                                <div>
+                                    <img src="../../static/calendar.svg" alt="Calendar" height="25px" width="25px">
                                 </div>
-                                <div id="Department"></div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="joinLink">
-                        <div class="left-ico">
-                            <div>
-                                <img src="../../static/participants.svg" alt="Calendar" height="25px" width="25px">
-                            </div>
-                        </div>
-                        <div class="right-content">
-                            <div id="participants">
-                                <p>Join Link</p>
-                                <p id="joinLink"></p>
-                                <div class="meetingKeyPassword">
-                                    <p>Meeting ID: <span id="meetingKey"></span></p>
-                                    <p>Password: <span id="meetingPassword"></span></p>
+                            <div class="right-content">
+                                <div class="meetingTimings">
+                                    <div id="meetingDate"></div>
+                                    <div id="meetingRegion"></div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="reminder">
-                        <div class="left-ico">
-                            <div>
-                                <img src="../../static/reminder-icon.svg" alt="Calendar" height="25px" width="25px">
+                        <div class="Host">
+                            <div class="left-ico">
+                                <div>
+                                    <img src="../../static/cohost-icon.svg" alt="Calendar" height="25px" width="25px">
+                                </div>
+                            </div>
+                            <div class="right-content">
+                                <div class="meetingHostDetails">
+                                    <div id="Host">
+                                        <p>Host</p>
+                                        <p id="hostMail"></p>
+                                    </div>
+                                    <div id="Department"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="right-content">
-                            <div id="meetingReminderDiv">
-                                <p>Reminders: <span id="reminderCount"></span></p>
+                        <div class="joinLink">
+                            <div class="left-ico">
+                                <div>
+                                    <img src="../../static/participants.svg" alt="Calendar" height="25px" width="25px">
+                                </div>
+                            </div>
+                            <div class="right-content">
+                                <div id="participants">
+                                    <p>Join Link</p>
+                                    <p id="joinLink"></p>
+                                    <div class="meetingKeyPassword">
+                                        <p>Meeting ID: <span id="meetingKey"></span></p>
+                                        <p>Password: <span id="meetingPassword"></span></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="audio" style="display: none;">
-                        <div class="left-ico">
-                            <div>
-                                <img src="../../static/audio.svg" alt="Calendar" height="25px" width="25px">
+                        <div class="reminder">
+                            <div class="left-ico">
+                                <div>
+                                    <img src="../../static/reminder-icon.svg" alt="Calendar" height="25px" width="25px">
+                                </div>
+                            </div>
+                            <div class="right-content">
+                                <div id="meetingReminderDiv">
+                                    <p>Reminders: <span id="reminderCount"></span></p>
+                                </div>
                             </div>
                         </div>
-                        <div class="right-content">
+                        <div class="audio" style="display: none;">
+                            <div class="left-ico">
+                                <div>
+                                    <img src="../../static/audio.svg" alt="Calendar" height="25px" width="25px">
+                                </div>
+                            </div>
+                            <div class="right-content">
 
-                        </div>
-                    </div>
-                    <div class="agenda" style="display: none;">
-                        <div class="left-ico">
-                            <div>
-                                <img src="../../static/agenda-icon.svg" alt="Calendar" height="25px" width="25px">
                             </div>
                         </div>
-                        <div class="right-content">
+                        <div class="agenda" style="display: none;">
+                            <div class="left-ico">
+                                <div>
+                                    <img src="../../static/agenda-icon.svg" alt="Calendar" height="25px" width="25px">
+                                </div>
+                            </div>
+                            <div class="right-content">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 </body>
 

@@ -63,13 +63,14 @@ aside {
     position: relative;
     width: 5em;
     background-color: #1b2a3f;
+    max-height: 100%;
 }
 
 .container {
     position: relative;
     width: 100%;
     display: flex;
-    flex: auto;
+    height: calc(100% - 7em);
 }
 
 
@@ -464,12 +465,13 @@ aside {
 #detailed_Meeting_View_MainElement {
     margin: 15px 15px 15px 15px;
     background: #fff;
+    width: 100%;
 }
 
 .detailsTitleBar {
     box-sizing: border-box;
     display: flex;
-    flex-direction: row;
+    align-items: center;
     min-height: 75px;
     box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.3);
 }
@@ -564,19 +566,19 @@ aside {
 
 .meetingContentOuterDiv {
     position: relative;
-    height: calc(100% - 50px);
+    height: 80%;
     width: 100%;
-    overflow: auto;
     display: flex;
     padding: 10px;
     column-count: 2;
+    overflow: auto;
 }
 
 .meetingContentInnerDiv {
-    max-width: 65%;
-    width: 65%;
-    height: auto;
+    position: relative;
+    flex: auto;
     padding: 10px;
+    overflow: auto;
 }
 
 .meetingContentInnerDiv>div {

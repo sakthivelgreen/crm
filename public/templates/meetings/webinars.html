@@ -12,37 +12,41 @@
 </head>
 
 <body>
-    <navbar-element></navbar-element>
-    <div class="meetingsNavbar">
-        <nav>
-            <div class="left">
-                <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
-                            src="/static/newMeetingIconWithName.png"></a></span>
-            </div>
-            <div class="right">
-            </div>
-            <a href="/templates/meetings/createMeetings.html" target="_parent" hidden id="link"></a>
-        </nav>
-    </div>
-    <div class="container">
-        <aside>
-            <custom-sidebar></custom-sidebar>
-        </aside>
-        <main id="meetingMainElement">
-            <div class="nav2">
-                <div class="nav2Left">
-                    <Ul id="webinarUpcomingPastUL">
-                        <li class="li"><a href="#" id="upcomingWebinars">Upcoming</a>
-                        </li>
-                        <li class="li"><a href="#" id="completedWebinars">Past</a>
-                        </li>
-                    </Ul>
+    <div class="wrapper"><navbar-element></navbar-element>
+        <div class="meetingsNavbar">
+            <nav>
+                <div class="left">
+                    <span id="meetings"><a href="/templates/meetings/home.html" target="_parent"><img
+                                src="/static/newMeetingIconWithName.png"></a></span>
                 </div>
-                <div class="nav2Right">
-                    <button id="createWebinarButton" class="MeetingPrimaryButton">Create Webinar</button>
+                <div class="right">
                 </div>
-            </div>
-        </main>
+                <a href="/templates/meetings/createMeetings.html" target="_parent" hidden id="link"></a>
+            </nav>
+        </div>
+        <div class="container">
+            <aside>
+                <custom-sidebar></custom-sidebar>
+            </aside>
+            <main id="meetingMainElement">
+                <div class="nav2">
+                    <div class="nav2Left">
+                        <Ul id="webinarUpcomingPastUL">
+                            <li class="li"><a href="#" id="upcomingWebinars">Upcoming</a>
+                            </li>
+                            <li class="li"><a href="#" id="completedWebinars">Past</a>
+                            </li>
+                        </Ul>
+                    </div>
+                    <div class="nav2Right">
+                        <button id="createWebinarButton" class="MeetingPrimaryButton">Create Webinar</button>
+                    </div>
+                </div>
+                <div style="display: flex;justify-content: center;align-items: center; height: 70%;">
+                    <h1 style="font-size: x-large;">This page is still in Progress</h1>
+                </div>
+            </main>
+        </div>
     </div>
     <script type="module" src="/js/declarations.js" defer></script>
 </body>
