@@ -12,109 +12,112 @@
 </head>
 
 <body>
-    <div class="dialogContainer" style="display: none;">
-        <dialog id="popupAcc">
-            <form id="quickAcc">
-                <label for="accName">Organisation Name</label>
-                <input type="text" name="accName" id="accName" required>
-                <label for="accEmail">Organisation Email</label>
-                <input type="email" name="accEmail" id="accEmail" required>
-                <label for="accIncome">Annual Income</label>
-                <input type="number" name="accIncome" id="accIncome" required>
-                <div>
-                    <button type="button" id="cancelPopup" class="defaultBtn">Cancel</button>
-                    <button type="submit" id="createAccountBtn" class="primaryBtn">Create Account</button>
-                </div>
-
-            </form>
-        </dialog>
-    </div>
-    <navbar-element></navbar-element>
-    <div class="topRowDiv">
-        <ul class="topRow1">
-            <li>
-                <h3>Edit Contact</h3>
-            </li>
-            <li><select name="layout" id="layoutSelect" class="defaultBtn">
-                    <option value="standard">Standard</option>
-                </select></li>
-            <li><a href="#">Edit Page Layout</a></li>
-        </ul>
-        <ul class="topRow2">
-            <li><button class="defaultBtn" id="cancelBtn">Cancel</button></li>
-            <li><button class="defaultBtn" id="btnSaveAndNew">Save and New</button></li>
-            <li><button id="saveContactBtn" class="primaryBtn" type="submit">Save</button></li>
-        </ul>
-    </div>
-    <div class="content">
-
-        <div class="createContactContainer">
-            <form id="createContactForm">
-
-                <div class="individualForm">
-                    <div class="form-elements-div">
-                        <label for="firstname">First Name</label>
-                        <input type="text" name="firstname" id="firstname" class="form-elements">
+    <div class="wrapper">
+        <div class="dialogContainer" style="display: none;">
+            <dialog id="popupAcc">
+                <form id="quickAcc">
+                    <label for="accName">Organisation Name</label>
+                    <input type="text" name="accName" id="accName" required>
+                    <label for="accEmail">Organisation Email</label>
+                    <input type="email" name="accEmail" id="accEmail" required>
+                    <label for="accIncome">Annual Income</label>
+                    <input type="number" name="accIncome" id="accIncome" required>
+                    <div>
+                        <button type="button" id="cancelPopup" class="defaultBtn">Cancel</button>
+                        <button type="submit" id="createAccountBtn" class="primaryBtn">Create Account</button>
                     </div>
 
-                    <div class="form-elements-div">
-                        <label for="lastname">Last Name</label>
-                        <input type="text" name="lastname" id="lastname" class="form-elements">
-                    </div>
-
-                    <div class="form-elements-div">
-                        <label for="email">Email ID</label>
-                        <input type="text" name="email" id="email" class="form-elements">
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="phone">Phone</label>
-                        <input type="text" name="phone" id="phone" class="form-elements" maxlength="10">
-                    </div>
-
-                    <div class="form-elements-div">
-                        <label for="product">Product</label>
-                        <input type="text" name="product" id="product" class="form-elements">
-                    </div>
-
-                    <div class="form-elements-div">
-                        <label for="address">Address</label>
-                        <input type="text" name="address" id="address" class="form-elements">
-                    </div>
-                </div>
-                <div class="orgForm">
-                    <div class="form-elements-div">
-                        <input type="text" id="orgID" hidden>
-                        <input type="text" id="findID" hidden>
-                        <label for="companyname">Organization Name</label>
-                        <input type="text" name="companyname" id="companyname" class="form-elements">
-                        <span id="accError" style="display: none;">No such Accounts Exits <a href="#"
-                                id="createAccount">Create New
-                                Account</a></span>
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="designation">Designation / Role</label>
-                        <input type="text" name="designation" id="designation" class="form-elements">
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="orgEmail">Organisation Email</label>
-                        <input type="text" name="orgEmail" id="orgEmail" class="form-elements" disabled>
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="orgPhone">Organisation Phone</label>
-                        <input type="tel" name="orgPhone" id="orgPhone" class="form-elements" maxlength="10" disabled>
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="orgIncome">Annual Income</label>
-                        <input type="number" name="orgIncome" id="orgIncome" class="form-elements" disabled>
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="orgAddress">Organisation Address</label>
-                        <textarea name="orgAddress" id="orgAddress" class="form-elements" disabled></textarea>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </dialog>
         </div>
+        <navbar-element></navbar-element>
+        <div class="topRowDiv">
+            <ul class="topRow1">
+                <li>
+                    <h3>Edit Contact</h3>
+                </li>
+                <li><select name="layout" id="layoutSelect" class="defaultBtn">
+                        <option value="standard">Standard</option>
+                    </select></li>
+                <li><a href="#">Edit Page Layout</a></li>
+            </ul>
+            <ul class="topRow2">
+                <li><button class="defaultBtn" id="cancelBtn">Cancel</button></li>
+                <li><button class="defaultBtn" id="btnSaveAndNew">Save and New</button></li>
+                <li><button id="saveContactBtn" class="primaryBtn" type="submit">Save</button></li>
+            </ul>
+        </div>
+        <div class="content">
 
+            <div class="createContactContainer">
+                <form id="createContactForm">
+
+                    <div class="individualForm">
+                        <div class="form-elements-div">
+                            <label for="firstname">First Name</label>
+                            <input type="text" name="firstname" id="firstname" class="form-elements">
+                        </div>
+
+                        <div class="form-elements-div">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" name="lastname" id="lastname" class="form-elements">
+                        </div>
+
+                        <div class="form-elements-div">
+                            <label for="email">Email ID</label>
+                            <input type="text" name="email" id="email" class="form-elements">
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="phone">Phone</label>
+                            <input type="text" name="phone" id="phone" class="form-elements" maxlength="10">
+                        </div>
+
+                        <div class="form-elements-div">
+                            <label for="product">Product</label>
+                            <input type="text" name="product" id="product" class="form-elements">
+                        </div>
+
+                        <div class="form-elements-div">
+                            <label for="address">Address</label>
+                            <input type="text" name="address" id="address" class="form-elements">
+                        </div>
+                    </div>
+                    <div class="orgForm">
+                        <div class="form-elements-div">
+                            <input type="text" id="orgID" hidden>
+                            <input type="text" id="findID" hidden>
+                            <label for="companyname">Organization Name</label>
+                            <input type="text" name="companyname" id="companyname" class="form-elements">
+                            <span id="accError" style="display: none;">No such Accounts Exits <a href="#"
+                                    id="createAccount">Create New
+                                    Account</a></span>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="designation">Designation / Role</label>
+                            <input type="text" name="designation" id="designation" class="form-elements">
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="orgEmail">Organisation Email</label>
+                            <input type="text" name="orgEmail" id="orgEmail" class="form-elements" disabled>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="orgPhone">Organisation Phone</label>
+                            <input type="tel" name="orgPhone" id="orgPhone" class="form-elements" maxlength="10"
+                                disabled>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="orgIncome">Annual Income</label>
+                            <input type="number" name="orgIncome" id="orgIncome" class="form-elements" disabled>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="orgAddress">Organisation Address</label>
+                            <textarea name="orgAddress" id="orgAddress" class="form-elements" disabled></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
     </div>
 
     <script src="/js/contacts/editContact.js" defer></script>

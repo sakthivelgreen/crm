@@ -32,25 +32,26 @@
 </head>
 
 <body>
-    <navbar-element></navbar-element>
-    <div class="container">
-        <div style="display: none;" class="hasCompany">
-            <label for="leadname">Lead</label>
-            <input type="text" name="leadname" id="leadname1" disabled>
-            <p>Convert to</p>
-            <fieldset style="border: none;">
-                <input type="radio" name="convert" id="contact" required>
-                <label for="contact">Contact</label>
-                <input type="radio" name="convert" id="contactAndaccount">
-                <label for="contactAndaccount">Contact & Account</label>
-            </fieldset>
-            <button type="button" class="primaryBtn" id="ConvertBtn1">Convert</button>
-        </div>
-        <div style="display: none;" class="hasNoCompany">
-            <header>Convert to Contact</header>
-            <label for="leadname">Lead</label>
-            <input type="text" name="leadname" id="leadname2" disabled>
-            <button type="button" class="primaryBtn" id="ConvertBtn2">Convert</button>
+    <div class="wrapper"><navbar-element></navbar-element>
+        <div class="container">
+            <div style="display: none;" class="hasCompany">
+                <label for="leadname">Lead</label>
+                <input type="text" name="leadname" id="leadname1" disabled>
+                <p>Convert to</p>
+                <fieldset style="border: none;">
+                    <input type="radio" name="convert" id="contact" required>
+                    <label for="contact">Contact</label>
+                    <input type="radio" name="convert" id="contactAndaccount">
+                    <label for="contactAndaccount">Contact & Account</label>
+                </fieldset>
+                <button type="button" class="primaryBtn" id="ConvertBtn1">Convert</button>
+            </div>
+            <div style="display: none;" class="hasNoCompany">
+                <header>Convert to Contact</header>
+                <label for="leadname">Lead</label>
+                <input type="text" name="leadname" id="leadname2" disabled>
+                <button type="button" class="primaryBtn" id="ConvertBtn2">Convert</button>
+            </div>
         </div>
     </div>
     <script src="/js/leads/convertlead.js"></script>

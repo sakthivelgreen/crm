@@ -12,96 +12,98 @@
 </head>
 
 <body>
-    <navbar-element></navbar-element>
-    <div class="topRowDiv">
-        <ul class="topRow1">
-            <li>
-                <h3>Create Lead</h3>
-            </li>
-            <li><select name="layout" id="layoutSelect" class="defaultBtn">
-                    <option value="standard">Standard</option>
-                </select></li>
-            <li><a href="#">Edit Page Layout</a></li>
-        </ul>
-        <ul class="topRow2">
-            <li><button class="defaultBtn" id="cancelBtn">Cancel</button></li>
-            <li><button class="defaultBtn" id="btnSaveAndNew">Save and New</button></li>
-            <li><button id="saveLeadBtn" class="primaryBtn" type="submit">Save</button></li>
-        </ul>
-    </div>
-    <div class="content">
+    <div class="wrapper">
+        <navbar-element></navbar-element>
+        <div class="topRowDiv">
+            <ul class="topRow1">
+                <li>
+                    <h3>Create Lead</h3>
+                </li>
+                <li><select name="layout" id="layoutSelect" class="defaultBtn">
+                        <option value="standard">Standard</option>
+                    </select></li>
+                <li><a href="#">Edit Page Layout</a></li>
+            </ul>
+            <ul class="topRow2">
+                <li><button class="defaultBtn" id="cancelBtn">Cancel</button></li>
+                <li><button class="defaultBtn" id="btnSaveAndNew">Save and New</button></li>
+                <li><button id="saveLeadBtn" class="primaryBtn" type="submit">Save</button></li>
+            </ul>
+        </div>
+        <div class="content">
 
-        <div class="createLeadContainer">
-            <form id="createLeadForm">
-                <div class="individualForm">
-                    <fieldset>
-                        <input type="radio" name="formselect" id="individual" checked>
-                        <label for="individual">Individual</label>
+            <div class="createLeadContainer">
+                <form id="createLeadForm">
+                    <div class="individualForm">
+                        <fieldset>
+                            <input type="radio" name="formselect" id="individual" checked>
+                            <label for="individual">Individual</label>
 
-                        <input type="radio" name="formselect" id="organisation">
-                        <label for="organisation">Organisation</label>
-                    </fieldset>
+                            <input type="radio" name="formselect" id="organisation">
+                            <label for="organisation">Organisation</label>
+                        </fieldset>
 
-                    <div class="form-elements-div">
-                        <label for="firstname">First Name</label>
-                        <input type="text" name="firstname" id="firstname" class="form-elements">
-                    </div>
+                        <div class="form-elements-div">
+                            <label for="firstname">First Name</label>
+                            <input type="text" name="firstname" id="firstname" class="form-elements">
+                        </div>
 
-                    <div class="form-elements-div">
-                        <label for="lastname">Last Name</label>
-                        <input type="text" name="lastname" id="lastname" class="form-elements">
-                    </div>
+                        <div class="form-elements-div">
+                            <label for="lastname">Last Name</label>
+                            <input type="text" name="lastname" id="lastname" class="form-elements">
+                        </div>
 
-                    <div class="form-elements-div">
-                        <label for="email">Email ID</label>
-                        <input type="text" name="email" id="email" class="form-elements">
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="phone">Phone</label>
-                        <input type="text" name="phone" id="phone" class="form-elements" maxlength="10">
-                    </div>
+                        <div class="form-elements-div">
+                            <label for="email">Email ID</label>
+                            <input type="text" name="email" id="email" class="form-elements">
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="phone">Phone</label>
+                            <input type="text" name="phone" id="phone" class="form-elements" maxlength="10">
+                        </div>
 
-                    <div class="form-elements-div">
-                        <label for="product">Product</label>
-                        <input type="text" name="product" id="product" class="form-elements">
-                    </div>
+                        <div class="form-elements-div">
+                            <label for="product">Product</label>
+                            <input type="text" name="product" id="product" class="form-elements">
+                        </div>
 
-                    <div class="form-elements-div">
-                        <label for="address">Address</label>
-                        <input type="text" name="address" id="address" class="form-elements">
+                        <div class="form-elements-div">
+                            <label for="address">Address</label>
+                            <input type="text" name="address" id="address" class="form-elements">
+                        </div>
                     </div>
-                </div>
-                <div class="orgForm">
-                    <div class="form-elements-div">
-                        <label for="companyname">Organization Name</label>
-                        <input type="text" name="companyname" id="companyname" class="form-elements">
+                    <div class="orgForm">
+                        <div class="form-elements-div">
+                            <label for="companyname">Organization Name</label>
+                            <input type="text" name="companyname" id="companyname" class="form-elements">
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="orgEmail">Organisation Email</label>
+                            <input type="text" name="orgEmail" id="orgEmail" class="form-elements">
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="designation">Designation / Role</label>
+                            <input type="text" name="designation" id="designation" class="form-elements">
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="orgPhone">Organisation Phone</label>
+                            <input type="text" name="orgPhone" id="orgPhone" class="form-elements" maxlength="10">
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="orgIncome">Annual Income</label>
+                            <input type="number" name="orgIncome" id="orgIncome" class="form-elements">
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="orgAddress">Organisation Address</label>
+                            <textarea name="orgAddress" id="orgAddress" class="form-elements"></textarea>
+                        </div>
                     </div>
-                    <div class="form-elements-div">
-                        <label for="orgEmail">Organisation Email</label>
-                        <input type="text" name="orgEmail" id="orgEmail" class="form-elements">
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="designation">Designation / Role</label>
-                        <input type="text" name="designation" id="designation" class="form-elements">
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="orgPhone">Organisation Phone</label>
-                        <input type="text" name="orgPhone" id="orgPhone" class="form-elements" maxlength="10">
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="orgIncome">Annual Income</label>
-                        <input type="number" name="orgIncome" id="orgIncome" class="form-elements">
-                    </div>
-                    <div class="form-elements-div">
-                        <label for="orgAddress">Organisation Address</label>
-                        <textarea name="orgAddress" id="orgAddress" class="form-elements"></textarea>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
+
         </div>
 
     </div>
-
     <script src="/js/leads/createlead.js" defer></script>
 </body>
 

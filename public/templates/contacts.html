@@ -10,64 +10,67 @@
 </head>
 
 <body id="body">
-    <navbar-element></navbar-element>
-    <div class="topRowDiv">
-        <ul class="topRow1">
-            <li>
-                <svg class="active" viewBox="110 80 20 10" width="30" height="30" id="filter">
-                    <path style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:10"
-                        d="m116.7 85.9-5-6.2h14l-5 6v4.1l-4 3z" />
-                </svg>
-            </li>
-            <li><select class="defaultBtn" name="Filter" id="Filter">
-                    <option value="allContacts" selected>All Contacts</option>
-                </select></li>
-        </ul>
-        <ul class="topRow2">
-            <li><button id="createContactBtn" class="primaryBtn">Create Contact</button></li>
-            <li><button class="defaultBtn options">Actions</button>
-                <ul id="dropDown1">
-                    <!-- <li>Mass Convert</li> -->
-                    <li>Mass Transfer</li>
-                    <li>Mass Update</li>
-                    <li>Delete</li>
-                </ul>
-            </li>
-        </ul>
-        <ul class="optionsRow">
-            <li><button class="defaultBtn" id="macroBtn">Run Macro</button></li>
-            <li><button class="defaultBtn" id="sendMail">Send Mail</button></li>
-            <li><button class="defaultBtn" id="createTask">Create Task</button></li>
-            <li><button class="defaultBtn optionsSpecific">Actions</button>
-                <ul id="dropDown2">
-                    <li hidden>Mass Update</li>
-                    <!-- <li hidden>Mass Convert</li> -->
-                    <li hidden>Change Owner</li>
-                    <li id="deleteBtn">Delete</li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="mainContainer">
-        <div class="spacing"></div>
-        <div class="Container">
-            <div id="filterContainer">
-                <ul>
-                    <li><label for="searchInput">Search</label>
-                        <select name="selectFilter" id="filterSelect">
-                            <option value="" disabled selected>Choose Filter to Search</option>
-                        </select>
-                    </li>
-                    <li>
-                        <input type="search" name="search" id="searchInput" placeholder="Search...">
-                    </li>
-                    <li>
-                        <button type="button" id="SearchBtn" class="primaryBtn" style="display: none;">Search</button>
-                    </li>
-                </ul>
-            </div>
-            <div id="ListContainer">
-                <table id="ListTable"></table>
+    <div class="wrapper"><navbar-element></navbar-element>
+        <div class="topRowDiv">
+            <ul class="topRow1">
+                <li>
+                    <svg class="active" viewBox="110 80 20 10" width="30" height="30" id="filter">
+                        <path
+                            style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:10"
+                            d="m116.7 85.9-5-6.2h14l-5 6v4.1l-4 3z" />
+                    </svg>
+                </li>
+                <li><select class="defaultBtn" name="Filter" id="Filter">
+                        <option value="allContacts" selected>All Contacts</option>
+                    </select></li>
+            </ul>
+            <ul class="topRow2">
+                <li><button id="createContactBtn" class="primaryBtn">Create Contact</button></li>
+                <li><button class="defaultBtn options">Actions</button>
+                    <ul id="dropDown1">
+                        <!-- <li>Mass Convert</li> -->
+                        <li>Mass Transfer</li>
+                        <li>Mass Update</li>
+                        <li>Delete</li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="optionsRow">
+                <li><button class="defaultBtn" id="macroBtn">Run Macro</button></li>
+                <li><button class="defaultBtn" id="sendMail">Send Mail</button></li>
+                <li><button class="defaultBtn" id="createTask">Create Task</button></li>
+                <li><button class="defaultBtn optionsSpecific">Actions</button>
+                    <ul id="dropDown2">
+                        <li hidden>Mass Update</li>
+                        <!-- <li hidden>Mass Convert</li> -->
+                        <li hidden>Change Owner</li>
+                        <li id="deleteBtn">Delete</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="mainContainer">
+            <div class="spacing"></div>
+            <div class="Container">
+                <div id="filterContainer">
+                    <ul>
+                        <li><label for="searchInput">Search</label>
+                            <select name="selectFilter" id="filterSelect">
+                                <option value="" disabled selected>Choose Filter to Search</option>
+                            </select>
+                        </li>
+                        <li>
+                            <input type="search" name="search" id="searchInput" placeholder="Search...">
+                        </li>
+                        <li>
+                            <button type="button" id="SearchBtn" class="primaryBtn"
+                                style="display: none;">Search</button>
+                        </li>
+                    </ul>
+                </div>
+                <div id="ListContainer">
+                    <table id="ListTable"></table>
+                </div>
             </div>
         </div>
     </div>

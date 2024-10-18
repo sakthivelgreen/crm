@@ -12,44 +12,45 @@
 </head>
 
 <body id="body">
-    <navbar-element></navbar-element>
-    <div class="topRowDiv">
-        <ul class="topRow1">
-            <li>
-                <button id="backArrowBtn" class="defaultBtn">
-                    <svg height="25px" width="25px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14.7 6.3l-4.4 4.4 4.4 4.4-1.4 1.4-5.6-5.6 5.6-5.6 1.4 1.4z" fill="currentColor" />
-                    </svg>
-                </button>
-            </li>
+    <div class="wrapper"><navbar-element></navbar-element>
+        <div class="topRowDiv">
+            <ul class="topRow1">
+                <li>
+                    <button id="backArrowBtn" class="defaultBtn">
+                        <svg height="25px" width="25px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.7 6.3l-4.4 4.4 4.4 4.4-1.4 1.4-5.6-5.6 5.6-5.6 1.4 1.4z" fill="currentColor" />
+                        </svg>
+                    </button>
+                </li>
 
-        </ul>
-        <ul class="topRow2">
-            <li><button id="editAccount" class="defaultBtn">Edit</button></li>
-            <li><button class="defaultBtn options"><svg height="24px" width="24px" viewBox="0 0 24 24">
-                        <circle cx="6" cy="12" r="2" fill="currentColor" />
-                        <circle cx="12" cy="12" r="2" fill="currentColor" />
-                        <circle cx="18" cy="12" r="2" fill="currentColor" />
-                    </svg></button>
-                <ul id="dropDown1">
-                    <li id="deleteBtn"><span>Delete</span></li>
-                    <hr>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="content">
-        <div class="viewAccountContainer">
-            <div class="quickLink"></div>
-            <div class="viewAccountDetails">
-                <div class="overviewBar"></div>
-                <section class="details">
-                    <table class="accountTables" id="accountTable"></table>
-                </section>
-
-            </div>
+            </ul>
+            <ul class="topRow2">
+                <li><button id="editAccount" class="defaultBtn">Edit</button></li>
+                <li><button class="defaultBtn options"><svg height="24px" width="24px" viewBox="0 0 24 24">
+                            <circle cx="6" cy="12" r="2" fill="currentColor" />
+                            <circle cx="12" cy="12" r="2" fill="currentColor" />
+                            <circle cx="18" cy="12" r="2" fill="currentColor" />
+                        </svg></button>
+                    <ul id="dropDown1">
+                        <li id="deleteBtn"><span>Delete</span></li>
+                        <hr>
+                    </ul>
+                </li>
+            </ul>
         </div>
+        <div class="content">
+            <div class="viewAccountContainer">
+                <div class="quickLink"></div>
+                <div class="viewAccountDetails">
+                    <div class="overviewBar"></div>
+                    <section class="details">
+                        <table class="accountTables" id="accountTable"></table>
+                    </section>
 
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script src="/js/accounts/viewAccount.js" defer></script>
