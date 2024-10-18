@@ -124,7 +124,6 @@ export function handleMeetingObj() {
     let duration = (meetingModuleElements.meetingDurationHours().value * 60 * 60 * 1000) + (meetingModuleElements.meetingDurationMinutes().value * 60 * 1000)
     inputs.forEach((input) => {
         validity = inputValidationEmpty(input)
-        console.log(validity);
     })
     if (!validity) {
         obj = {

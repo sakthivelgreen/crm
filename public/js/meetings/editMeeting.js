@@ -18,8 +18,6 @@ MeetingApi.getByID(Params.id)
     })
 
 function mainFunction(data) {
-    back(meetingModuleElements.closeMeetingCreateFormButton())
-    console.log(data);
     participantEvents();
     duration();
     setTime(data);
@@ -48,7 +46,7 @@ const EditMeetingSave = () => {
     meetingModuleElements.EditMeetingSubmitButton().addEventListener('click', (e) => {
         e.stopPropagation();
         const obj = handleMeetingObj();
-        console.log(obj);
+        handle_API_Operation(Params.id, obj);
     })
 }
 
@@ -57,3 +55,15 @@ flatpickr(meetingModuleElements.meetingDate(), {
     minDate: "today",
     dateFormat: "M d, Y"
 })
+
+function handle_API_Operation(id, obj) {
+    MeetingApi.put(id, obj)
+        .then(() => {
+            alert("Edit Successful")
+        })
+        .then(() => {
+            window.open(document.referrer, '_self');
+        })
+        .catch(e => console.error(e))
+
+}
