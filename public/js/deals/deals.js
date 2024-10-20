@@ -11,11 +11,15 @@ let pipelinesArray;
 
 let dealsREST = new REST("/mongodb/deals")
 let deals;
-dealsREST.get().then((obj) => {
-    deals = obj;
-}).then(() => {
-    display();
-})
+
+function main() {
+    dealsREST.get().then((obj) => {
+        deals = obj;
+    }).then(() => {
+        display();
+    })
+}
+main();
 
 function display() {
     // for getting pipelines from resource server;
@@ -119,7 +123,8 @@ function display() {
             let result = updateStage(draggedElementId, stage);
             if (result) {
                 e.target.classList.remove('noContent');
-                CheckData(stageBody.id)
+                CheckData(stageBody.id);
+                main();
             } else {
                 alert("Error Changing Stage Please Refresh the Page!!!")
             }
