@@ -1,5 +1,6 @@
 #ListContainer {
     background-color: #EDF0F4;
+    overflow: hidden;
 }
 
 .kanbanView {
