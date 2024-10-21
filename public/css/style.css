@@ -139,18 +139,13 @@ body {
 }
 
 .topRowDiv {
-    height: 8%;
+    height: 3.5em;
     width: 100%;
     display: flex;
     align-items: center;
-    box-shadow: 0px 0px 5px rgb(0, 0, 0, 0.7);
+    box-shadow: 0px 1px 2px rgb(0, 0, 0, 0.7);
     background-color: #fff;
-}
-
-.topRowDiv {
-    height: 8%;
-    display: flex;
-    align-items: center;
+    z-index: 1;
 }
 
 .topRow1,

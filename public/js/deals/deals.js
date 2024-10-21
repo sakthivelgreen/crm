@@ -206,10 +206,6 @@ function dealsFunction(pipeline, stage, stageBody) {
             dealContact.textContent = dealVariable.dealcontact
             dealClosingDate.textContent = formatDate
 
-            dealAccount.addEventListener("click", () => {
-                window.location.href = "/templates/accounts/viewAccounts.html?id=" + dealVariable.accountID
-            })
-            dealContact.addEventListener("click", () => { window.location.href = "/templates/contacts/viewContactDetail.html?id=" + dealVariable.contactID })
             dealDiv.appendChild(dealName)
             dealDiv.appendChild(dealOwner)
             dealDiv.appendChild(dealAccount)
@@ -217,7 +213,19 @@ function dealsFunction(pipeline, stage, stageBody) {
             dealDiv.appendChild(dealAmount)
             dealDiv.appendChild(dealClosingDate)
 
-            // drag event listerner
+            // Event Listeners
+            dealDiv.addEventListener('click', (eV) => {
+                eV.stopPropagation();
+                if (eV.target.className === "dealaccount") {
+                    window.location.href = "/templates/accounts/viewAccounts.html?id=" + dealVariable.accountID
+                } else if (eV.target.className === 'dealcontact') {
+                    window.location.href = "/templates/contacts/viewContactDetail.html?id=" + dealVariable.contactID
+                } else if (eV.target.className === 'dealname') {
+                    window.open(`/templates/deals/viewDeals.html?id=${dealDiv.id}`, '_self');
+                }
+            })
+
+            // drag event listener
             dealDiv.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData("text", e.target.id); // Store the ID of the dragged element
                 e.target.classList.add("dragging");

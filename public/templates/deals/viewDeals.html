@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <script type="module" src="../../components/navbar.js"></script>
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/deal.css">
+    <script type="module" src="../../js/deals/viewDeal.js" defer></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <navbar-element></navbar-element>
+        <div class="topRowDiv">
+            <ul class="topRow1">
+                <li>
+                    <button id="previousBtn" class="defaultBtn">Back </button>
+                </li>
+                <li id="pageTitle"></li>
+            </ul>
+            <ul class="topRow2">
+                <li><button type="button" class="primaryBtn" id="sendMailbtn">Send Mail</button></li>
+                <li><button type="button" class="defaultBtn" id="dealEditBtn">Edit</button></li>
+                <li><button class="defaultBtn options"><svg height="24px" width="24px" viewBox="0 0 24 24">
+                            <circle cx="6" cy="12" r="2" fill="currentColor" />
+                            <circle cx="12" cy="12" r="2" fill="currentColor" />
+                            <circle cx="18" cy="12" r="2" fill="currentColor" />
+                        </svg></button>
+                    <ul id="dropDown1">
+                        <li id="deleteBtn"><span>Delete</span></li>
+                        <hr>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="content">
+            <aside id="sideBar"></aside>
+            <main>
+                <section class="stageSection">
+                    <div class="stageDetials">
+                        <div class="left">
+                            <p>Start</p>
+                            <p id="dealCreationDate"></p>
+                        </div>
+                        <div class="right">
+                            <p>Closing</p>
+                            <p id="dealClosingDate"></p>
+                        </div>
+                    </div>
+                    <div id="stageCurrent"></div>
+                </section>
+                <section class="detailsCard">
+                    <p>Deal Information</p>
+                    <div class="innerDivDetailsCard">
+                        <div class="flexLeftContent">
+                            <div class="flcDiv">
+                                <span>Deal Name</span><span id="dealName"></span>
+                            </div>
+                            <div class="flcDiv">
+                                <span>Contact Name</span><span id="contactName"></span>
+                            </div>
+                            <div class="flcDiv">
+                                <span>Account Name</span><span id="accountName"></span>
+                            </div>
+                        </div>
+                        <div class="flexRightContent">
+                            <div class="flrDiv">
+                                <span>Amount</span><span id="dealAmount"></span>
+                            </div>
+                            <div class="flrDiv">
+                                <span>Pipeline</span><span id="dealPipeline"></span>
+                            </div>
+                            <div class="flrDiv">
+                                <span>Stage</span><span id="dealStage"></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+        </div>
+    </div>
+</body>
+
+</html>
