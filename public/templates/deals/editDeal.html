@@ -17,7 +17,7 @@
         <div class="topRowDiv">
             <ul class="topRow1">
                 <li>
-                    <h3>Create Deal</h3>
+                    <h3>Edit Deal</h3>
                 </li>
                 <li hidden><select name="layout" id="layoutSelect" class="defaultBtn">
                         <option value="standard">Standard</option>
@@ -29,6 +29,56 @@
                 <li><button class="defaultBtn" id="btnSaveAndNew">Save and New</button></li>
                 <li><button id="saveDealBtn" class="primaryBtn" type="button">Save</button></li>
             </ul>
+        </div>
+        <div class="content">
+            <div class="outerContainer">
+                <form id="AccountForm">
+                    <div class="deal">
+                        <div class="form-elements-div">
+                            <label for="dealName">Deal Name</label>
+                            <input type="text" name="dealName" id="dealName" class="form-elements" required>
+                        </div>
+
+                        <div class="form-elements-div">
+                            <label for="dealOwner">Deal Owner</label>
+                            <input type="text" name="dealOwner" id="dealOwner" class="form-elements">
+                        </div>
+
+                        <div class="form-elements-div">
+                            <label for="dealAmount">Amount</label>
+                            <input type="text" name="dealAmount" id="dealAmount" class="form-elements" maxlength="10"
+                                required>
+                        </div>
+
+                        <div class="form-elements-div">
+                            <label for="dealClosingDate">Closing Date</label>
+                            <input type="text" name="dealClosingDate" id="dealClosingDate" class="form-elements"
+                                required>
+                        </div>
+                    </div>
+                    <div class="details">
+                        <div class="form-elements-div">
+                            <label for="contactName">Contact Person</label>
+                            <select name="contactName" id="contactName" class="form-elements" required></select>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="accountName">Account Name</label>
+                            <select name="accountName" id="accountName" class="form-elements"></select>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="dealPipeline">Pipeline</label>
+                            <select name="dealPipeline" id="dealPipeline" class="form-elements">
+                            </select>
+                        </div>
+                        <div class="form-elements-div">
+                            <label for="dealStage">Stage</label>
+                            <select name="dealStage" id="dealStage" class="form-elements">
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
 

@@ -12,5 +12,9 @@ export const declarations = {
     accountName: () => document.querySelector('#accountName'),
     dealAmount: () => document.querySelector('#dealAmount'),
     dealPipeline: () => document.querySelector('#dealPipeline'),
-    dealStage: () => document.querySelector('#dealStage')
+    dealStage: () => document.querySelector('#dealStage'),
+    cancelBtn: () => document.querySelector('#cancelBtn'),
+    btnSaveAndNew: () => document.querySelector('#btnSaveAndNew'),
+    saveDealBtn: () => document.querySelector('#saveDealBtn'),
+    dealOwner: () => document.querySelector('#dealOwner'),
 }
