@@ -45,7 +45,7 @@ let piplines = new REST("/mongodb/pipelines");
 piplines.get().then((obj) => {
     obj.forEach(data => {
         for (const pipeline in data) {
-            if (pipeline === "id") {
+            if (pipeline === "_id") {
                 continue
             }
             const option = document.createElement('option');
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
         li.addEventListener("click", (e) => {
             accountInput.value = account.organisation_name;
             accountId = account.id;
-            updateContact(contactsArray);
+            // updateContact(contactsArray);
         })
     }
 
@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
         li.addEventListener("click", () => {
             contactPersonInput.value = name;
             contactId = contact.id;
-            updateAccount(accountsArray)
+            // updateAccount(accountsArray)
         })
     }
 
@@ -263,7 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
     contactPersonInput.addEventListener("keyup", () => {
         accountId = null;
         contactId = null;
-        accountInput.value = "";
         updateAccount(accountsArray);
         // Filter contacts based on the input value
         const inputValue = contactPersonInput.value.toLowerCase();

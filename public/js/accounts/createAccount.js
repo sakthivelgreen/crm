@@ -44,7 +44,7 @@ form.addEventListener("submit", (e) => {
 
 async function storeData(obj) {
     try {
-        let response = await fetch("http://localhost:3000/accounts", {
+        let response = await fetch("/mongodb/accounts", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
