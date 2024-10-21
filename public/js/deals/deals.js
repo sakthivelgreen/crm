@@ -220,7 +220,8 @@ function dealsFunction(pipeline, stage, stageBody) {
                     window.location.href = "/templates/accounts/viewAccounts.html?id=" + dealVariable.accountID
                 } else if (eV.target.className === 'dealcontact') {
                     window.location.href = "/templates/contacts/viewContactDetail.html?id=" + dealVariable.contactID
-                } else if (eV.target.className === 'dealname') {
+                }
+                if (eV.target.className === 'dealname') {
                     window.open(`/templates/deals/viewDeals.html?id=${dealDiv.id}`, '_self');
                 }
             })
