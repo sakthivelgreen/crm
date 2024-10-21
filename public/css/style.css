@@ -17,7 +17,6 @@
     box-sizing: border-box;
     font-family: "Open Sans", sans-serif;
     scrollbar-width: thin;
-    scrollbar-gutter: stable both-edges;
 }
 
 body {
