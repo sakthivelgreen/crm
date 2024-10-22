@@ -17,4 +17,5 @@ export const declarations = {
     btnSaveAndNew: () => document.querySelector('#btnSaveAndNew'),
     saveDealBtn: () => document.querySelector('#saveDealBtn'),
     dealOwner: () => document.querySelector('#dealOwner'),
+    deleteBtn: () => document.querySelector('#deleteBtn')
 }

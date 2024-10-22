@@ -1,10 +1,12 @@
 import { getParams, back, dateFormat, dateOptions } from '../commonFunctions.js';
 import { declarations } from './dealDeclarations.js';
-import { getDeal, getPipeline, updateStage } from './dealModule.js';
-
+import { API_Endpoint, getDeal, getPipeline, updateStage } from './dealModule.js';
+import { PopUp } from '../../components/popup.js';
 
 // redirect -> Back
-back(declarations.previousPage());
+declarations.previousPage().addEventListener('click', () => {
+    window.open('/templates/deals.html', '_self')
+});
 
 // Deal ID from Parameter
 const dealID = getParams(window.location.search).id;
@@ -41,6 +43,18 @@ function events(obj) {
             window.location.reload();
         }
     })
+    const optionBtn = document.querySelector(".options");
+    optionBtn.onfocus = () => {
+        let menu = document.getElementById("dropDown1");
+        menu.style.display = "block";
+    }
+    optionBtn.onblur = () => {
+        setTimeout(() => {
+            let menu = document.getElementById("dropDown1");
+            menu.style.display = "none";
+        }, 300)
+    }
+    declarations.deleteBtn().addEventListener('click', handleDelete);
 }
 
 async function setStage(obj) {
@@ -57,3 +71,20 @@ async function setStage(obj) {
     }
 }
 
+async function handleDelete(e) {
+    const popup = new PopUp("Confirm Delete", "Delete", "red");
+    document.body.appendChild(popup);
+    popup.confirm().then((ok) => {
+        if (ok) deleteDeal();
+    })
+
+}
+async function deleteDeal() {
+    try {
+        let response = await API_Endpoint.delete(dealID);
+        if (response) window.open('/templates/deals.html', '_self');
+    } catch (error) {
+        console.error(error);
+        alert('Error in Deletion')
+    }
+}

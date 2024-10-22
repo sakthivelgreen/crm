@@ -260,6 +260,8 @@ section {
 .flcDiv span:first-child,
 .flrDiv span:first-child {
     width: 30%;
+    min-width: 150px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: end;
