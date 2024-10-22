@@ -31,6 +31,7 @@ let dealObj = {
 let contacts = new REST("/mongodb/contacts");
 let accounts = new REST("/mongodb/accounts");
 
+const popup = document.querySelector("#popUp");
 const dateInput = document.querySelector("#closingDate");
 const cancelBtn = document.querySelector("#cancelBtn");
 const saveBtn = document.querySelector("#saveDealBtn");
@@ -133,20 +134,19 @@ function createDeal(e) {
 
     let result = new REST("/mongodb/deals");
     if (dealName && dealAmount && dealContact && date !== "") {
-        console.log(dealObj);
-        // result.post(dealObj).then(() => {
-        //     const message = document.createElement("span");
-        //     const closeBtn = document.createElement("button");
-        //     closeBtn.textContent = "Close"
-        //     message.textContent = `Deal Created Successfully`;
-        //     popup.appendChild(message);
-        //     popup.appendChild(closeBtn);
-        //     popup.showModal();
-        //     closeBtn.addEventListener("click", () => {
-        //         popup.close();
-        //         saveAndNew_clicked ? window.location.href = `/templates/deals/createDeal.html` : window.location.href = `/templates/deals.html`;
-        //     });
-        // })
+        result.post(dealObj).then(() => {
+            const message = document.createElement("span");
+            const closeBtn = document.createElement("button");
+            closeBtn.textContent = "Close"
+            message.textContent = `Deal Created Successfully`;
+            popup.appendChild(message);
+            popup.appendChild(closeBtn);
+            popup.showModal();
+            closeBtn.addEventListener("click", () => {
+                popup.close();
+                saveAndNew_clicked ? window.location.href = `/templates/deals/createDeal.html` : window.location.href = `/templates/deals.html`;
+            });
+        })
     } else {
         alert("Fill the required Fields");
     }

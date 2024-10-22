@@ -38,11 +38,14 @@ async function setValues(obj) {
     let contacts = await Contacts_Endpoint.get();
 
     document.title = `Edit Deal ( ${obj.dealname} ) - Zoho CRM`;
-    declarations.dealName().value = obj.dealname;
-    declarations.dealOwner().value = obj.dealowner;
-    declarations.dealAmount().value = obj.dealamount;
-    declarations.dealClosingDate().value = dateFormat(new Date(obj.dealclosingdate), dateOptions);
-
+    declarations.dealName().value = updateObject.dealname = obj.dealname;
+    declarations.dealOwner().value = updateObject.dealowner = obj.dealowner;
+    declarations.dealAmount().value = updateObject.dealamount = obj.dealamount;
+    declarations.dealClosingDate().value = updateObject.dealclosingdate = dateFormat(new Date(obj.dealclosingdate), dateOptions);
+    updateObject.dealcontact = obj.dealcontact;
+    updateObject.dealaccount = obj.dealaccount;
+    updateObject.accountID = obj.accountID;
+    updateObject.contactID = obj.contactID;
     setPipelines(obj);
     setDate();
     setContacts(obj, contacts);
@@ -69,11 +72,15 @@ async function setPipelines(deal) {
             option.textContent = pipeline.charAt(0).toUpperCase() + pipeline.slice(1);
             declarations.dealPipeline().appendChild(option);
             if (pipeline === deal.dealpipeline) {
+                updateObject.dealpipeline = pipeline;
                 for (const element in data[pipeline]) {
                     const stage = document.createElement("option");
                     stage.value = element;
                     stage.textContent = element.charAt(0).toUpperCase() + element.slice(1);
-                    if (element === deal.dealstage) stage.selected = 'true';
+                    if (element === deal.dealstage) {
+                        updateObject.dealstage = element;
+                        stage.selected = 'true';
+                    };
                     declarations.dealStage().appendChild(stage);
                 }
                 option.selected = "true";
@@ -121,6 +128,7 @@ async function setAccounts(deal, accounts) {
     optionDefault.textContent = 'Select Account';
     optionDefault.value = "";
     optionDefault.selected = true;
+    optionDefault.addEventListener("click", () => updateObject.dealaccount = "")
     declarations.accountName().appendChild(optionDefault);
     accounts.forEach(account => {
         accountName = document.createElement('option');
@@ -171,18 +179,21 @@ function events(contacts, accounts, obj) {
 
 }
 async function updateDeal() {
-    updateObject.dealname = declarations.dealName().value;
-    updateObject.dealowner = declarations.dealOwner().value;
-    updateObject.dealpipeline = declarations.dealPipeline().value;
-    updateObject.dealstage = declarations.dealStage().value;
-    updateObject.dealamount = declarations.dealAmount().value;
-    updateObject.dealclosingdate = declarations.dealClosingDate().value;
-    try {
-        let response = await API_Endpoint.put(dealID, updateObject)
-        console.log(response);
-        return true;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
+    if ((declarations.dealName().value && declarations.dealAmount().value && declarations.dealClosingDate().value) !== "") {
+        updateObject.dealname = declarations.dealName().value;
+        updateObject.dealowner = declarations.dealOwner().value;
+        updateObject.dealpipeline = declarations.dealPipeline().value;
+        updateObject.dealstage = declarations.dealStage().value;
+        updateObject.dealamount = declarations.dealAmount().value;
+        updateObject.dealclosingdate = declarations.dealClosingDate().value;
+        try {
+            let response = await API_Endpoint.put(dealID, updateObject)
+            console.log(response);
+            return true;
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    } else alert("fill required fields");
+
 }
