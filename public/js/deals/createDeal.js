@@ -16,7 +16,18 @@ function formatDate(date) {
 }
 
 // declarations
-
+let dealObj = {
+    dealname: "",
+    dealowner: "",
+    dealamount: "",
+    dealpipeline: "",
+    dealstage: "",
+    dealcontact: "",
+    dealaccount: "",
+    dealclosingdate: "",
+    contactID: "",
+    accountID: ""
+}
 let contacts = new REST("/mongodb/contacts");
 let accounts = new REST("/mongodb/accounts");
 
@@ -31,7 +42,6 @@ const contactPersonInput = document.querySelector('#contactPerson');
 const accountInput = document.querySelector('#account');
 const pipelineSelect = document.querySelector("#pipeline")
 const stageSelect = document.querySelector("#stage");
-const popup = document.querySelector("#popUp");
 const accountListDiv = document.querySelector(".accountListDiv");
 const contactListDiv = document.querySelector(".contactListDiv");
 const accountsUL = document.querySelector("#accountsUL");
@@ -87,6 +97,7 @@ saveAndNew.addEventListener("click", (e) => {
     saveAndNew_clicked = true;
     createDeal(e);
 })
+
 let date;
 let dealName;
 let dealOwner;
@@ -97,6 +108,8 @@ let dealContact;
 let dealAccount;
 let contactId;
 let accountId;
+
+
 function createDeal(e) {
     e.preventDefault();
     date = new Date(dateInput.value);
@@ -109,33 +122,31 @@ function createDeal(e) {
     dealContact = contactPersonInput.value;
     dealAccount = accountInput.value;
 
-    let dealObj = {
-        dealname: dealName,
-        dealowner: dealOwner,
-        dealamount: dealAmount,
-        dealpipeline: dealPipeline,
-        dealstage: dealStage,
-        dealcontact: dealContact,
-        dealaccount: dealAccount,
-        dealclosingdate: date,
-        contactID: contactId || "",
-        accountID: accountId || ""
-    }
+    dealObj.dealname = dealName;
+    dealObj.dealowner = dealOwner;
+    dealObj.dealamount = dealAmount;
+    dealObj.dealpipeline = dealPipeline;
+    dealObj.dealstage = dealStage;
+    dealObj.dealcontact = dealContact;
+    dealObj.dealaccount = dealAccount;
+    dealObj.dealclosingdate = date;
+
     let result = new REST("/mongodb/deals");
     if (dealName && dealAmount && dealContact && date !== "") {
-        result.post(dealObj).then(() => {
-            const message = document.createElement("span");
-            const closeBtn = document.createElement("button");
-            closeBtn.textContent = "Close"
-            message.textContent = `Deal Created Successfully`;
-            popup.appendChild(message);
-            popup.appendChild(closeBtn);
-            popup.showModal();
-            closeBtn.addEventListener("click", () => {
-                popup.close();
-                saveAndNew_clicked ? window.location.href = `/templates/deals/createDeal.html` : window.location.href = `/templates/deals.html`;
-            });
-        })
+        console.log(dealObj);
+        // result.post(dealObj).then(() => {
+        //     const message = document.createElement("span");
+        //     const closeBtn = document.createElement("button");
+        //     closeBtn.textContent = "Close"
+        //     message.textContent = `Deal Created Successfully`;
+        //     popup.appendChild(message);
+        //     popup.appendChild(closeBtn);
+        //     popup.showModal();
+        //     closeBtn.addEventListener("click", () => {
+        //         popup.close();
+        //         saveAndNew_clicked ? window.location.href = `/templates/deals/createDeal.html` : window.location.href = `/templates/deals.html`;
+        //     });
+        // })
     } else {
         alert("Fill the required Fields");
     }
@@ -168,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
         accountsUL.appendChild(li);
         li.addEventListener("click", (e) => {
             accountInput.value = account.organisation_name;
-            accountId = account.id;
+            dealObj.accountID = account._id;
             // updateContact(contactsArray);
         })
     }
@@ -195,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         contactsUL.appendChild(li);
         li.addEventListener("click", () => {
             contactPersonInput.value = name;
-            contactId = contact.id;
+            dealObj.contactID = contact._id;
             // updateAccount(accountsArray)
         })
     }
