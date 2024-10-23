@@ -1,3 +1,7 @@
+import customList from "/components/custom_listview.js";
+import REST from '../rest.js';
+
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let contactID = urlParams.get('id');
@@ -56,7 +60,35 @@ function getContacts(contact) {
         tr.appendChild(td2);
         tbody.appendChild(tr);
     }
+    processDeals(contact._id);
+    processAccounts(contact._id);
 }
+
+// Process Deals
+async function processDeals(id) {
+    let list = new customList();
+    const Deal_Endpoint = new REST('/mongodb/deals');
+    let allDeals = await Deal_Endpoint.get();
+    let objects = allDeals.filter(deal => deal.accountID == id);
+    list.title = ['deal_Name', 'deal_Pipeline', 'deal_Stage', 'deal_Amount'];
+    list.redirect = '/templates/deals/viewDeals.html'
+    list.value = objects;
+    document.querySelector('#dealSection').appendChild(list);
+}
+
+async function processAccounts(id) {
+
+    let list = new customList();
+    const Account_Endpoint = new REST('/mongodb/accounts');
+    let allAccounts = await Account_Endpoint.get();
+    let objects = allAccounts.filter(acc => acc.contacts.includes(id));
+    list.title = ['account_Name', 'account_Email', 'account_Phone', 'account_Income'];
+    list.redirect = '/templates/accounts/viewAccounts.html'
+    list.value = objects;
+    document.querySelector('#accountSection').appendChild(list);
+
+}
+
 
 // Edit redirect 
 

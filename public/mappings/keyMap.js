@@ -11,5 +11,9 @@ export const keyMap = {
     deal_Amount: (key) => key['dealamount'],
     deal_Owner: (key) => key['dealowner'],
     deal_Contact: (key) => key['dealcontact'],
-    deal_Account: (key) => key['dealaccount']
+    deal_Account: (key) => key['dealaccount'],
+    account_Name: (key) => key['organisation_name'],
+    account_Phone: (key) => key['organisation_phone'],
+    account_Email: (key) => key['organisation_email'],
+    account_Income: (key) => key['organisation_income'],
 }
