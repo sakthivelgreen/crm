@@ -239,7 +239,7 @@ li {
     background-color: #fff;
     border-collapse: collapse;
     width: 100%;
-
+    max-height: min-content;
 }
 
 #ListTable thead th {
@@ -342,4 +342,11 @@ select:required {
 
 .errorInput {
     border: red solid 1px;
+}
+
+section.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
