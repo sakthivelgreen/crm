@@ -29,9 +29,13 @@ if (params.hasOwnProperty('module') && params.hasOwnProperty('id')) {
 
 // ---------------------- Main Function -----------------------//
 let MeetingApi = new REST('/meetings');
+const MongoDB_Api = new REST('/mongodb/meetings');
 const createMeeting = async (obj) => {
     try {
         MeetingApi.post(obj)
+            .then((data) => {
+                storeInMongoDB(data);
+            })
             .then(() => {
                 alert('Meeting Created');
             })
@@ -45,7 +49,14 @@ const createMeeting = async (obj) => {
         throw new Error(`Error: ${e}`);
     }
 }
-
+async function storeInMongoDB(obj) {
+    try {
+        let res = await MongoDB_Api.post(obj);
+        if (res) return;
+    } catch (error) {
+        console.error(error)
+    }
+}
 // ---------------------- End Main Function -------------------//
 flatpickr(meetingModuleElements.meetingDate(), {
     minDate: "today",

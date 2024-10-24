@@ -1,4 +1,6 @@
 import REST from "/js/rest.js";
+import { getParams } from '../commonFunctions.js'
+import { keyMap } from "../../mappings/keyMap.js";
 
 // FlatPickr library used for custom date picker
 document.addEventListener('DOMContentLoaded', () => {
@@ -309,3 +311,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
+
+// for Deal Integration
+const params = getParams(window.location.search);
+if (params.hasOwnProperty('module') && params.hasOwnProperty('id')) {
+    let Api = new REST(`/mongodb/${params.module}`);
+    Api.getByID(params.id)
+        .then((data) => {
+            if (params.module === 'contacts') {
+                contactPersonInput.value = keyMap.name(data);
+                dealObj.contactID = data._id;
+            }
+            if (params.module === 'accounts') {
+                accountInput.value = keyMap.account_Name(data);
+                dealObj.accountID = data._id;
+            }
+
+        })
+}

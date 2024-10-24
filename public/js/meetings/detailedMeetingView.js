@@ -6,6 +6,7 @@ const urlParams = new URLSearchParams(url);
 const meetingId = urlParams.get('id');
 
 const MeetingAPI = new REST("/meetings");
+const MongoAPI = new REST('/mongodb/meetings');
 MeetingAPI.getByID(meetingId)
     .then((meetingData) => {
         mainFunction(meetingData.session);
@@ -76,7 +77,9 @@ function events(obj) {
     buttons.meetingEditButton().addEventListener('click', () => { window.open(`/templates/meetings/EditMeetings.html?id=${meetingId}`, '_self') });
 }
 
-const deleteMeeting = (obj) => {
+const deleteMeeting = async (obj) => {
+    let key = obj.meetingKey;
+    await deleteInMongoDB(key);
     MeetingAPI.delete(obj.meetingKey)
         .then(() => {
             window.open(`/templates/meetings/meetings.html`, "_self");
@@ -85,3 +88,23 @@ const deleteMeeting = (obj) => {
             console.log(e);
         })
 }
+
+async function deleteInMongoDB(meetingKey) {
+    try {
+        let data = await MongoAPI.get()
+        let result = data.find(object => object.session.meetingKey === meetingKey);
+        if (result) {
+            try {
+                let res = await MongoAPI.delete(result._id);
+                if (res) return;
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            return;
+        }
+    } catch (error) {
+        console.error(error);
+    }
+
+}   
