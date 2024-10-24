@@ -2,7 +2,7 @@ import { deleteID } from './accountModule.js';
 import customList from "/components/custom_listview.js";
 import REST from '../rest.js';
 import { keyMap } from '../../mappings/keyMap.js';
-import { Elements, buttons } from '../declarations.js';
+import { Elements, Sections, buttons } from '../declarations.js';
 import { buttonRedirect } from "../commonFunctions.js";
 
 // Getting Id from url
@@ -89,6 +89,7 @@ function processAccounts(account) {
     }
     processContactDetails(account.contacts);
     processDeals(account._id);
+    processMeetings(account);
 }
 
 async function processContactDetails(contactsArray) {
@@ -97,7 +98,7 @@ async function processContactDetails(contactsArray) {
     list.title = ['name', 'email', 'phone', 'designation']
     list.value = objects;
     list.redirect = '/templates/contacts/viewContactDetail.html';
-    document.querySelector('#contactSection').appendChild(list);
+    Sections.contactSection().appendChild(list);
 
 }
 async function processDeals(id) {
@@ -108,8 +109,30 @@ async function processDeals(id) {
     list.title = ['deal_Name', 'deal_Pipeline', 'deal_Stage', 'deal_Amount'];
     list.redirect = '/templates/deals/viewDeals.html'
     list.value = objects;
-    document.querySelector('#dealSection').appendChild(list);
+    Sections.dealSection().appendChild(list);
 }
+
+async function processMeetings(account) {
+    const list = new customList();
+    list.title = ['meeting_topic', 'meeting_Agenda', 'start_Date']
+    const Meeting_Endpoint = new REST('/mongodb/meetings');
+    let allMeetings = await Meeting_Endpoint.get();
+
+    let Meeting = allMeetings.filter(item => item.session.participants.some(ele =>
+        ele.email == account.organisation_email
+    ));
+    let arr = []
+    Meeting.forEach((element) => {
+        element.session['_id'] = element.session.meetingKey;
+        arr.push(element.session);
+    });
+
+    list.value = arr;
+    list.redirect = '/templates/meetings/meetingsDetail.html';
+    Sections.meetingsSection().appendChild(list);
+
+}
+
 // Fetch Contacts Using ID (Function)
 async function getContactObject(id) {
     try {

@@ -16,4 +16,8 @@ export const keyMap = {
     account_Phone: (key) => key['organisation_phone'],
     account_Email: (key) => key['organisation_email'],
     account_Income: (key) => key['organisation_income'],
+    meeting_topic: (key) => key['topic'],
+    meeting_Agenda: (key) => key['agenda'],
+    start_Date: (key) => key['startDate'],
+
 }

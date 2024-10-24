@@ -39,7 +39,12 @@ export const divElements = {
 }
 
 export const Elements = {
-    pageTitle: () => document.querySelector('#pageTitle')
+    pageTitle: () => document.querySelector('#pageTitle'),
+}
+export const Sections = {
+    meetingsSection: () => document.querySelector("#meetingsSection"),
+    dealSection: () => document.querySelector("#dealSection"),
+    contactSection: () => document.querySelector("#contactSection"),
 }
 
 export const popupElements = {

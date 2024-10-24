@@ -1,7 +1,7 @@
 import customList from "/components/custom_listview.js";
 import REST from '../rest.js';
 import { declarations } from './contactDeclarations.js';
-import { buttons } from '../declarations.js';
+import { buttons, Sections } from '../declarations.js';
 import { keyMap } from '../../mappings/keyMap.js';
 import { buttonRedirect } from "../commonFunctions.js";
 
@@ -68,6 +68,7 @@ function getContacts(contact) {
     }
     processDeals(contact._id);
     processAccounts(contact._id);
+    processMeetings(contact)
 }
 
 // Process Deals
@@ -92,6 +93,27 @@ async function processAccounts(id) {
     list.redirect = '/templates/accounts/viewAccounts.html'
     list.value = objects;
     document.querySelector('#accountSection').appendChild(list);
+
+}
+
+async function processMeetings(contact) {
+    const list = new customList();
+    list.title = ['meeting_topic', 'meeting_Agenda', 'start_Date']
+    const Meeting_Endpoint = new REST('/mongodb/meetings');
+    let allMeetings = await Meeting_Endpoint.get();
+
+    let Meeting = allMeetings.filter(item => item.session.participants.some(ele =>
+        ele.email == contact.email
+    ));
+    let arr = []
+    Meeting.forEach((element) => {
+        element.session['_id'] = element.session.meetingKey;
+        arr.push(element.session);
+    });
+
+    list.value = arr;
+    list.redirect = '/templates/meetings/meetingsDetail.html';
+    Sections.meetingsSection().appendChild(list);
 
 }
 
