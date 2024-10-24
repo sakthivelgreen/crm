@@ -321,7 +321,6 @@ input:disabled {
 
 .disabled:hover {
     cursor: not-allowed;
-    /* pointer-events: none; */
     cursor: no-drop;
 }
 
@@ -331,6 +330,7 @@ select {
     border: 1px solid #000;
     border-radius: 5px;
     outline: 0px;
+    cursor: pointer;
 }
 
 input:required,

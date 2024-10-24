@@ -179,11 +179,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const li = document.createElement("li");
         li.textContent = account.organisation_name;
         accountsUL.appendChild(li);
-        li.addEventListener("click", (e) => {
+        li.addEventListener("click", handleClickTouch);
+        li.addEventListener('touchend', handleClickTouch)
+        function handleClickTouch() {
             accountInput.value = account.organisation_name;
             dealObj.accountID = account._id;
-            // updateContact(contactsArray);
-        })
+        }
     }
 
     // Contact
@@ -206,11 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const li = document.createElement("li");
         li.textContent = name;
         contactsUL.appendChild(li);
-        li.addEventListener("click", () => {
+        li.addEventListener("click", handleClickTouch);
+        li.addEventListener('touchend', handleClickTouch);
+        function handleClickTouch() {
             contactPersonInput.value = name;
             dealObj.contactID = contact._id;
-            // updateAccount(accountsArray)
-        })
+        }
     }
 
     function updateContact(contactsArray) {
@@ -251,14 +253,14 @@ document.addEventListener("DOMContentLoaded", () => {
     accountInput.addEventListener("blur", () => {
         setTimeout(() => {
             accountListDiv.style.display = "none";
-        }, 200);
+        }, 400);
     });
 
     contactPersonInput.addEventListener("focus", () => contactListDiv.style.display = "block");
     contactPersonInput.addEventListener("blur", () => {
         setTimeout(() => {
             contactListDiv.style.display = "none";
-        }, 200);
+        }, 400);
     });
 
     // Filter 
