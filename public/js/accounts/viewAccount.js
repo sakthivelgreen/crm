@@ -1,6 +1,9 @@
 import { deleteID } from './accountModule.js';
 import customList from "/components/custom_listview.js";
 import REST from '../rest.js';
+import { keyMap } from '../../mappings/keyMap.js';
+import { Elements, buttons } from '../declarations.js';
+import { buttonRedirect } from "../commonFunctions.js";
 
 // Getting Id from url
 const queryString = window.location.search;
@@ -62,6 +65,8 @@ getAccounts()  // Calling Main Function
 
 // Processing accounts View
 function processAccounts(account) {
+    Elements.pageTitle().textContent = keyMap.account_Name(account);
+    document.title = `${keyMap.account_Name(account)} (Account) - Zoho CRM`
     const tbody = document.createElement("tbody");
     orgTable.appendChild(tbody);
     const tr1 = document.createElement('tr');
@@ -148,8 +153,6 @@ async function deleteAccount(e) {
 }
 
 
-
-
 async function deleteContact(AccID) {
     let response = await fetch("/mongodb/contacts")
     if (!response.ok) throw new Error(response.statusText);
@@ -178,3 +181,8 @@ async function deleteContact(AccID) {
         }
     }
 }
+
+// redirect Buttons 
+// Create Meeting
+buttonRedirect(buttons.meetingCreateButton(), accountID, '/templates/meetings/createMeetings.html', 'accounts')
+buttonRedirect(buttons.createDeal(), accountID, '/templates/deals/createDeal.html', 'accounts')

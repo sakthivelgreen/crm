@@ -1,6 +1,9 @@
 import customList from "/components/custom_listview.js";
 import REST from '../rest.js';
-
+import { declarations } from './contactDeclarations.js';
+import { buttons } from '../declarations.js';
+import { keyMap } from '../../mappings/keyMap.js';
+import { buttonRedirect } from "../commonFunctions.js";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -48,7 +51,10 @@ const tbody = document.createElement("tbody");
 table.appendChild(tbody);
 // get contact
 function getContacts(contact) {
-    titleElement.textContent = `${contact.firstname} ${contact.lastname}`;
+
+    declarations.pageTitle().textContent = keyMap.name(contact);
+
+    titleElement.textContent = `${keyMap.name(contact)} (contact) - Zoho CRM`;
     for (const key in contact) {
         if (key === "_id" || key === 'organisation_id') continue;
         const tr = document.createElement("tr");
@@ -153,3 +159,8 @@ deleteContact.addEventListener("click", async (e) => {
 
 })
 
+// createMeeting Button
+buttonRedirect(buttons.meetingCreateButton(), contactID, '/templates/meetings/createMeetings.html', 'contacts');
+
+// create Deal
+buttonRedirect(buttons.createDeal(), contactID, '/templates/deals/createDeal.html', 'contacts');

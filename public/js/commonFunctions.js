@@ -50,3 +50,10 @@ export function back(item) {
         window.open(link, '_self');
     })
 }
+
+export function buttonRedirect(btn, id = "", link, module = "") {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.open(`${link}?id=${id}&module=${module}`, '_self');
+    })
+}

@@ -1,7 +1,7 @@
 import { meetingModuleElements, forms } from "../declarations.js";
 import { getTimeWithAMPM, inputValidationEmpty, timeOptions, dateFormat, dateOptions } from "../commonFunctions.js";
 
-let ParticipantsEmail = [];
+export let ParticipantsEmail = [];
 
 export const participantEvents = () => {
     meetingModuleElements.meetingParticipants().addEventListener("focus", () => {
@@ -172,4 +172,30 @@ export const setDate = (obj) => {
 export const setMeetingValues = (obj) => {
     meetingModuleElements.meetingTopic().value = obj.topic;
     meetingModuleElements.meetingAgenda().value = obj.agenda;
+}
+
+export function setParticipants(val) {
+    let enterEvent = new KeyboardEvent("keydown", {
+        key: "Enter",  // Key value
+        code: "Enter", // Code for the Enter key
+        keyCode: 13,   // Key code for Enter
+        which: 13,     // 'which' property (for backward compatibility)
+        bubbles: true  // Ensure the event bubbles up
+    });
+    if (Array.isArray(val)) {
+        val.forEach(email => {
+            meetingModuleElements.meetingParticipants().value = email;
+            meetingModuleElements.meetingParticipants().focus();
+            // Dispatch the event on the input element
+            setTimeout(() => {
+                meetingModuleElements.meetingParticipants().dispatchEvent(enterEvent);
+            }, 100);
+        })
+    } else {
+        meetingModuleElements.meetingParticipants().value = val;
+        meetingModuleElements.meetingParticipants().focus();
+        setTimeout(() => {
+            meetingModuleElements.meetingParticipants().dispatchEvent(enterEvent);
+        }, 100);
+    }
 }

@@ -14,6 +14,8 @@ export const buttons = {
     meetingJoinButton: () => document.querySelector("#meetingJoinButton"),
     meetingCreateButton: () => document.querySelector("#createMeetingButton"),
     meetingCreateSubmitButton: () => document.querySelector("#createMeetingSubmitButton"),
+    sendMail: () => document.querySelector('#sendMail'),
+    createDeal: () => document.querySelector('#createDeal')
 }
 
 export const anchorTags = {
@@ -36,7 +38,8 @@ export const divElements = {
     meetingsYesterday: document.querySelector("#meetingsYesterday")
 }
 
-export const ulElements = {
+export const Elements = {
+    pageTitle: () => document.querySelector('#pageTitle')
 }
 
 export const popupElements = {
