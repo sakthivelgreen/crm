@@ -144,6 +144,8 @@ export default class customList extends HTMLElement {
             }
             .innerDiv.empty .customBody img{
                 height:250px;
+                opacity:0.5;
+                pointer-events:none;
             }
             .innerDiv.empty .customBody{
                 position: relative;
