@@ -5,6 +5,10 @@ export class mailSidebar extends HTMLElement {
     }
 
     async connectedCallback() {
+        await this.render();
+        this.events();
+    }
+    async render() {
         const folders = await this.getFolders()
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
@@ -15,7 +19,6 @@ export class mailSidebar extends HTMLElement {
 
         const style = document.createElement('style');
         style.textContent = this.style();
-
         shadowRoot.appendChild(style);
         shadowRoot.appendChild(div);
     }
@@ -37,6 +40,24 @@ export class mailSidebar extends HTMLElement {
             </div>`
         }).join('');
         return `<div class="innerDiv"> ${div}</div>`;
+    }
+    events() {
+        this.shadowRoot.querySelector('.innerDiv').addEventListener('click', (e) => {
+            e.preventDefault();
+            const itemElement = e.target.closest('.item');
+
+            if (itemElement) {
+                // Access the correct element's ID and text content
+                const folderId = itemElement.id;
+                const folderName = itemElement.textContent;
+
+                this.dispatchEvent(new CustomEvent('mail-event', {
+                    detail: { folderId, folderName },
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+        })
     }
 
     style() {
@@ -60,7 +81,7 @@ export class mailSidebar extends HTMLElement {
             align-items: left;
             padding: 10px 5px;
         }
-            .folder-item{
+            .item{
                 user-select: none;
                 width: 100%;
                 padding:5px 10px;
@@ -69,15 +90,12 @@ export class mailSidebar extends HTMLElement {
                 color:#fff;
                 border-radius: 5px;
             }
-        .folder-item:hover{
+        .item:hover{
             color: #000;
             transition-duration: 0.75s;
             background:rgba(245,245,245,1);
         }
-        .item{
-            width:100%;
-            height: 100%;
-        }
+
         `;
     }
 

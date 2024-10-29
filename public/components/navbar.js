@@ -14,7 +14,7 @@ class NavBar extends HTMLElement {
             Accounts: `/templates/accounts.html`,
             Deals: `/templates/deals.html`,
             Meetings: `/templates/meetings/home.html`,
-            EMail: `/templates/email/inbox.html`
+            EMail: `/templates/email/mail.html`
         }
         const navElement = document.createElement('nav');
         const navLeft = document.createElement('div');
