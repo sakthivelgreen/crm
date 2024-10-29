@@ -10,6 +10,7 @@ var mongodbRouter = require('./routes/mongodb');
 var meetingsRouter = require('./routes/meetings');
 var crmRouter = require('./routes/crm');
 var tokenRouter = require('./routes/token');
+var mailRouter = require('./routes/zohoMail');
 
 var app = express();
 
@@ -25,6 +26,7 @@ app.use('/mongodb', mongodbRouter);
 app.use('/meetings', meetingsRouter);
 app.use('/crm', crmRouter);
 app.use('/token', tokenRouter);
+app.use('/mail', mailRouter);
 
 app.listen(port, () => {
     console.log(`Server at http://localhost:${port}/`)
