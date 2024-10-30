@@ -14,7 +14,7 @@
             const urlParams = new URLSearchParams(queryString);
             const Authcode = urlParams.get('code');
             async function main(params) {
-                let obj = accessToken()
+                let obj = await accessToken()
                 console.log(obj);
             }
             main();
