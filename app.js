@@ -28,6 +28,26 @@ app.use('/crm', crmRouter);
 app.use('/token', tokenRouter);
 app.use('/mail', mailRouter);
 
+app.post('/auth/check', async (req, res) => {
+    const object = req.body;
+    try {
+        let response = await axios.post(`https://accounts.zoho.in/oauth/v2/token`, {
+            headers: {
+                code: object.code,
+                client_id: object.client_id,
+                client_secret: object.client_secret,
+                redirect_uri: "https://sakthi-crm.vercel.app/oauth",
+                grant_type: "authorization_code",
+            }
+        });
+        let obj = response.data;
+        res.json(obj);
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+})
+
 app.listen(port, () => {
     console.log(`Server at http://localhost:${port}/`)
 })

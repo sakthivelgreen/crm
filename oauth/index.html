@@ -19,16 +19,17 @@
             }
             main();
             async function accessToken() {
+                const obj = {
+                    code: Authcode,
+                    client_id: "1000.IGHRMK35G3HXVMRGOMZGAWQ5UC2HWB",
+                    client_secret: "d343eb269d1659b75dee308d8ed861b03639f9ba54",
+                    redirect_uri: "https://sakthi-crm.vercel.app/oauth",
+                    grant_type: "authorization_code",
+                }
                 try {
-                    let response = await fetch('https://accounts.zoho.in/oauth/v2/token', {
+                    let response = await fetch('/auth/check', {
                         method: "POST",
-                        headers: {
-                            code: Authcode,
-                            client_id: "1000.IGHRMK35G3HXVMRGOMZGAWQ5UC2HWB",
-                            client_secret: "d343eb269d1659b75dee308d8ed861b03639f9ba54",
-                            redirect_uri: "https://sakthi-crm.vercel.app/oauth",
-                            grant_type: "authorization_code",
-                        }
+                        body: JSON.stringify(obj)
                     })
                     if (!response.ok) throw new Error('Error')
                     let result = await response.json();
