@@ -12,8 +12,31 @@
         document.addEventListener("DOMContentLoaded", () => {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
-            const code = urlParams.get('code');
-            console.log(code);
+            const Authcode = urlParams.get('code');
+            async function main(params) {
+                let obj = accessToken()
+                console.log(obj);
+            }
+            main();
+            async function accessToken() {
+                try {
+                    let response = await fetch('https://accounts.zoho.in/oauth/v2/token', {
+                        method: "POST",
+                        headers: {
+                            code: Authcode,
+                            client_id: "1000.IGHRMK35G3HXVMRGOMZGAWQ5UC2HWB",
+                            client_secret: "d343eb269d1659b75dee308d8ed861b03639f9ba54",
+                            redirect_uri: "https://sakthi-crm.vercel.app/oauth",
+                            grant_type: "authorization_code",
+                        }
+                    })
+                    if (!response.ok) throw new Error('Error')
+                    let result = await response.json();
+                    return result;
+                } catch (error) {
+                    console.log(error)
+                }
+            }
 
         })
     </script>

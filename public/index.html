@@ -31,10 +31,26 @@
             height: 400px;
         }
     </style>
+
+    <script type="module">
+        import REST from '/js/rest.js';
+
+        let api = new REST('/meetings/');
+        api.get().then((data) => {
+            console.log(data)
+        })
+
+        document.querySelector('#GetAuth').addEventListener('click', (e) => {
+            window.open('https://accounts.zoho.com/oauth/v2/auth?scope=ZohoMeeting.meeting.ALL,ZohoMeeting.manageOrg.ALL,ZohoMeeting.webinar.ALL&client_id=1000.IGHRMK35G3HXVMRGOMZGAWQ5UC2HWB&response_type=code&redirect_uri=https://sakthi-crm.vercel.app/oauth&access_type=offline&state=opaque&prompt=consent')
+        })
+
+    </script>
     <div class="content">
         <div class="container">
             <div class="progress">Dashboard is in Progress</div>
-            <section></section>
+            <section>
+                <button type="button" id="GetAuth">Get Auth Token</button>
+            </section>
         </div>
     </div>
 
