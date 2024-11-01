@@ -3,26 +3,40 @@ import REST from "../rest.js";
 import { keyMap } from "../../mappings/keyMap.js";
 import { declarations } from "./mailDeclarations.js";
 
-const MailRest = new REST('/mail/folders');
+let folderID, folderName;
+const MailFoldersRest = new REST('/mail/folders');
+const MailMsgRest = new REST('/mail/view');
 async function main() {
     let folderArray = await getData();
-    console.log(folderArray);
-    display()
+    await display(folderArray.data)
+    events();
     document.querySelector('#loading').style.display = 'none';
 }
 main();
 
 async function getData() {
-    return MailRest.get();
+    return MailFoldersRest.get();
 }
 
-function display() {
-    events();
+async function display(dataArray) {
+    folderID = !folderID ? dataArray[0].folderId : folderID;
+    const msg = await getMessages(folderID);
+    console.log(msg);
+
+}
+
+async function getMessages(id) {
+    try {
+        return await MailMsgRest.getByID(id);
+    } catch (e) {
+        console.error(e)
+    }
 }
 
 function events() {
-    console.log(document.querySelector('mail-sidebar'))
-    document.querySelector('mail-sidebar').addEventListener('mail-event', (e) => {
-        console.log(e.detail);
+    declarations.mailSidebar().addEventListener('mail-event', (e) => {
+        folderID = e.detail.folderId;
+        folderName = e.detail.folderName;
+        display();
     })
 }

@@ -95,7 +95,6 @@ export class mailSidebar extends HTMLElement {
             transition-duration: 0.75s;
             background:rgba(245,245,245,1);
         }
-
         `;
     }
 
