@@ -76,9 +76,9 @@ async function processDeals(id) {
     let list = new customList();
     const Deal_Endpoint = new REST('/mongodb/deals');
     let allDeals = await Deal_Endpoint.get();
-    let objects = allDeals.filter(deal => deal.accountID == id);
+    let objects = allDeals.filter(deal => deal.contactID == id);
     list.title = ['deal_Name', 'deal_Pipeline', 'deal_Stage', 'deal_Amount'];
-    list.redirect = '/templates/deals/viewDeals.html'
+    list.redirect = '/templates/deals/viewDeals.html';
     list.value = objects;
     document.querySelector('#dealSection').appendChild(list);
 }

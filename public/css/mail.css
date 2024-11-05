@@ -9,4 +9,11 @@ aside {
 
 main {
     flex: 1 0 auto;
+
+}
+
+.list {
+    padding-top: 20px;
+    max-height: 500px;
+    overflow-y: auto;
 }

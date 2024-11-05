@@ -1,7 +1,7 @@
 import { back } from "../commonFunctions.js";
 import REST from "../rest.js";
-import { keyMap } from "../../mappings/keyMap.js";
 import { declarations } from "./mailDeclarations.js";
+import { customMailList } from "../../components/custom_listview.js";
 
 let folderID, folderName;
 const MailFoldersRest = new REST('/mail/folders');
@@ -19,10 +19,11 @@ async function getData() {
 }
 
 async function display(dataArray) {
-    folderID = !folderID ? dataArray[0].folderId : folderID;
+    folderID = folderID ?? dataArray[0].folderId;
     const msg = await getMessages(folderID);
-    console.log(msg);
-
+    const list = new customMailList();
+    list.value = msg.data;
+    document.querySelector('.list').appendChild(list);
 }
 
 async function getMessages(id) {
@@ -37,6 +38,7 @@ function events() {
     declarations.mailSidebar().addEventListener('mail-event', (e) => {
         folderID = e.detail.folderId;
         folderName = e.detail.folderName;
+        document.querySelector('.list').replaceChildren();
         display();
     })
 }

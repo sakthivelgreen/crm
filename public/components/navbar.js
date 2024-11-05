@@ -103,11 +103,12 @@ class NavBar extends HTMLElement {
         .navLeft{
             position:relative;
             width:60%;
+            flex: 1 0 auto;
             height:100%;
         }
         .navRight{
             position:relative;
-            width:40%;
+            flex: 1 1 1%;
             height:100%;
         }
         .navLeft ul{
