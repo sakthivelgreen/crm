@@ -1,11 +1,16 @@
-import { back } from "../commonFunctions.js";
+import { back, getParams } from "../commonFunctions.js";
 import REST from "../rest.js";
 import { declarations } from "./mailDeclarations.js";
 import { customMailList } from "../../components/custom_listview.js";
 
-let folderID, folderName;
+let folderID, folderName, msgID;
 const MailFoldersRest = new REST('/mail/folders');
 const MailMsgRest = new REST('/mail/view');
+
+
+
+
+
 async function main() {
     let folderArray = await getData();
     await display(folderArray.data)
@@ -19,7 +24,16 @@ async function getData() {
 }
 
 async function display(dataArray) {
+    let path = window.location.hash;
+    if (path) {
+        path = path.split('/');
+        folderID = path[1];
+    }
+    if (!folderID) {
+        window.open(`#${dataArray[0].folderName}/${dataArray[0].folderId}`, '_self');
+    }
     folderID = folderID ?? dataArray[0].folderId;
+
     const msg = await getMessages(folderID);
     const list = new customMailList();
     list.value = msg.data;
@@ -38,7 +52,28 @@ function events() {
     declarations.mailSidebar().addEventListener('mail-event', (e) => {
         folderID = e.detail.folderId;
         folderName = e.detail.folderName;
+        window.open(`#${folderName}/${folderID}`, '_self')
         document.querySelector('.list').replaceChildren();
         display();
     })
+    declarations.mailList().addEventListener('open-mail', async (e) => {
+        msgID = e.detail.msgID;
+        let dt = await getMessageDetail()
+        console.log(dt);
+
+        const sidePop = document.createElement('right-popup');
+        sidePop.content = dt.data.content;
+        document.body.appendChild(sidePop);
+    });
+}
+
+async function getMessageDetail() {
+    try {
+        let response = await fetch(`/mail/view/message/${msgID}/${folderID}`);
+        if (!response.ok) throw new Error("Error");
+        let result = await response.json();
+        return result;
+    } catch (error) {
+        console.error(error)
+    }
 }

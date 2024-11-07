@@ -97,4 +97,20 @@ router.get('/view/:folderID', async (req, res) => {
     }
 });
 
+router.get('/view/message/:mid/:fid', async (req, res) => {
+    let msgId = req.params.mid;
+    let folId = req.params.fid;
+    try {
+        let response = await axios.get(`https://mail.zoho.com/api/accounts/${accountId}/folders/${folId}/messages/${msgId}/content`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Zoho-oauthtoken ${message_token}`
+            }
+        })
+        res.status(200).json(response.data);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 module.exports = router;

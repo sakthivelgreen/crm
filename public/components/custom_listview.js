@@ -335,14 +335,9 @@ export class customMailList extends customList {
     body(obj, div) {
         const body = document.createElement('div');
         body.className = 'customBody';
-        let arr = this.title;
         if (obj.length > 0) {
             let bodyHtml = '';
-            console.log(obj);
-
             obj.forEach(ele => {
-                console.log(ele);
-
                 bodyHtml += `<div class='rowElement' id='${ele.messageId}'>`
                 bodyHtml += `<div class='checkBoxDiv'><input type='checkbox' id='${ele.messageId}'></div>`;
                 bodyHtml += `<div class='column'><p>${ele.fromAddress}</p><p>${ele.subject}</p></div>`;
@@ -358,6 +353,20 @@ export class customMailList extends customList {
             body.appendChild(noDataImg);
             return body;
         }
+    }
+    events() {
+        super.events();
+        this.shadowRoot.querySelector('.customBody').addEventListener('click', (e) => {
+            const rowElement = e.target.closest('.rowElement');
+            if (rowElement && e.target.tagName.toLowerCase() !== 'input') {
+                const eve = new CustomEvent('open-mail', {
+                    detail: { msgID: rowElement.id },
+                    composed: true,
+                    bubbles: true
+                })
+                this.dispatchEvent(eve);
+            }
+        });
     }
     style() {
         const parentStyle = super.style();
