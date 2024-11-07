@@ -49,7 +49,6 @@ export default class rightPopUp extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue && name === 'data-html') {
             this.content = newValue;
-            this.render();
         }
     }
 
@@ -58,6 +57,7 @@ export default class rightPopUp extends HTMLElement {
     }
     set content(value) {
         this.htmlObject = value;
+        this.render();
     }
 
     style() {
@@ -74,6 +74,7 @@ export default class rightPopUp extends HTMLElement {
                 box-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
                 transform: translateX(100%); /* Start offscreen */
                 transition: transform 1s ease-in-out;
+                overflow-y: auto;
             }
 
             /* Slide in effect */

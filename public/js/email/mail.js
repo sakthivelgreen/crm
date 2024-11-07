@@ -58,12 +58,20 @@ function events() {
     })
     declarations.mailList().addEventListener('open-mail', async (e) => {
         msgID = e.detail.msgID;
-        let dt = await getMessageDetail()
-        console.log(dt);
+        let dt = await getMessageDetail();
 
-        const sidePop = document.createElement('right-popup');
-        sidePop.content = dt.data.content;
-        document.body.appendChild(sidePop);
+        // Check if right-popup already exists
+        let sidePop = declarations.rightPopUp();
+
+        if (sidePop) {
+            // Update content if the popup already exists
+            sidePop.content = dt.data.content;
+        } else {
+            // Create a new popup if it doesn't exist
+            sidePop = document.createElement('right-popup');
+            sidePop.content = dt.data.content;
+            document.body.appendChild(sidePop);
+        }
     });
 }
 
