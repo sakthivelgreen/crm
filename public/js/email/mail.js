@@ -23,7 +23,7 @@ async function getData() {
     return MailFoldersRest.get();
 }
 
-async function display(dataArray) {
+async function display(dataArray = null) {
     let path = window.location.hash;
     if (path) {
         path = path.split('/');
@@ -38,6 +38,7 @@ async function display(dataArray) {
     const list = new customMailList();
     list.value = msg.data;
     document.querySelector('.list').appendChild(list);
+    openMailEvent();
 }
 
 async function getMessages(id) {
@@ -56,18 +57,20 @@ function events() {
         document.querySelector('.list').replaceChildren();
         display();
     })
+}
+
+function openMailEvent() {
     declarations.mailList().addEventListener('open-mail', async (e) => {
+        console.log("clicked");
+
         msgID = e.detail.msgID;
         let dt = await getMessageDetail();
 
-        // Check if right-popup already exists
         let sidePop = declarations.rightPopUp();
 
         if (sidePop) {
-            // Update content if the popup already exists
             sidePop.content = dt.data.content;
         } else {
-            // Create a new popup if it doesn't exist
             sidePop = document.createElement('right-popup');
             sidePop.content = dt.data.content;
             document.body.appendChild(sidePop);
