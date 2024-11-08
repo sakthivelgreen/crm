@@ -3,13 +3,10 @@ import REST from "../rest.js";
 import { declarations } from "./mailDeclarations.js";
 import { customMailList } from "../../components/custom_listview.js";
 
-let folderID, folderName, msgID;
+let folderID, folderName, msgID, hash;
 const MailFoldersRest = new REST('/mail/folders');
 const MailMsgRest = new REST('/mail/view');
-
-
-
-
+setInterval(() => display(), 18000);
 
 async function main() {
     let folderArray = await getData();
@@ -37,7 +34,7 @@ async function display(dataArray = null) {
     const msg = await getMessages(folderID);
     const list = new customMailList();
     list.value = msg.data;
-    document.querySelector('.list').appendChild(list);
+    document.querySelector('.list').replaceChildren(list);
     openMailEvent();
 }
 
@@ -61,7 +58,6 @@ function events() {
 
 function openMailEvent() {
     declarations.mailList().addEventListener('open-mail', async (e) => {
-        console.log("clicked");
 
         msgID = e.detail.msgID;
         let dt = await getMessageDetail();
@@ -73,7 +69,7 @@ function openMailEvent() {
         } else {
             sidePop = document.createElement('right-popup');
             sidePop.content = dt.data.content;
-            document.body.appendChild(sidePop);
+            declarations.mainContainer().appendChild(sidePop);
         }
     });
 }

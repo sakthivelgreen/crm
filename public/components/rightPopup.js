@@ -19,7 +19,9 @@ export default class rightPopUp extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <div class="outerContainer">
                 <span id="close"></span>
-                ${this.htmlObject}
+                <div class="innerContainer">
+                    ${this.htmlObject}
+                </div>
             </div>
             ${this.style()}
         `;
@@ -63,19 +65,28 @@ export default class rightPopUp extends HTMLElement {
     style() {
         return `
         <style>
+               .innerContainer:has(div[width > 300px]) {
+                    width: auto !important;
+                }
+
             .outerContainer {
-                position: fixed;
-                z-index: 999;
-                top: 0;
-                right: 0;
+                position: relative;
                 height: 100%;
-                width: 45%;
+                width: 400px;
                 background: #fff;
                 box-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
                 transform: translateX(100%); /* Start offscreen */
-                transition: transform 1s ease-in-out;
-                overflow-y: auto;
+                transition: transform 0.5s ease-in-out;
+                overflow: auto;
             }
+
+            .innerContainer{
+                margin-top: 70px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                padding: 15px;
+                }
 
             /* Slide in effect */
             .outerContainer.active {
