@@ -2,45 +2,45 @@ const express = require('express');
 const axios = require('axios')
 const router = express.Router();
 const cookieParser = require('cookie-parser');
-
+const zoho = require('./zoho');
+const { response } = require('../app');
 router.use(cookieParser());
+require('dotenv').config();
 
 // Define authorization code as a variable
 let Access_Token;
+let loc;
+let user = {};
 router.use(async (req, res, next) => {
-    Access_Token = req.cookies.token;
+    Access_Token = req.cookies.meeting_token;
+    loc = req.cookies.loc;
     if (!Access_Token) {
-        let result = await token(req, res);
-        if (result.success) {
-            Access_Token = result.token;
-            next();
-        } else {
-            return res.status(401).json({ error: 'Unauthorized: Token not available', Access_Token });
-        }
+        return res.send("Get Auth Token");
     } else {
-        next();
+        let result = await getUserDetails()
+        if (result) {
+            next();
+        }
     }
 });
 
-const token = async (req, res) => {
+async function getUserDetails() {
     try {
-        let response = await axios.post(`${process.env.BASE_URL}/token`);
-        let obj = response.data;
-        await res.cookie('token', obj.access_token, { httpOnly: true, secure: false, maxAge: 3600000 });
-        return {
-            "success": true,
-            "token": obj.access_token
-        }
+        let response = await axios.get(`https://meeting.zoho.${loc}/api/v2/user.json`, {
+            headers: {
+                "Authorization": `Zoho-oauthtoken ${Access_Token}`
+            }
+        });
+        user = await response.data.userDetails;
+        return true;
     } catch (error) {
-        console.error(error);
-        return false;
+        console.log(error)
     }
 }
-
 // Proxy GET request
 router.get('/', async (req, res) => {
     try {
-        const response = await axios.get('https://meeting.zoho.in/api/v2/60017874042/sessions.json', {
+        const response = await axios.get(`https://meeting.zoho.${loc}/api/v2/${user.zsoid}/sessions.json`, {
             headers: {
                 "Authorization": `Zoho-oauthtoken ${Access_Token}`
             }
@@ -55,7 +55,7 @@ router.get('/', async (req, res) => {
 router.get('/:meetingKey', async (req, res) => {
     const { meetingKey } = req.params
     try {
-        const response = await axios.get(`https://meeting.zoho.in/api/v2/60017874042/sessions/${meetingKey}.json`, {
+        const response = await axios.get(`https://meeting.zoho.${loc}/api/v2/${user.zsoid}/sessions/${meetingKey}.json`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Zoho-oauthtoken ${Access_Token}`
@@ -70,7 +70,7 @@ router.get('/:meetingKey', async (req, res) => {
 // Proxy POST request
 router.post('/', async (req, res) => {
     try {
-        const response = await axios.post('https://meeting.zoho.in/api/v2/60017874042/sessions.json', req.body, {
+        const response = await axios.post(`https://meeting.zoho.${loc}/api/v2/${user.zsoid}/sessions.json`, req.body, {
             headers: {
                 "Authorization": `Zoho-oauthtoken ${Access_Token}`,
                 "Content-Type": "application/json"
@@ -86,7 +86,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await axios.put(`https://meeting.zoho.in/api/v2/60017874042/sessions/${id}.json`, req.body, {
+        const response = await axios.put(`https://meeting.zoho.${loc}/api/v2/${user.zsoid}/sessions/${id}.json`, req.body, {
             headers: {
                 "Authorization": `Zoho-oauthtoken ${Access_Token}`,
                 "Content-Type": "application/json"
@@ -102,7 +102,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const response = await axios.delete(`https://meeting.zoho.in/api/v2/60017874042/sessions/${id}.json`, {
+        const response = await axios.delete(`https://meeting.zoho.${loc}/api/v2/${user.zsoid}/sessions/${id}.json`, {
             headers: {
                 "Authorization": `Zoho-oauthtoken ${Access_Token}`,
             }

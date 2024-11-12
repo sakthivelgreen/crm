@@ -113,4 +113,12 @@ router.get('/view/message/:mid/:fid', async (req, res) => {
     }
 })
 
+router.post('/sendMail', async (req, res) => {
+    try {
+        let response = await axios.post(`https://mail.zoho.com/api/accounts/${accountId}/messages`)
+    } catch (error) {
+
+    }
+})
+
 module.exports = router;

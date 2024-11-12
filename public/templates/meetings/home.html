@@ -30,10 +30,16 @@
                 <custom-sidebar></custom-sidebar>
             </aside>
             <main id="meetingMainElement">
-
+                <button id="getToken">Generate Access Tokens</button>
             </main>
         </div>
     </div>
+    <script>
+        document.getElementById('getToken').addEventListener('click', (e) => {
+            localStorage.setItem('url', `${window.location.href}`);
+            window.open(`/zoho/auth/${'ZohoMeeting.meeting.ALL,ZohoMeeting.manageOrg.READ'}`, '_self');
+        })
+    </script>
     <script type="module" src="/js/declarations.js" defer></script>
 </body>
 

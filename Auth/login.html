@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CRM</title>
+    <script src="./login.js" defer></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .wrapper {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('/static/v796-nunny-03b.jpg');
+            background-size: cover;
+        }
+
+        .container {
+            max-height: 400px;
+            height: max-content;
+            width: 350px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1));
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            height: inherit;
+            width: inherit;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-element-div {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        form {
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        .socialLogin {
+            height: max-content;
+            width: 100%;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #fff;
+        }
+
+        button {
+            all: unset;
+            color: #fff;
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        #loginBtn,
+        #zohoLoginBtn {
+            border: 1px solid white;
+        }
+
+        #backBtn {
+            border: 1px solid #fff;
+        }
+
+        #loginBtn:hover,
+        #zohoLoginBtn:hover {
+            background-color: #00A550;
+            border: 1px solid #00A550;
+        }
+
+        #backBtn:hover {
+            background-color: gray;
+            border: 1px solid gray;
+        }
+
+        input {
+            color: #fff;
+            height: 45px;
+            padding-left: 10px;
+            border-radius: 5px;
+            border: 1px solid #fff;
+            background-color: inherit;
+            size: 3.5em;
+        }
+
+        input::placeholder {
+            color: #fff;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        :required {
+            border-left: 4px solid #EF0107;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <div class="form-container">
+                <div class="socialLogin">
+                    <button type="button" id="zohoLoginBtn">Login With Zoho</button>
+                </div>
+                <form method="post" id="loginForm" action="/login">
+                    <div class="form-element-div">
+                        <label for="email">Email</label>
+                        <input type="text" placeholder="Enter Your Email" name="Email" id="email" required
+                            autocomplete="email">
+                        <small class="Error"></small>
+                    </div>
+                    <div class="form-element-div">
+                        <label for="password">Password</label>
+                        <input type="password" placeholder="Enter Your Password" name="password" id="password" required
+                            autocomplete="current-password">
+                        <small class="Error"></small>
+                    </div>
+                    <div class="form-element-div">
+                        <button type="submit" id="loginBtn">Login</button>
+                        <button type="button" id="backBtn">Back</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -32,7 +32,7 @@ MeetingAPI.get().then(Obj => {
                 case "This Month":
                     divElements.meetingsThisMonth.appendChild(meetingItem)
                     break;
-                case "Later":
+                case "Earlier":
                     divElements.meetingsLater.appendChild(meetingItem)
                     break;
                 default:

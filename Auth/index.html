@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth</title>
+</head>
+
+<body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // Get and Print Authorize Grant Code
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+
+            const auth_code = urlParams.get('code');
+            const location = urlParams.get('location');
+            let module = localStorage.getItem('url');
+            let token_string;
+            if (module.includes('meeting')) {
+                token_string = 'meeting_token'
+            } else if (module.includes('mail')) {
+                token_string = 'mail_token'
+            }
+            async function main(params) {
+                console.log(localStorage.getItem('url'))
+                if (auth_code !== null) {
+                    let obj = await accessToken()  // Calling function to get Access Token
+                    window.open(module, "_self");
+                }
+
+            }
+            main();
+            async function accessToken() {
+                try {
+                    let response = await fetch(`/zoho/access/${auth_code}/${location}/${token_string}`, {
+                        method: "POST"
+                    })
+                    console.log(await response.json());
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
