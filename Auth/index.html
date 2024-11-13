@@ -28,6 +28,7 @@
                 console.log(localStorage.getItem('url'))
                 if (auth_code !== null) {
                     let obj = await accessToken()  // Calling function to get Access Token
+                    await alert("Tokens Generated")
                     window.open(module, "_self");
                 }
 
@@ -38,7 +39,6 @@
                     let response = await fetch(`/zoho/access/${auth_code}/${location}/${token_string}`, {
                         method: "POST"
                     })
-                    console.log(await response.json());
                 } catch (error) {
                     console.log(error)
                 }

@@ -15,7 +15,7 @@ router.use(async (req, res, next) => {
     Access_Token = req.cookies.meeting_token;
     loc = req.cookies.loc;
     if (!Access_Token) {
-        return res.send("Get Auth Token");
+        return res.status(401).json({ redirect: '/zoho/auth/ZohoMeeting.meeting.ALL,ZohoMeeting.manageOrg.READ' });
     } else {
         let result = await getUserDetails()
         if (result) {

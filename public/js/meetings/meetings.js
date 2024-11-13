@@ -9,15 +9,27 @@ const getMeetings = async () => {
         let response = await axios.get(`/meetings`);
         return response.data
     } catch (error) {
-        console.log(error);
+        if (error.response && error.response.status === 401) {
+            const redirectUrl = error.response.data.redirect;
+            alert('Get Tokens');
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            } else {
+                console.error('Redirect URL not provided in 401 response');
+            }
+        } else {
+            console.error('Error fetching meetings:', error);  // Log other errors
+        }
     }
 }
 getMeetings()
     .then((data) => {
-        meetingsObj = data.response.session
-        meetingsObj = meetingsObj.sort((a, b) => a.startTimeMillisec - b.startTimeMillisec);
+        if (data) {
+            meetingsObj = data.response.session
+            meetingsObj = meetingsObj.sort((a, b) => a.startTimeMillisec - b.startTimeMillisec);
+        }
     })
-    .then(() => { listMeetings() })
+    .then(() => { if (meetingsObj) { listMeetings() } })
     .then(() => { checkData() })
 const listMeetings = async () => {
     for (const meeting of meetingsObj) {
