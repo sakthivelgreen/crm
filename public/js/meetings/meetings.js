@@ -5,6 +5,7 @@ anchorTags.upcomingMeetingsNav.parentElement.classList.add("activeLink");
 
 let meetingsObj;
 const getMeetings = async () => {
+    localStorage.setItem('url', window.location.href);
     try {
         let response = await axios.get(`/meetings`);
         return response.data

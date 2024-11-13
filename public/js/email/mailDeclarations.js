@@ -4,4 +4,5 @@ export const declarations = {
     mailList: () => document.querySelector('custom-list-mail'),
     rightPopUp: () => document.querySelector('right-popup'),
     mainContainer: () => document.querySelector('main'),
+    aside: () => document.querySelector('aside'),
 }

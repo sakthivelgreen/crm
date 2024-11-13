@@ -2,22 +2,38 @@ import { back, getParams } from "../commonFunctions.js";
 import REST from "../rest.js";
 import { declarations } from "./mailDeclarations.js";
 import { customMailList } from "../../components/custom_listview.js";
+import { mailSidebar } from "../../components/mail_sidebar.js"
+
 
 let folderID, folderName, msgID, hash;
-const MailFoldersRest = new REST('/mail/folders');
 const MailMsgRest = new REST('/mail/view');
-setInterval(() => display(), 18000);
 
 async function main() {
+    localStorage.setItem('url', window.location.href);
     let folderArray = await getData();
+    await sidebar(folderArray.data);
     await display(folderArray.data)
     events();
     document.querySelector('#loading').style.display = 'none';
 }
 main();
-
+async function sidebar(val) {
+    const sidebar = new mailSidebar();
+    sidebar.value = val;
+    declarations.aside().appendChild(sidebar);
+}
 async function getData() {
-    return MailFoldersRest.get();
+    try {
+        let response = await fetch('/mail/folders');
+        if (!response.ok && response.status === 401) {
+            response.json().then(data =>
+                window.location.href = data.redirect
+            )
+        }
+        return response.json();
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 async function display(dataArray = null) {
@@ -30,8 +46,9 @@ async function display(dataArray = null) {
         window.open(`#${dataArray[0].folderName}/${dataArray[0].folderId}`, '_self');
     }
     folderID = folderID ?? dataArray[0].folderId;
-
     const msg = await getMessages(folderID);
+    console.log(msg);
+
     const list = new customMailList();
     list.value = msg.data;
     document.querySelector('.list').replaceChildren(list);
@@ -40,7 +57,9 @@ async function display(dataArray = null) {
 
 async function getMessages(id) {
     try {
-        return await MailMsgRest.getByID(id);
+        let response = await fetch(`/mail/view/${id}`)
+        if (!response.ok) throw new Error('Error');
+        return await response.json()
     } catch (e) {
         console.error(e)
     }

@@ -1,10 +1,10 @@
 require('dotenv').config();
-var axios = require('axios');
-var qs = require('qs');
-var express = require('express');
-var router = express.Router();
+const axios = require('axios');
+const qs = require('qs');
+const express = require('express');
+const router = express.Router();
 
-var dt = {
+const dt = {
     "eu": "https://accounts.zoho.eu",
     "au": "https://accounts.zoho.com.au",
     "in": "https://accounts.zoho.in",
@@ -14,7 +14,7 @@ var dt = {
     "ca": "https://accounts.zohocloud.ca",
     "sa": "https://accounts.zoho.sa"
 };
-var dtLoc = {
+const dtLoc = {
     "eu": "eu",
     "au": "au",
     "in": "in",
@@ -66,8 +66,6 @@ router.post('/access/:code/:location/:tstring', async (req, res) => {
         res.status(500).json({ error: 'OAuth authentication failed', details: error.message });
     }
 });
-
-
 
 
 module.exports = router;

@@ -1,15 +1,18 @@
 import REST from "../js/rest.js";
 export class mailSidebar extends HTMLElement {
+    val;
     constructor() {
         super();
     }
-
+    static get observedAttributes() {
+        return ['data-arr']
+    }
     async connectedCallback() {
         await this.render();
         this.events();
     }
     async render() {
-        const folders = await this.getFolders()
+        const folders = this.val;
         const shadowRoot = this.attachShadow({ mode: 'open' });
 
         const div = document.createElement('div');
@@ -21,16 +24,6 @@ export class mailSidebar extends HTMLElement {
         style.textContent = this.style();
         shadowRoot.appendChild(style);
         shadowRoot.appendChild(div);
-    }
-
-    async getFolders() {
-        try {
-            let Api = new REST('/mail/folders');
-            let response = await Api.get();
-            return response.data;
-        } catch (error) {
-            console.error(error);
-        }
     }
 
     display(folders) {
@@ -58,6 +51,12 @@ export class mailSidebar extends HTMLElement {
                 }));
             }
         })
+    }
+
+    attributesChangedCallback(name, oldVale, newValue) {
+        if (oldVale != newValue && name === 'data-arr') {
+            this.value = newValue;
+        }
     }
 
     style() {
@@ -98,6 +97,12 @@ export class mailSidebar extends HTMLElement {
         `;
     }
 
+    get value() {
+        return this.val;
+    }
+    set value(val) {
+        this.val = val;
+    }
 }
 
 customElements.define('mail-sidebar', mailSidebar);

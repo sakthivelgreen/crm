@@ -2,6 +2,7 @@ import { anchorTags, buttons, divElements } from "../declarations.js";
 import REST from '../rest.js';
 import { currDate } from "../commonFunctions.js";
 
+localStorage.setItem('url', window.location.href);
 anchorTags.completedMeetingsNav.parentElement.classList.add('activeLink')
 const MeetingAPI = new REST('/meetings');
 
