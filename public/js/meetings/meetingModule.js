@@ -2,6 +2,16 @@ import { meetingModuleElements, forms } from "../declarations.js";
 import { getTimeWithAMPM, inputValidationEmpty, timeOptions, dateFormat, dateOptions } from "../commonFunctions.js";
 
 export let ParticipantsEmail = [];
+export let userDetails;
+export async function getDetails() {
+    try {
+        let response = await fetch('/meetings/user');
+        if (!response.ok) throw new Error("Error");
+        userDetails = await response.json();
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export const participantEvents = () => {
     meetingModuleElements.meetingParticipants().addEventListener("focus", () => {
@@ -131,7 +141,7 @@ export function handleMeetingObj() {
             "session": {
                 "topic": `${meetingModuleElements.meetingTopic().value}`,
                 "agenda": `${meetingModuleElements.meetingAgenda().value}`,
-                "presenter": 60030984640,
+                "presenter": userDetails.zuid,
                 "startTime": `${meetingModuleElements.meetingDate().value} ${getTimeWithAMPM(meetingModuleElements.meetingTime().value)}`,
                 "duration": `${duration}`,
                 "timezone": "Asia/Calcutta"

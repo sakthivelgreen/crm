@@ -2,25 +2,30 @@ const express = require('express');
 const axios = require('axios')
 const router = express.Router();
 const cookieParser = require('cookie-parser');
-const zoho = require('./zoho');
-const { response } = require('../app');
 router.use(cookieParser());
 require('dotenv').config();
 
 // Define authorization code as a variable
 let Access_Token;
 let loc;
-let user = {};
+let user;
 router.use(async (req, res, next) => {
     Access_Token = req.cookies.meeting_token;
     loc = req.cookies.loc;
     if (!Access_Token) {
         return res.status(401).json({ redirect: '/zoho/auth/ZohoMeeting.meeting.ALL,ZohoMeeting.manageOrg.READ' });
     } else {
-        let result = await getUserDetails()
-        if (result) {
-            next();
+        user = req.cookies.meeting_user;
+        if (!user) {
+            let result = await getUserDetails()
+            res.cookie('meeting_user', result, {
+                httpOnly: true,
+                secure: false,
+                maxAge: 36000
+            });
+            user = result;
         }
+        next();
     }
 });
 
@@ -31,12 +36,15 @@ async function getUserDetails() {
                 "Authorization": `Zoho-oauthtoken ${Access_Token}`
             }
         });
-        user = await response.data.userDetails;
-        return true;
+        return response.data.userDetails;
     } catch (error) {
         console.log(error)
     }
 }
+
+router.get('/user', async (req, res) => {
+    res.json(user);
+})
 // Proxy GET request
 router.get('/', async (req, res) => {
     try {

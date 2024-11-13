@@ -60,6 +60,7 @@ MeetingAPI.get().then(Obj => {
             }
         }
     })
+    .then(checkData())
 
 const meetingListItemStructure = async (meeting) => {
     let imgSrc = imgUrl(meeting.timePeriod); // For image url morning, afternoon, evening and night
@@ -112,6 +113,29 @@ const imgUrl = (timePeriod) => {
     }
 }
 
+function checkData() {
+    const Div = document.querySelector(".content");
+    // Check if the element exists
+    if (Div) {
+        const childNodes = Div.childNodes;
+
+        // Check if there are child nodes, and whether each child node is empty (i.e., contains no text or other elements)
+        const allChildrenEmpty = Array.from(childNodes).every(child => {
+            // Check if a node is an element node and if it has no child elements or text
+            return child.nodeType === Node.TEXT_NODE && child.textContent.trim() === '' ||
+                (child.nodeType === Node.ELEMENT_NODE && !child.hasChildNodes());
+        });
+        const text = document.createElement('p');
+        text.textContent = "No Past Meetings";
+        const img = document.createElement("img");
+        img.src = '../../static/no-upcoming-meeting.svg';
+        if (allChildrenEmpty) {
+            Div.classList.add("noMeetings")
+            Div.appendChild(img);
+            Div.appendChild(text);
+        }
+    }
+}
 buttons.meetingCreateButton().addEventListener("click", () => {
     window.open("/templates/meetings/createMeetings.html", "_self");
 })

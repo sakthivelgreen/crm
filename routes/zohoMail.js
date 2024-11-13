@@ -16,11 +16,11 @@ router.use(async (req, res, next) => {
             redirect: '/zoho/auth/ZohoMail.folders.ALL,ZohoMail.messages.ALL,ZohoMail.organization.accounts.ALL,ZohoMail.partner.organization.ALL,ZohoMail.accounts.ALL'
         });
     } else {
-        let user = req.cookies.user;
+        let user = req.cookies.mail_user;
         if (!user) {
             try {
                 let result = await getAccountDetails(req, res, mail_token, loc);
-                res.cookie('user', result, {
+                res.cookie('mail_user', result, {
                     httpOnly: true,
                     secure: false,
                     maxAge: 36000

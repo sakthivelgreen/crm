@@ -154,7 +154,8 @@ aside {
     overflow: auto;
 }
 
-.UlMeetingListClass.noMeetings {
+.UlMeetingListClass.noMeetings,
+.content.noMeetings {
     background-color: #fff;
     height: 100%;
     display: flex;

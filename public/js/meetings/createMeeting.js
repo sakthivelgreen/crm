@@ -2,7 +2,7 @@ import { meetingModuleElements } from "../declarations.js";
 import { back, getParams } from "../commonFunctions.js";
 import REST from "../rest.js";
 import { keyMap } from '../../mappings/keyMap.js';
-import { participantEvents, scheduleEvents, duration, setDate, setDuration, setTime, setMeetingValues, setParticipants, listParticipants } from "./meetingModule.js";
+import { participantEvents, scheduleEvents, duration, setDate, setDuration, setTime, setMeetingValues, setParticipants, listParticipants, getDetails } from "./meetingModule.js";
 
 // Get ID
 const params = getParams(window.location.search);
@@ -65,6 +65,7 @@ flatpickr(meetingModuleElements.meetingDate(), {
 
 
 const MainFunction = () => {
+    getDetails()
     back(meetingModuleElements.closeMeetingCreateFormButton());
     duration();
     participantEvents();
