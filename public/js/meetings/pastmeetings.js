@@ -16,52 +16,55 @@ MeetingAPI.get().then(Obj => {
     }
 })
     .then(async () => {
-        for (const Meeting of Meetings) {
-            if ((Meeting.startTimeMillisec + Meeting.duration) < currDate.getTime()) {
-                const meetingItem = document.createElement('li');
-                meetingItem.id = Meeting.meetingKey;
-                meetingItem.className = "meetingListItem";
-                meetingItem.innerHTML = await meetingListItemStructure(Meeting);
-                switch (Meeting.eventTime) {
-                    case "Today":
-                        divElements.meetingsToday.appendChild(meetingItem)
-                        break;
-                    case "Yesterday":
-                        divElements.meetingsYesterday.appendChild(meetingItem)
-                        break;
-                    case "This Week":
-                        divElements.meetingsThisWeek.appendChild(meetingItem)
-                        break;
-                    case "Last Week":
-                        divElements.meetingsLastWeek.appendChild(meetingItem)
-                        break;
-                    case "This Month":
-                        divElements.meetingsThisMonth.appendChild(meetingItem)
-                        break;
-                    case "Earlier":
-                        divElements.meetingsLater.appendChild(meetingItem)
-                        break;
-                    default:
-                        console.log(Meeting)
-                        break;
-                }
-                meetingItem.addEventListener("click", async (e) => {
-                    e.stopPropagation();
-                    if (e.target.className === "pastMeetingNotes") {
-                        console.log("Notes");
-                    } else if (e.target.className === "pastMeetingChats") {
-                        console.log("Chats")
-                    } else if (e.target.parentElement.className === "meetingOptions") {
-                        console.log("hi");
-                    } else {
-                        window.location.href = `/templates/meetings/meetingsDetail.html?id=${meetingItem.id}`;
-                    }
-                })
-            }
-        }
+        await listMeetings()
     })
-    .then(checkData())
+    .then(() => checkData())
 
+const listMeetings = async () => {
+    for (const Meeting of Meetings) {
+        if ((Meeting.startTimeMillisec + Meeting.duration) < currDate.getTime()) {
+            const meetingItem = document.createElement('li');
+            meetingItem.id = Meeting.meetingKey;
+            meetingItem.className = "meetingListItem";
+            meetingItem.innerHTML = await meetingListItemStructure(Meeting);
+            switch (Meeting.eventTime) {
+                case "Today":
+                    divElements.meetingsToday.appendChild(meetingItem)
+                    break;
+                case "Yesterday":
+                    divElements.meetingsYesterday.appendChild(meetingItem)
+                    break;
+                case "This Week":
+                    divElements.meetingsThisWeek.appendChild(meetingItem)
+                    break;
+                case "Last Week":
+                    divElements.meetingsLastWeek.appendChild(meetingItem)
+                    break;
+                case "This Month":
+                    divElements.meetingsThisMonth.appendChild(meetingItem)
+                    break;
+                case "Earlier":
+                    divElements.meetingsLater.appendChild(meetingItem)
+                    break;
+                default:
+                    console.log(Meeting)
+                    break;
+            }
+            meetingItem.addEventListener("click", async (e) => {
+                e.stopPropagation();
+                if (e.target.className === "pastMeetingNotes") {
+                    console.log("Notes");
+                } else if (e.target.className === "pastMeetingChats") {
+                    console.log("Chats")
+                } else if (e.target.parentElement.className === "meetingOptions") {
+                    console.log("hi");
+                } else {
+                    window.location.href = `/templates/meetings/meetingsDetail.html?id=${meetingItem.id}`;
+                }
+            })
+        }
+    }
+}
 const meetingListItemStructure = async (meeting) => {
     let imgSrc = imgUrl(meeting.timePeriod); // For image url morning, afternoon, evening and night
     const structure = `
@@ -114,7 +117,7 @@ const imgUrl = (timePeriod) => {
 }
 
 function checkData() {
-    const Div = document.querySelector(".content");
+    const Div = document.querySelector(".pastMeetingsDiv");
     // Check if the element exists
     if (Div) {
         const childNodes = Div.childNodes;

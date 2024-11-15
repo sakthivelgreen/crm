@@ -145,7 +145,7 @@ aside {
 }
 
 #upcomingMeetingsDiv,
-.content {
+.pastMeetingsDiv {
     /* flex: 1; */
     padding-top: 25px;
     position: relative;
@@ -155,7 +155,7 @@ aside {
 }
 
 .UlMeetingListClass.noMeetings,
-.content.noMeetings {
+.pastMeetingsDiv.noMeetings {
     background-color: #fff;
     height: 100%;
     display: flex;
