@@ -4,16 +4,17 @@ const router = express.Router();
 const cookieParser = require('cookie-parser');
 router.use(cookieParser());
 require('dotenv').config();
+const requiredScope = require('./scope');
 
 // Define authorization code as a variable
 let Access_Token;
 let loc;
 let user;
 router.use(async (req, res, next) => {
-    Access_Token = req.cookies.meeting_token;
+    Access_Token = req.cookies.token;
     loc = req.cookies.loc;
     if (!Access_Token) {
-        return res.status(401).json({ redirect: '/zoho/auth/ZohoMeeting.meeting.ALL,ZohoMeeting.manageOrg.READ' });
+        return res.status(401).json({ redirect: `/zoho/auth/${requiredScope}` });
     } else {
         user = req.cookies.meeting_user;
         if (!user) {

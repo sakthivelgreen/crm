@@ -45,6 +45,12 @@ export default class rightPopUp extends HTMLElement {
             container.addEventListener('transitionend', () => {
                 this.remove();
             });
+            this.dispatchEvent(new CustomEvent('close-true'), {
+                detail: { 'close': true },
+                composed: true,
+                bubbles: true
+            })
+
         });
     }
 
@@ -72,7 +78,7 @@ export default class rightPopUp extends HTMLElement {
             .outerContainer {
                 position: relative;
                 height: 100%;
-                width: 400px;
+                width: 600px;
                 background: #fff;
                 box-shadow: 0px 0px 5px rgba(0, 0, 0, 1);
                 transform: translateX(100%); /* Start offscreen */
@@ -81,11 +87,12 @@ export default class rightPopUp extends HTMLElement {
             }
 
             .innerContainer{
-                margin-top: 70px;
                 position: absolute;
+                margin-top: 20px;
                 top: 0;
                 left: 0;
                 padding: 15px;
+                width:100%;
                 }
 
             /* Slide in effect */
@@ -99,7 +106,7 @@ export default class rightPopUp extends HTMLElement {
             }
 
             #close {
-                position: absolute;
+                position: sticky;
                 top: 0;
                 left:0;
                 cursor: pointer;

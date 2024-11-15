@@ -29,8 +29,8 @@ router.get('/auth/:scope', (req, res) => {
     res.redirect(`https://accounts.zoho.com/oauth/v2/auth?scope=${req.params.scope}&client_id=${process.env.CLIENT_ID}&response_type=code&redirect_uri=${process.env.REDIRECT_URI}&access_type=offline`)
 })
 
-router.post('/access/:code/:location/:tstring', async (req, res) => {
-    const { code, location, tstring } = req.params;
+router.post('/access/:code/:location', async (req, res) => {
+    const { code, location } = req.params;
     try {
         // Make a POST request with form-urlencoded data
         let response = await axios.post(
@@ -50,7 +50,7 @@ router.post('/access/:code/:location/:tstring', async (req, res) => {
         );
 
         let obj = response.data;
-        res.cookie(tstring, obj.access_token, {
+        res.cookie('token', obj.access_token, {
             httpOnly: true,
             secure: false,
             maxAge: 3600000

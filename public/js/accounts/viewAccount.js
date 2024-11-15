@@ -2,17 +2,18 @@ import { deleteID } from './accountModule.js';
 import customList from "/components/custom_listview.js";
 import REST from '../rest.js';
 import { keyMap } from '../../mappings/keyMap.js';
-import { Elements, Sections, buttons } from '../declarations.js';
+import { Elements, Sections, buttons, popupElements } from '../declarations.js';
 import { buttonRedirect } from "../commonFunctions.js";
+import rightPopUp from '../../components/rightPopup.js'
 
 // Getting Id from url
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let accountID = urlParams.get('id');
 let url = "/mongodb/accounts/";
+let account_details;
 
-
-// Targetting html Elements
+// Targeting html Elements
 let container = document.querySelector(".viewAccountDetails");
 let orgTable = document.querySelector("#accountTable");
 
@@ -53,10 +54,10 @@ async function getAccounts() {
             console.log(response.statusText);
             throw new Error("Error Fetching Accounts");
         }
-        let jsonString = await response.json();
-        processAccounts(jsonString);
+        let jsonObject = await response.json();
+        processAccounts(jsonObject);
     } catch (error) {
-
+        console.log(error)
     }
 }
 
@@ -65,6 +66,7 @@ getAccounts()  // Calling Main Function
 
 // Processing accounts View
 function processAccounts(account) {
+    account_details = account;
     Elements.pageTitle().textContent = keyMap.account_Name(account);
     document.title = `${keyMap.account_Name(account)} (Account) - Zoho CRM`
     const tbody = document.createElement("tbody");
@@ -209,3 +211,45 @@ async function deleteContact(AccID) {
 // Create Meeting
 buttonRedirect(buttons.meetingCreateButton(), accountID, '/templates/meetings/createMeetings.html', 'accounts')
 buttonRedirect(buttons.createDeal(), accountID, '/templates/deals/createDeal.html', 'accounts')
+
+// send Mail
+const sidebar = new rightPopUp();
+sidebar.addEventListener('close-true', (e) => {
+    popupElements.popup().style.display = 'none';
+})
+buttons.sendMail().addEventListener('click', (e) => {
+    fetch('/templates/email/sendMailTemplate.html')
+        .then(response => response.text())
+        .then(html => {
+            sidebar.content = html;
+        })
+        .then(() => {
+            requestAnimationFrame(() => {
+                let input = sidebar.shadowRoot.querySelector('#to-address');
+                if (input) {
+                    input.value = account_details.organisation_email;
+                    input.disabled = false;
+                    input.readOnly = false;
+                }
+            });
+        })
+        .then(() => {
+            popupElements.popup().style.display = 'flex';
+            popupElements.popup().replaceChildren(sidebar)
+            importFormJs(sidebar);
+        })
+        .then(() => {
+            sidebar.shadowRoot.querySelector('#sendMailBtn').addEventListener('mail-status', (e) => {
+                let status = e.detail.status;
+                if (status) {
+                    sidebar.remove();
+                    popupElements.popup().style.display = 'none';
+                }
+            })
+        })
+})
+async function importFormJs(sidebar) {
+    import('../../js/email/sendMail.js').then(module => {
+        module.main(sidebar);
+    })
+}

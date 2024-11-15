@@ -1,7 +1,111 @@
-<form>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-</form>
+<div class="outer-div-form">
+    <div class="btn-div-form">
+        <button type="submit" id="sendMailBtn">Send</button>
+    </div>
+    <form id="mail-form">
+        <div class="form-div-inside">
+            <label for="from-address">From:</label>
+            <input class="form-input-element" name="From" type="text" id="from-address" disabled>
+        </div>
+        <div class="form-div-inside">
+            <label for="to-address">To:</label>
+            <input class="form-input-element" name="To" type="text" id="to-address" required>
+        </div>
+        <div class="form-div-inside">
+            <label for="cc-address">CC:</label>
+            <input class="form-input-element" name="CC" type="text" id="cc-address">
+        </div>
+        <div class="form-div-inside">
+            <label for="mail-subject">Subject:</label>
+            <input class="form-input-element" name="Subject" type="text" id="mail-subject" required>
+        </div>
+        <div class="form-div-inside">
+            <label for="mail-content">Message:</label>
+            <textarea class="form-input-element" name="Message" type="text" id="mail-content" required></textarea>
+        </div>
+    </form>
+</div>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .btn-div-form {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: right;
+        width: 100%;
+        gap: 5%;
+        padding: 5px;
+    }
+
+    .btn-div-form>button {
+        min-width: 100px;
+        padding: 5px 10px;
+        outline: 0;
+        border: 1px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+        background: #fff;
+    }
+
+    .btn-div-form>button:hover {
+        color: #fff;
+        background-color: gray;
+        border: gray;
+    }
+
+    .btn-div-form>button:first-child:hover {
+        background-color: rgb(27, 117, 252);
+        border: rgb(35, 35, 162);
+    }
+
+    .outer-div-form {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 15px;
+    }
+
+    .form-input-element {
+        width: 100%;
+        height: 40px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 16px;
+        padding: 2px 15px;
+        margin-top: 5px;
+        border: 1px solid;
+        outline: 0;
+        border-radius: 5px;
+    }
+
+    .form-input-element.error {
+        border: 1px solid red;
+    }
+
+    #mail-form {
+        border-top: 1px solid black;
+        margin-top: 15px;
+        padding: 10px 0px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 500px;
+        gap: 10px;
+        scrollbar-width: thin;
+    }
+
+    #mail-content {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        height: 150px;
+        text-wrap: wrap;
+        resize: none;
+    }
+
+    :required {
+        border-left: red 2px solid;
+    }
+</style>

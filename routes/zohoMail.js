@@ -4,19 +4,20 @@ const router = express.Router();
 const cookie_parser = require('cookie-parser');
 router.use(cookie_parser());
 const axios = require('axios');
+const requiredScope = require('./scope');
 
 // Define authorization code as a variable
 let accountId, mail_token, loc, user;
 
 router.use(async (req, res, next) => {
-    mail_token = req.cookies.mail_token;
+    mail_token = req.cookies.token;
     loc = req.cookies.loc;
     if (!mail_token) {
         return res.status(401).json({
-            redirect: '/zoho/auth/ZohoMail.folders.ALL,ZohoMail.messages.ALL,ZohoMail.organization.accounts.ALL,ZohoMail.partner.organization.ALL,ZohoMail.accounts.ALL'
+            redirect: `/zoho/auth/${requiredScope}`
         });
     } else {
-        let user = req.cookies.mail_user;
+        user = req.cookies.mail_user;
         if (!user) {
             try {
                 let result = await getAccountDetails(req, res, mail_token, loc);
@@ -49,7 +50,9 @@ async function getAccountDetails(req, res, mail_token, loc) {
     }
 }
 
-
+router.get('/user', async (req, res) => {
+    res.send(user);
+})
 router.get('/folders', async (req, res) => {
     try {
         let response = await axios.get(`https://mail.zoho.${loc}/api/accounts/${accountId}/folders`,
@@ -115,10 +118,18 @@ router.get('/view/message/:mid/:fid', async (req, res) => {
 })
 
 router.post('/sendMail', async (req, res) => {
+    let data = req.body;
     try {
-        let response = await axios.post(`https://mail.zoho.${loc}/api/accounts/${accountId}/messages`)
+        let response = await axios.post(`https://mail.zoho.${loc}/api/accounts/${accountId}/messages`, data, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Zoho-oauthtoken ${mail_token}`
+            }
+        });
+        if (response.status == 200) res.json(response.data);
     } catch (error) {
-
+        console.log(error);
     }
 })
 

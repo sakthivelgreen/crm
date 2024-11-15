@@ -396,8 +396,13 @@ export class customMailList extends customList {
                 cursor: pointer;
             }
             .rowElement{
-                height: 60px;
+                min-height: 70px;
+                margin-bottom:5px;
+                border-bottom: 1px solid rgba(0,0,0,0.7)
             }
+                .rowElement.selected{
+                    background-color: rgba(25,63,18,0.9);
+                }
             .column{
                 flex-direction: column;
                 align-items: start;

@@ -17,26 +17,21 @@
 
             const auth_code = urlParams.get('code');
             const location = urlParams.get('location');
-            let module = localStorage.getItem('url');
-            let token_string;
-            if (module.includes('meeting')) {
-                token_string = 'meeting_token'
-            } else if (module.includes('mail')) {
-                token_string = 'mail_token'
-            }
+            let url = localStorage.getItem('url');
+
             async function main(params) {
                 console.log(localStorage.getItem('url'))
                 if (auth_code !== null) {
                     let obj = await accessToken()  // Calling function to get Access Token
                     await alert("Tokens Generated")
-                    window.open(module, "_self");
+                    window.open(url, "_self");
                 }
 
             }
             main();
             async function accessToken() {
                 try {
-                    let response = await fetch(`/zoho/access/${auth_code}/${location}/${token_string}`, {
+                    let response = await fetch(`/zoho/access/${auth_code}/${location}`, {
                         method: "POST"
                     })
                 } catch (error) {
