@@ -4,12 +4,13 @@ import { declarations } from './contactDeclarations.js';
 import { buttons, Sections } from '../declarations.js';
 import { keyMap } from '../../mappings/keyMap.js';
 import { buttonRedirect } from "../commonFunctions.js";
+import rightPopUP from '../../components/rightPopup.js'
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let contactID = urlParams.get('id');
 let isRunning = false;
-
+let Contact;
 
 const backBtn = document.querySelector("#backArrowBtn");
 backBtn.addEventListener("click", () => {
@@ -51,7 +52,7 @@ const tbody = document.createElement("tbody");
 table.appendChild(tbody);
 // get contact
 function getContacts(contact) {
-
+    Contact = contact;
     declarations.pageTitle().textContent = keyMap.name(contact);
 
     titleElement.textContent = `${keyMap.name(contact)} (contact) - Zoho CRM`;
@@ -186,3 +187,46 @@ buttonRedirect(buttons.meetingCreateButton(), contactID, '/templates/meetings/cr
 
 // create Deal
 buttonRedirect(buttons.createDeal(), contactID, '/templates/deals/createDeal.html', 'contacts');
+
+// send Mail
+const sidebar = new rightPopUP();
+sidebar.addEventListener('close-true', (e) => {
+    popupElements.popup().style.display = 'none';
+})
+declarations.sendMail().addEventListener('click', (e) => {
+    e.preventDefault();
+    fetch('/templates/email/sendMailTemplate.html')
+        .then(response => response.text())
+        .then(html => {
+            sidebar.content = html;
+        })
+        .then(() => {
+            requestAnimationFrame(() => {
+                let input = sidebar.shadowRoot.querySelector('#to-address');
+                if (input) {
+                    input.value = Contact.email;
+                    input.disabled = false;
+                    input.readOnly = false;
+                }
+            });
+        })
+        .then(() => {
+            declarations.popup().style.display = 'flex';
+            declarations.popup().replaceChildren(sidebar)
+            importFormJs(sidebar);
+        })
+        .then(() => {
+            sidebar.shadowRoot.querySelector('#sendMailBtn').addEventListener('mail-status', (e) => {
+                let status = e.detail.status;
+                if (status) {
+                    sidebar.remove();
+                    declarations.popup().style.display = 'none';
+                }
+            })
+        })
+})
+async function importFormJs(sidebar) {
+    import('../../js/email/sendMail.js').then(module => {
+        module.main(sidebar);
+    })
+}

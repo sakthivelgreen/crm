@@ -1,3 +1,5 @@
 export const declarations = {
-    pageTitle: () => document.querySelector('#pageTitle')
+    pageTitle: () => document.querySelector('#pageTitle'),
+    sendMail: () => document.querySelector('#sendMail'),
+    popup: () => document.querySelector('#PopUP')
 }
