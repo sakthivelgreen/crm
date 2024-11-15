@@ -1,9 +1,11 @@
+import { declarations } from './leadDeclarations.js';
+import rightPopUp from '../../components/rightPopup.js';
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let leadID = urlParams.get('id');
 let isRunning = false;
-
-
+let leads;
 const backBtn = document.querySelector("#backArrowBtn");
 backBtn.addEventListener("click", () => {
     window.location.href = `/templates/leads.html`;
@@ -49,6 +51,7 @@ const tbody = document.createElement("tbody");
 table.appendChild(tbody);
 // get lead
 function getLeads(lead) {
+    leads = lead;
     titleElement.textContent = `${lead.firstname} ${lead.lastname}`;
     for (const key in lead) {
         if (key === "id") continue;
@@ -104,3 +107,45 @@ const converLeadBtn = document.querySelector("#convertLead");
 converLeadBtn.addEventListener("click", () => {
     window.location.href = `/templates/leads/convertlead.html?id=${leadID}`;
 })
+
+// send Mail
+const sidebar = new rightPopUp();
+sidebar.addEventListener('close-true', (e) => {
+    declarations.popup().style.display = 'none';
+})
+declarations.sendMail().addEventListener('click', (e) => {
+    fetch('/templates/email/sendMailTemplate.html')
+        .then(response => response.text())
+        .then(html => {
+            sidebar.content = html;
+        })
+        .then(() => {
+            requestAnimationFrame(() => {
+                let input = sidebar.shadowRoot.querySelector('#to-address');
+                if (input) {
+                    input.value = leads.email;
+                    input.disabled = false;
+                    input.readOnly = false;
+                }
+            });
+        })
+        .then(() => {
+            declarations.popup().style.display = 'flex';
+            declarations.popup().replaceChildren(sidebar)
+            importFormJs(sidebar);
+        })
+        .then(() => {
+            sidebar.shadowRoot.querySelector('#sendMailBtn').addEventListener('mail-status', (e) => {
+                let status = e.detail.status;
+                if (status) {
+                    sidebar.remove();
+                    declarations.popup().style.display = 'none';
+                }
+            })
+        })
+})
+async function importFormJs(sidebar) {
+    import('../../js/email/sendMail.js').then(module => {
+        module.main(sidebar);
+    })
+}
