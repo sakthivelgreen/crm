@@ -176,7 +176,7 @@ function processCheckBox(head, body) {
     });
 
 
-    // funtion to check if all items are checked
+    // function to check if all items are checked
     function allcheck() {
         for (let i = 0; i < bodyCheck.length; i++) {
             if (!bodyCheck[i].checked) {
@@ -187,7 +187,7 @@ function processCheckBox(head, body) {
         head.checked = true;
     }
 
-    // fuction for checkbox in table head 
+    // function for checkbox in table head 
     head.addEventListener("change", (e) => {
         if (head.checked) {                     // if checked(true)
             bodyCheck.forEach(e => {
@@ -247,17 +247,21 @@ function processCheckBox(head, body) {
 // delete function definition
 async function funDelete(param) {
     try {
-        let delFetch = await fetch(`http://localhost:3000/leads/${param}`, {
+        let response = await fetch(`/mongodb/leads/${param}`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" }
         })
-        delFetch.then(console.log("Delete Success"))
+
+        if (!response.ok) throw new Error();
+        else console.log('Delete Success!')
+
     } catch (error) {
         alert("Error in deletion " + error)
         throw new Error("error", error);
     }
     finally {
         alert("Delete Success")
+        location.reload()
     }
 
 }

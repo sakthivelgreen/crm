@@ -80,7 +80,7 @@ optionBtn.onblur = () => {
     setTimeout(() => {
         let menu = document.getElementById("dropDown1");
         menu.style.display = "none";
-    }, 100)
+    }, 300)
 }
 
 // Delete Lead 
@@ -91,7 +91,7 @@ deleteLead.addEventListener("click", (e) => {
         try {
             fetch(url, {
                 method: "DELETE"
-            }).then()
+            }).then(() => location.reload())
         } catch (error) {
             console.log(error);
         }
