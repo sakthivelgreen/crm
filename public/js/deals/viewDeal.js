@@ -2,6 +2,7 @@ import { getParams, back, dateFormat, dateOptions } from '../commonFunctions.js'
 import { declarations } from './dealDeclarations.js';
 import { API_Endpoint, getDeal, getPipeline, updateStage } from './dealModule.js';
 import { PopUp } from '../../components/popup.js';
+import rightPopUp from '../../components/rightPopup.js';
 
 // redirect -> Back
 declarations.previousPage().addEventListener('click', () => {
@@ -11,15 +12,27 @@ declarations.previousPage().addEventListener('click', () => {
 // Deal ID from Parameter
 const dealID = getParams(window.location.search).id;
 
+let Contact;
 
 // Main Function()
 async function main() {
     const obj = await getDeal(dealID);
     setValues(obj)
-
+    Contact = await getContact(obj.contactID);
 }
 main();              // Main function call. 
 
+async function getContact(id) {
+    try {
+        let response = await fetch(`/mongodb/contacts/${id}`)
+        if (!response.ok) throw new Error();
+        return await response.json();
+    } catch (error) {
+        alert(error)
+        console.log(error)
+    }
+
+}
 function setValues(obj) {
     document.title = `${obj.dealname} (Deal) - Zoho CRM`;
     declarations.pageTitle().textContent = obj.dealname;
@@ -87,4 +100,46 @@ async function deleteDeal() {
         console.error(error);
         alert('Error in Deletion')
     }
+}
+
+// send Mail 
+const sidebar = new rightPopUp();
+sidebar.addEventListener('close-true', (e) => {
+    declarations.popup().style.display = 'none';
+})
+declarations.sendMailbtn().addEventListener('click', (e) => {
+    fetch('/templates/email/sendMailTemplate.html')
+        .then(response => response.text())
+        .then(html => {
+            sidebar.content = html;
+        })
+        .then(() => {
+            requestAnimationFrame(() => {
+                let input = sidebar.shadowRoot.querySelector('#to-address');
+                if (input) {
+                    input.value = Contact.email;
+                    input.disabled = false;
+                    input.readOnly = false;
+                }
+            });
+        })
+        .then(() => {
+            declarations.popup().style.display = 'flex';
+            declarations.popup().replaceChildren(sidebar)
+            importFormJs(sidebar);
+        })
+        .then(() => {
+            sidebar.shadowRoot.querySelector('#sendMailBtn').addEventListener('mail-status', (e) => {
+                let status = e.detail.status;
+                if (status) {
+                    sidebar.remove();
+                    declarations.popup().style.display = 'none';
+                }
+            })
+        })
+})
+async function importFormJs(sidebar) {
+    import('../../js/email/sendMail.js').then(module => {
+        module.main(sidebar);
+    })
 }
