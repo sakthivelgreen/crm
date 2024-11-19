@@ -8,72 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="../../components/navbar.js"></script>
 
-    <script type="module" defer>
-
-        import { getUserDetails, events } from '../../js/email/sendMail.js';
-        import { declarations } from '../../js/email/mailDeclarations.js';
-
-
-        $(document).ready(function () {
-            $('.content').load('./sendMailTemplate.html', function (response, status, xhr) {
-                if (status === "error") {
-                    $('#content-container').text('Error loading content: ' + xhr.status + " " + xhr.statusText);
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', (e) => {
-            async function main() {
-                let user = await getUserDetails();
-                declarations.from_address().value = user.primaryEmailAddress;
-                events()
-            }
-            main()
-            async function events() {
-                declarations.sendMailBtn().addEventListener('click', async (event) => {
-                    event.preventDefault();
-                    let from = declarations.from_address().value;
-                    let to = declarations.to_address().value;
-                    let cc = declarations.cc_address().value;
-                    let sub = declarations.mail_subject().value;
-                    let msg = declarations.mail_content().value;
-                    if ((from && to && msg && sub)) {
-                        let obj = {
-                            'fromAddress': from,
-                            'toAddress': to,
-                            'subject': sub,
-                            'content': msg,
-                            'ccAddress': cc,
-                            "askReceipt": "yes"
-                        }
-                        let res = await sendMail(obj);
-                        res ? window.open('/templates/email/mail.html', '_self') : '';
-                    }
-                })
-            }
-
-            async function sendMail(obj) {
-                try {
-                    let response = await fetch('/mail/sendMail', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(obj)
-                    })
-                    if (!response.ok) throw new Error('Unable to send Mail currently! tryAgain Later!');
-                    alert('Mail Sent!')
-                    return true;
-                } catch (error) {
-                    alert(error);
-                    console.log(error);
-                }
-            }
-        })
-
-
-
-    </script>
+    <script type="module" src="../../js/email/composeMail.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -92,17 +27,6 @@
             height: calc(100% - 4em);
             width: 650px;
             border: none;
-        }
-
-        iframe::-webkit-scrollbar {
-            width: 2px;
-        }
-
-        iframe::-webkit-scrollbar-thumb {
-            background-color: #888;
-            /* Styles the thumb */
-            border-radius: 10px;
-            /* Makes it rounded */
         }
     </style>
 </head>

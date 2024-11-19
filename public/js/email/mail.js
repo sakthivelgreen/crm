@@ -87,15 +87,71 @@ function openMailEvent() {
         let dt = await getMessageDetail();
 
         let sidePop = declarations.rightPopUp();
+        let style = `
+        .mail-actions{
+            position:sticky;
+            top:0px;
+            z-index:1;
+            height: 70px;
+            border-bottom:1px solid black;
+            background: #fff;
+            display: flex;
+            gap:10px;
+            align-items:center;
+            justify-content: right;
+            padding-right: 20px;
+        }
+        button{
+            all: unset;
+            padding: 5px 10px;
+            border: 1px dashed black;    
+        }
+            button:hover{
+                cursor: pointer;
+                color: blue;
+                transition: 0.5s;
+                border-radius: 5px;
+                border-color: blue;
+                background: rgba(0,0,255,0.3)
+            }
+            #delete-mail:hover{
+                color: red;
+                background: rgba(255,0,0,0.1)
+            }
+        `
+        let Content = `
+            <style>${style}</style>
+            <div class='mail-actions'>
+                <button id='forward-mail'>Forward</button>
+                <button id='delete-mail'>Delete</button>
+            </div>
+            <div class='content' style="position:relative; height:calc(100% - 90px);width:100%; overflow:auto; padding: 0px 15px">
+                ${dt.data.content}
+            <div>
+            `;
 
         if (sidePop) {
-            sidePop.content = dt.data.content;
+            sidePop.content = Content;
         } else {
             sidePop = document.createElement('right-popup');
-            sidePop.content = dt.data.content;
+            sidePop.content = Content;
             declarations.mainContainer().appendChild(sidePop);
         }
+        mailEvents(sidePop); // Mail Events
     });
+}
+
+// Forward Mail & Delete Events
+function mailEvents(sidebar) {
+    sidebar.shadowRoot.querySelector(".mail-actions").addEventListener('click', (e) => {
+        e.preventDefault();
+        if (e.target.id === 'forward-mail') {
+            window.open(`/templates/email/sendMail.html?mid=${msgID}&fid=${folderID}`, '_self');
+        }
+        if (e.target.id === 'delete-mail') {
+            alert('Delete is still in progress! Try again after sometime')
+        }
+    })
 }
 
 async function getMessageDetail() {

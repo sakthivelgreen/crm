@@ -91,7 +91,6 @@ export default class rightPopUp extends HTMLElement {
                 margin-top: 20px;
                 top: 0;
                 left: 0;
-                padding: 15px;
                 width:100%;
                 }
 
