@@ -116,6 +116,21 @@ router.get('/view/message/:mid/:fid', async (req, res) => {
         console.log(error);
     }
 })
+router.get('/view/message/meta/:mid/:fid', async (req, res) => {
+    let msgId = req.params.mid;
+    let folId = req.params.fid;
+    try {
+        let response = await axios.get(`https://mail.zoho.${loc}/api/accounts/${accountId}/folders/${folId}/messages/${msgId}/details`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Zoho-oauthtoken ${mail_token}`
+            }
+        })
+        res.status(200).json(response.data);
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 router.post('/sendMail', async (req, res) => {
     let data = req.body;

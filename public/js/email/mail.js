@@ -124,6 +124,8 @@ function openMailEvent() {
             <div class='mail-actions'>
                 <button id='forward-mail'>Forward</button>
                 <button id='delete-mail'>Delete</button>
+                <button id='reply-mail'>Reply</button>
+                <button id='reply-all-mail'>Reply All</button>
             </div>
             <div class='content' style="position:relative; height:calc(100% - 90px);width:100%; overflow:auto; padding: 0px 15px">
                 ${dt.data.content}
@@ -150,6 +152,12 @@ function mailEvents(sidebar) {
         }
         if (e.target.id === 'delete-mail') {
             alert('Delete is still in progress! Try again after sometime')
+        }
+        if (e.target.id === 'reply-mail') {
+            window.open(`/templates/email/sendMail.html?mid=${msgID}&fid=${folderID}&action=reply`, '_self');
+        }
+        if (e.target.id === 'reply-all-mail') {
+            window.open(`/templates/email/sendMail.html?mid=${msgID}&fid=${folderID}&action=reply-all`, '_self');
         }
     })
 }
