@@ -38,6 +38,8 @@ export class mailSidebar extends HTMLElement {
         </div>`;
     }
     events() {
+        let root = this.shadowRoot;
+        updateActive(root);
         this.shadowRoot.querySelector('.innerDiv').addEventListener('click', (e) => {
             e.preventDefault();
             const itemElement = e.target.closest('.item');
@@ -46,7 +48,7 @@ export class mailSidebar extends HTMLElement {
                 // Access the correct element's ID and text content
                 const folderId = itemElement.id;
                 const folderName = itemElement.textContent;
-
+                updateActive(root, folderId);
                 this.dispatchEvent(new CustomEvent('mail-event', {
                     detail: { folderId, folderName },
                     bubbles: true,
@@ -61,6 +63,20 @@ export class mailSidebar extends HTMLElement {
                 composed: true
             }))
         })
+        function updateActive(root, folderId = null) {
+            root.querySelectorAll('.item').forEach(item => {
+                item.classList.remove('active')
+            });
+            setTimeout(() => {
+                let id;
+                if (folderId === null) {
+                    id = window.location.hash;
+                    id = id.split('/');
+                    id = id[1];
+                } else id = folderId;
+                root.getElementById(`${id}`).classList.add('active');
+            }, 0);
+        }
     }
 
     attributesChangedCallback(name, oldVale, newValue) {
@@ -89,6 +105,7 @@ export class mailSidebar extends HTMLElement {
             flex-direction: column;
             align-items: left;
             padding: 10px 5px;
+            gap:2px;
         }
             .item,#compose-mail{
                 user-select: none;
@@ -104,8 +121,14 @@ export class mailSidebar extends HTMLElement {
             transition-duration: 0.75s;
             background:rgba(245,245,245,1);
         }
-            #compose-mail{
-            background: #0000ff
+        .item.active{
+            background: rgba(245,245,245,1);
+            color: #000;
+        }
+            #compose-mail:hover{
+                transition: 0.75s;
+                color: #0000ff;
+                background: #fff;
             }
         `;
     }

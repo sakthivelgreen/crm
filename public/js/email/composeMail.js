@@ -18,7 +18,7 @@ $(document).ready(function () {
 document.addEventListener('DOMContentLoaded', (e) => {
     async function main() {
         let user = await getUserDetails();
-        await mailActions();
+        if (msgID) await mailActions();
         declarations.from_address().value = user.primaryEmailAddress;
         document.querySelector('#mail-form').style.cssText = `
                     height: 450px;
