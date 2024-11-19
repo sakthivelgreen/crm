@@ -18,7 +18,7 @@ export async function main(sidebar) {
     sidebar.shadowRoot.querySelector("#from-address").value = user.primaryEmailAddress;
     await events(sidebar.shadowRoot, object);
 }
-async function getUserDetails() {
+export async function getUserDetails() {
     try {
         let response = await fetch('/mail/user');
         if (response.status === 401) {
@@ -37,7 +37,7 @@ async function getUserDetails() {
     }
 }
 
-async function events(doc, object) {
+export async function events(doc, object) {
     doc.querySelector('#sendMailBtn').addEventListener('click', async (e) => {
         let res = Validate(object);
         if (res.length > 0) {

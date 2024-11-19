@@ -25,9 +25,14 @@ const dtLoc = {
     "sa": "sa"
 };
 
-router.get('/auth/:scope', (req, res) => {
-    res.redirect(`https://accounts.zoho.com/oauth/v2/auth?scope=${req.params.scope}&client_id=${process.env.CLIENT_ID}&response_type=code&redirect_uri=${process.env.REDIRECT_URI}&access_type=offline`)
-})
+function handleAuthGrant(req, res) {
+    let scope = req.params.scope;
+    let ClientId = process.env.CLIENT_ID;
+    let redirect_uri = process.env.REDIRECT_URI;
+    res.redirect(`https://accounts.zoho.com/oauth/v2/auth?scope=${scope}&client_id=${ClientId}&response_type=code&redirect_uri=${redirect_uri}&access_type=offline`)
+}
+
+router.get('/auth/:scope', handleAuthGrant);
 
 router.post('/access/:code/:location', async (req, res) => {
     const { code, location } = req.params;

@@ -5,4 +5,10 @@ export const declarations = {
     rightPopUp: () => document.querySelector('right-popup'),
     mainContainer: () => document.querySelector('main'),
     aside: () => document.querySelector('aside'),
+    from_address: () => document.querySelector('#from-address'),
+    to_address: () => document.querySelector('#to-address'),
+    cc_address: () => document.querySelector('#cc-address'),
+    mail_subject: () => document.querySelector('#mail-subject'),
+    mail_content: () => document.querySelector('#mail-content'),
+    sendMailBtn: () => document.querySelector('#sendMailBtn')
 }

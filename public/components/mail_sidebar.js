@@ -1,4 +1,3 @@
-import REST from "../js/rest.js";
 export class mailSidebar extends HTMLElement {
     val;
     constructor() {
@@ -32,7 +31,11 @@ export class mailSidebar extends HTMLElement {
                 <div class="item" id="${element.folderId}">${element.folderName}</div>
             </div>`
         }).join('');
-        return `<div class="innerDiv"> ${div}</div>`;
+        return `
+        <div class="innerDiv">
+            <div id="compose-mail">Compose</div>
+            ${div}
+        </div>`;
     }
     events() {
         this.shadowRoot.querySelector('.innerDiv').addEventListener('click', (e) => {
@@ -50,6 +53,13 @@ export class mailSidebar extends HTMLElement {
                     composed: true
                 }));
             }
+        })
+        this.shadowRoot.querySelector('#compose-mail').addEventListener('click', (e) => {
+            this.dispatchEvent(new CustomEvent('compose-btn', {
+                detail: { 'compose': true },
+                bubbles: true,
+                composed: true
+            }))
         })
     }
 
@@ -80,7 +90,7 @@ export class mailSidebar extends HTMLElement {
             align-items: left;
             padding: 10px 5px;
         }
-            .item{
+            .item,#compose-mail{
                 user-select: none;
                 width: 100%;
                 padding:5px 10px;
@@ -94,6 +104,9 @@ export class mailSidebar extends HTMLElement {
             transition-duration: 0.75s;
             background:rgba(245,245,245,1);
         }
+            #compose-mail{
+            background: #0000ff
+            }
         `;
     }
 

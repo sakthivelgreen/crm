@@ -73,6 +73,11 @@ function events() {
         document.querySelector('.list').replaceChildren();
         display();
     })
+    declarations.mailSidebar().addEventListener('compose-btn', (e) => {
+        if (e.detail.compose) {
+            window.open('/templates/email/sendMail.html', '_self');
+        }
+    })
 }
 
 function openMailEvent() {
