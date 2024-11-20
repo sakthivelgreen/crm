@@ -10,5 +10,8 @@ export const declarations = {
     cc_address: () => document.querySelector('#cc-address'),
     mail_subject: () => document.querySelector('#mail-subject'),
     mail_content: () => document.querySelector('#mail-content'),
-    sendMailBtn: () => document.querySelector('#sendMailBtn')
+    sendMailBtn: () => document.querySelector('#sendMailBtn'),
+    mail_form: () => document.querySelector('#mail-form'),
+    user_module: () => document.querySelector('#module-user'),
+    mUid: () => document.querySelector('#mUid')
 }

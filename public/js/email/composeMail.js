@@ -1,12 +1,18 @@
 import { getUserDetails, events } from '../../js/email/sendMail.js';
 import { declarations } from '../../js/email/mailDeclarations.js';
 import { getParams } from '../commonFunctions.js';
+import { keyMap } from '../../mappings/keyMap.js'
 
 const params = getParams(window.location.search);
 const msgID = params.mid;
 const fId = params.fid;
 const action = params.action;
-let msgDetail, msgMeta;
+let msgDetail, msgMeta, mailed_details;
+let data = {
+    leads: '',
+    contacts: '',
+    accounts: ''
+}
 
 $(document).ready(function () {
     $('.content').load('./sendMailTemplate.html', function (response, status, xhr) {
@@ -18,13 +24,16 @@ $(document).ready(function () {
 document.addEventListener('DOMContentLoaded', (e) => {
     async function main() {
         let user = await getUserDetails();
+        await getFromModules()
         if (msgID) await mailActions();
         declarations.from_address().value = user.primaryEmailAddress;
-        document.querySelector('#mail-form').style.cssText = `
+        declarations.mail_form().style.cssText = `
                     height: 450px;
                     overflow-y: auto;
                     padding: 10px
                 `;
+
+        moduleBasedMailSelection()
         events()
     }
     main()
@@ -46,9 +55,69 @@ document.addEventListener('DOMContentLoaded', (e) => {
                     "askReceipt": "yes"
                 }
                 let res = await sendMail(obj);
-                res ? window.open('/templates/email/mail.html', '_self') : '';
+                mailed_details = finalizeCollection();
+                if (res.status.code === 200) {
+                    let msg = {
+                        mail: to,
+                        msgId: res.data.messageId,
+                        msg: 'Mail Sent',
+                        subject: sub,
+                        user_details: mailed_details ?? ''
+                    }
+                    let result = await storeMongo(msg)
+                    result ? window.open('/templates/email/mail.html', '_self') : '';
+                };
+            } else {
+                alert('Fill out required fields')
             }
         })
+
+        document.querySelector('#enableModule').addEventListener('change', (e) => {
+            if (e.target.checked) {
+                declarations.user_module().disabled = false;
+                declarations.mUid().disabled = false;
+            }
+            else {
+                declarations.user_module().disabled = true;
+                declarations.mUid().disabled = true;
+            }
+        })
+        declarations.user_module().addEventListener('change', async (e) => {
+            let val = e.target.value;
+            if (val !== '') {
+                declarations.mUid().innerHTML = '';
+                if (val !== 'accounts') {
+                    declarations.mUid().innerHTML = '<option value="">Choose</option>';
+                    const optionsHtml = data[val].map(item =>
+                        `<option value="${item._id || ''}">${keyMap.name(item)}</option>`
+                    ).join('');
+                    declarations.mUid().innerHTML += optionsHtml;
+                }
+            }
+        });
+        let collection = new Map();
+        let set = new Set();
+        declarations.mUid().addEventListener('change', async (e) => {
+            let value = e.target.value.trim();
+            if (value !== '') {
+                let moduleValue = declarations.user_module().value.trim();
+                if (!collection.has(value)) {
+                    collection.set(value, moduleValue);
+                }
+                let obj = finalizeCollection();
+                for (const key in obj) {
+                    data[obj[key]].forEach(item => {
+                        if (item._id === key) set.add(item.email)
+                    });
+
+                }
+                declarations.to_address().value = [...set].join(',')
+            }
+        });
+        function finalizeCollection() {
+            const finalObject = Object.fromEntries(collection); // Convert Map to Object
+            return finalObject;
+        }
     }
 
     async function getMail(meta = null) { // for Forwarding Mail
@@ -95,6 +164,24 @@ document.addEventListener('DOMContentLoaded', (e) => {
         }
     }
 
+    function moduleBasedMailSelection() {
+        const addSelectModule = document.createElement('div');
+        addSelectModule.innerHTML = `
+        <span><input type='checkbox' id='enableModule'> Select From Modules</span>
+        <select id='module-user' disabled>
+            <option selected value=''>Select Module</option>
+            <option value='leads'>Leads</option>
+            <option value='contacts'>Contacts</option>
+            <option value='accounts'>Accounts</option>
+        </select>
+        <select id='mUid' disabled>
+            <option selected value=''>Choose...</option>
+        </select>
+        `;
+        let parent = declarations.to_address().parentElement;
+        parent.insertBefore(addSelectModule, declarations.to_address())
+    }
+
     async function sendMail(obj) {
         try {
             let response = await fetch('/mail/sendMail', {
@@ -106,10 +193,41 @@ document.addEventListener('DOMContentLoaded', (e) => {
             })
             if (!response.ok) throw new Error('Unable to send Mail currently! tryAgain Later!');
             alert('Mail Sent!')
-            return true;
+            return await response.json();
         } catch (error) {
             alert(error);
             console.log(error);
         }
     }
 })
+
+async function storeMongo(obj) {
+    try {
+        let response = await fetch(`/mongodb/email_logs`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        });
+        if (!response.ok) throw new Error(await response.json());
+        return true;
+    } catch (error) {
+        alert(error)
+        return false;
+    }
+}
+
+async function getFromModules() {
+    for (const key in data) {
+        try {
+            let response = await fetch(`/mongodb/${key}`)
+            if (!response.ok) throw new Error('Error Getting Users from Module');
+            data[key] = await response.json();
+        } catch (err) {
+            alert('Error: ' + err)
+            console.error(err)
+        }
+    }
+
+}
