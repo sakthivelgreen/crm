@@ -1,4 +1,4 @@
-export async function main(sidebar) {
+export async function main(sidebar, module, mUid) {
 
     const To_Address = sidebar.shadowRoot.querySelector('#to-address');
     const Subject = sidebar.shadowRoot.querySelector('#mail-subject');
@@ -67,6 +67,16 @@ export async function events(doc, object) {
                 bubbles: true,
                 composed: true
             })
+            let mongodbObject = {
+                mailId: response.data.mailId,
+                msgId: response.data.messageId,
+                msg: 'Mail Sent',
+                subject: object['sub'].value,
+                user_details: {
+                    mUid: module ?? ''
+                }
+            }
+            await storeMongo(mongodbObject);
             alert('Mail Sent!')
             doc.querySelector('#sendMailBtn').dispatchEvent(eve);
         } catch (error) {
@@ -88,4 +98,21 @@ function Validate(obj) {
         }
     }
     return emptyFields;
+}
+
+async function storeMongo(obj) {
+    try {
+        let response = await fetch(`/mongodb/email_logs`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        });
+        if (!response.ok) throw new Error(await response.json());
+        return true;
+    } catch (error) {
+        alert(error)
+        return false;
+    }
 }

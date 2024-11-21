@@ -7,6 +7,7 @@ const params = getParams(window.location.search);
 const msgID = params.mid;
 const fId = params.fid;
 const action = params.action;
+let actionMsg;
 let msgDetail, msgMeta, mailed_details;
 let data = {
     leads: '',
@@ -58,9 +59,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
                 mailed_details = finalizeCollection();
                 if (res.status.code === 200) {
                     let msg = {
-                        mail: to,
+                        mailId: res.data.mailId,
                         msgId: res.data.messageId,
-                        msg: 'Mail Sent',
+                        msg: actionMsg || 'Mail Sent',
                         subject: sub,
                         user_details: mailed_details ?? ''
                     }
@@ -147,17 +148,20 @@ document.addEventListener('DOMContentLoaded', (e) => {
         msgDetail = await getMail()  // For Forwarding Mail
         if (msgID) {
             declarations.mail_content().value = msgDetail.content;
+            actionMsg = "forwarded"
         }
         msgMeta = await getMail('meta')
         switch (action) {
             case 'reply':
                 declarations.to_address().value = msgMeta.fromAddress;
+                actionMsg = 'reply'
                 break;
             case 'reply-all':
                 declarations.to_address().value = msgMeta.fromAddress;
                 let cleanedStr = msgMeta.ccAddress.replace(/&lt;|&gt;/g, "");
                 let result = cleanedStr.split(',').map(email => email.trim()).join(',');
                 declarations.cc_address().value = result;
+                actionMsg = 'reply-all'
                 break;
             default:
                 break;
