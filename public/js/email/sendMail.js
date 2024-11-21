@@ -1,5 +1,9 @@
+import { timeOptions, dateFormat } from '../commonFunctions.js';
+timeOptions.hour12 = false;
 export async function main(sidebar, module, mUid) {
-
+    let mod = {
+        [mUid]: module
+    };
     const To_Address = sidebar.shadowRoot.querySelector('#to-address');
     const Subject = sidebar.shadowRoot.querySelector('#mail-subject');
     const Message = sidebar.shadowRoot.querySelector('#mail-content');
@@ -16,7 +20,7 @@ export async function main(sidebar, module, mUid) {
     let user = await getUserDetails();
 
     sidebar.shadowRoot.querySelector("#from-address").value = user.primaryEmailAddress;
-    await events(sidebar.shadowRoot, object);
+    await events(sidebar.shadowRoot, object, mod);
 }
 export async function getUserDetails() {
     try {
@@ -37,7 +41,7 @@ export async function getUserDetails() {
     }
 }
 
-export async function events(doc, object) {
+export async function events(doc, object, mod) {
     doc.querySelector('#sendMailBtn').addEventListener('click', async (e) => {
         let res = Validate(object);
         if (res.length > 0) {
@@ -68,15 +72,13 @@ export async function events(doc, object) {
                 composed: true
             })
             let res = await response.json()
-            console.log(res);
             let mongodbObject = {
+                time: dateFormat(new Date(), timeOptions),
                 mailId: res.data.mailId,
                 msgId: res.data.messageId,
                 msg: 'Mail Sent',
                 subject: object['sub'].value,
-                user_details: {
-                    mUid: module ?? ''
-                }
+                user_details: mod ?? ''
             }
             await storeMongo(mongodbObject);
             alert('Mail Sent!')

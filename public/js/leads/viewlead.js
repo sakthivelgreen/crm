@@ -146,6 +146,6 @@ declarations.sendMail().addEventListener('click', (e) => {
 })
 async function importFormJs(sidebar) {
     import('../../js/email/sendMail.js').then(module => {
-        module.main(sidebar);
+        module.main(sidebar, 'leads', leadID);
     })
 }

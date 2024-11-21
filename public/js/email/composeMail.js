@@ -2,6 +2,8 @@ import { getUserDetails, events } from '../../js/email/sendMail.js';
 import { declarations } from '../../js/email/mailDeclarations.js';
 import { getParams } from '../commonFunctions.js';
 import { keyMap } from '../../mappings/keyMap.js'
+import { timeOptions, dateFormat } from '../commonFunctions.js';
+timeOptions.hour12 = false;
 
 const params = getParams(window.location.search);
 const msgID = params.mid;
@@ -59,6 +61,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
                 mailed_details = finalizeCollection();
                 if (res.status.code === 200) {
                     let msg = {
+                        time: dateFormat(new Date(), timeOptions),
                         mailId: res.data.mailId,
                         msgId: res.data.messageId,
                         msg: actionMsg || 'Mail Sent',

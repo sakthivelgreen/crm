@@ -191,7 +191,7 @@ buttonRedirect(buttons.createDeal(), contactID, '/templates/deals/createDeal.htm
 // send Mail
 const sidebar = new rightPopUP();
 sidebar.addEventListener('close-true', (e) => {
-    popupElements.popup().style.display = 'none';
+    declarations.popup().style.display = 'none';
 })
 declarations.sendMail().addEventListener('click', (e) => {
     e.preventDefault();
@@ -227,6 +227,6 @@ declarations.sendMail().addEventListener('click', (e) => {
 })
 async function importFormJs(sidebar) {
     import('../../js/email/sendMail.js').then(module => {
-        module.main(sidebar);
+        module.main(sidebar, 'contacts', contactID);
     })
 }
