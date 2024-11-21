@@ -67,9 +67,11 @@ export async function events(doc, object) {
                 bubbles: true,
                 composed: true
             })
+            let res = await response.json()
+            console.log(res);
             let mongodbObject = {
-                mailId: response.data.mailId,
-                msgId: response.data.messageId,
+                mailId: res.data.mailId,
+                msgId: res.data.messageId,
                 msg: 'Mail Sent',
                 subject: object['sub'].value,
                 user_details: {
