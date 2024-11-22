@@ -2,8 +2,6 @@ const url = window.location.search;
 const query = new URLSearchParams(url);
 const id = query.get("id");
 
-let conv = localStorage.getItem("convert");
-console.log(conv);
 const fetchUrl = `/mongodb`;
 const div = document.querySelector(".container");
 const companyDiv = document.querySelector(".hasCompany");
@@ -47,18 +45,16 @@ function hasCompany(lead) {
         organisation_address: lead.orgaddress,
         organisation_income: lead.orgincome,
         designation: lead.designation,
-        contacts: [lead.id]
+        contacts: [lead._id]
     }
     let forIndividual = {
+        _id: lead._id,
         firstname: lead.firstname,
         lastname: lead.lastname,
         email: lead.email,
         phone: lead.phone,
-        companyname: "",
         address: lead.address,
-        designation: "",
-        product: lead.product,
-        organisation_id: []
+        product: lead.product
     }
     companyDiv.style.display = "flex";
     document.getElementById("leadname1").value = `${lead.firstname} ${lead.lastname}`;
@@ -66,24 +62,21 @@ function hasCompany(lead) {
 
         if (contactOnly.checked) {
             try {
-                deleteLead(lead.id);
+                deleteLead(lead._id);
             } catch (error) {
                 throw new Error("Error " + error);
             }
 
             try {
-                let postFetch = fetch(fetchUrl + "/contacts/", {
+                let response = await fetch(fetchUrl + "/contacts/", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(forIndividual)
                 })
-                postFetch.then(() => {
-                    window.location.href = "/templates/contacts.html";
-                });
-                postFetch.catch(() => {
-                })
+                if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+                window.open(`/templates/contacts/viewContactDetail.html?id=${lead._id}`, '_self')
             } catch (error) {
                 throw new Error("Error " + error);
             }
@@ -91,21 +84,19 @@ function hasCompany(lead) {
         }
         if (contactAndAccount.checked) {
             try {
-                deleteLead(lead.id);
+                deleteLead(lead._id);
             } catch (error) {
                 throw new Error("Error " + error);
             }
             try {
                 let id = await funPostAccount(forOrg)
                 let forContact = {
-                    id: lead.id,
+                    _id: lead._id,
                     firstname: lead.firstname,
                     lastname: lead.lastname,
                     email: lead.email,
                     phone: lead.phone,
-                    companyname: lead.companyname,
                     address: lead.address,
-                    designation: lead.designation,
                     product: lead.product,
                     organisation_id: [id]
                 }
@@ -121,28 +112,36 @@ function hasCompany(lead) {
 
 
 function hasNoCompany(lead) {
-    console.log(lead);
+    let forIndividual = {
+        _id: lead._id,
+        firstname: lead.firstname,
+        lastname: lead.lastname,
+        email: lead.email,
+        phone: lead.phone,
+        address: lead.address,
+        product: lead.product
+    }
+    console.log(forIndividual);
     noCompanyDiv.style.display = "flex";
     document.getElementById("leadname2").value = `${lead.firstname} ${lead.lastname}`;
-    convertBtn2.addEventListener("click", () => {
+    convertBtn2.addEventListener("click", async () => {
         try {
-            deleteLead(lead.id);
+            deleteLead(lead._id);
         } catch (error) {
             throw new Error("Error " + error);
         }
         try {
-            let postFetch = fetch(fetchUrl + "/contacts", {
+            let response = await fetch(fetchUrl + "/contacts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(lead)
+                body: JSON.stringify(forIndividual)
             })
-            postFetch.then(() => {
-                localStorage.setItem("convert", "true");
-            });
-            postFetch.catch(() => {
-            })
+            if (!response.ok) {
+                throw new Error(response.status + " " + response.statusText);
+            }
+            window.open(`/templates/contacts/viewContactDetail.html?id=${lead._id}`, '_self')
         } catch (error) {
             throw new Error("Error " + error);
         }
@@ -172,22 +171,22 @@ async function funPostAccount(forOrg) {
             body: JSON.stringify(forOrg)
         })
         let result = await postFetchAccount.json();
-        return result.id;
+        return result._id;
     } catch (error) {
         throw new Error("Error " + error);
     }
 }
 async function funPostContact(obj) {
     try {
-        let postFetchContact = await fetch(fetchUrl + "/contacts/", {
+        let response = await fetch(fetchUrl + "/contacts/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(obj)
         })
-        if (!postFetchContact.ok) throw new Error("Error in Conversion");
-        else return window.location.href = "/templates/contacts.html";
+        if (!response.ok) throw new Error("Error in Conversion");
+        return window.open(`/templates/contacts/viewContactDetail.html?id=${id}`, '_self')
     } catch (error) {
         throw new Error("Error " + error);
     }
