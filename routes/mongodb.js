@@ -23,8 +23,10 @@ router.post('/:module', async (req, res) => {
         const module = req.params.module;
         const collection = client.db('crm').collection(module);
         const newItem = req.body; // Data from the client
-        let id = newItem._id;
-        newItem._id = new ObjectId(id);
+        if (newItem._id) {
+            let id = newItem._id;
+            newItem._id = new ObjectId(id);
+        }
         // Insert the new document into the collection
         const result = await collection.insertOne(newItem);
 
