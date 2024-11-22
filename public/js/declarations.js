@@ -45,6 +45,7 @@ export const Sections = {
     meetingsSection: () => document.querySelector("#meetingsSection"),
     dealSection: () => document.querySelector("#dealSection"),
     contactSection: () => document.querySelector("#contactSection"),
+    mailSection: () => document.querySelector("#mailSection"),
 }
 
 export const popupElements = {

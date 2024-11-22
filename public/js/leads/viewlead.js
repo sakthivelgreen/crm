@@ -1,5 +1,6 @@
 import { declarations } from './leadDeclarations.js';
 import rightPopUp from '../../components/rightPopup.js';
+import { processMails } from "../commonFunctions.js";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -37,6 +38,7 @@ async function fetchLeads() {
         }
         leads = await response.json();
         getLeads(leads);
+        processMails(leadID, 'leads')
     }
     catch (error) {
         console.error('Error fetching leads:', error);

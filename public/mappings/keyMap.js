@@ -18,5 +18,8 @@ export const keyMap = {
     account_Income: (key) => key['organisation_income'],
     meeting_topic: (key) => key['topic'],
     meeting_Agenda: (key) => key['agenda'],
-    start_Date: (key) => key['startDate']
+    start_Date: (key) => key['startDate'],
+    Subject: (key) => key['subject'],
+    Date: (key) => key['receivedTime'],
+    Summary: (key) => key['summary']
 }

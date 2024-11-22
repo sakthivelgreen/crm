@@ -3,7 +3,7 @@ import customList from "/components/custom_listview.js";
 import REST from '../rest.js';
 import { keyMap } from '../../mappings/keyMap.js';
 import { Elements, Sections, buttons, popupElements } from '../declarations.js';
-import { buttonRedirect } from "../commonFunctions.js";
+import { buttonRedirect, processMails } from "../commonFunctions.js";
 import rightPopUp from '../../components/rightPopup.js'
 
 // Getting Id from url
@@ -92,6 +92,7 @@ function processAccounts(account) {
     processContactDetails(account.contacts);
     processDeals(account._id);
     processMeetings(account);
+    processMails(accountID, 'accounts')
 }
 
 async function processContactDetails(contactsArray) {

@@ -3,7 +3,7 @@ import REST from '../rest.js';
 import { declarations } from './contactDeclarations.js';
 import { buttons, Sections } from '../declarations.js';
 import { keyMap } from '../../mappings/keyMap.js';
-import { buttonRedirect } from "../commonFunctions.js";
+import { buttonRedirect, processMails } from "../commonFunctions.js";
 import rightPopUP from '../../components/rightPopup.js'
 
 const queryString = window.location.search;
@@ -70,6 +70,7 @@ function getContacts(contact) {
     processDeals(contact._id);
     processAccounts(contact._id);
     processMeetings(contact)
+    processMails(contactID, 'contacts');
 }
 
 // Process Deals

@@ -1,4 +1,5 @@
 import { keyMap } from "../mappings/keyMap.js";
+import { date_time, dateFormat } from "../js/commonFunctions.js";
 export default class customList extends HTMLElement {
     #obj;
     #titlesArray;
@@ -76,6 +77,10 @@ export default class customList extends HTMLElement {
                     `: ''}
                 ${this.#titlesArray.map(item => {
                     let content = keyMap[item] ? keyMap[item](key) : '';
+                    if (item === 'Date') {
+                        const date = new Date(Number(content));
+                        content = dateFormat(date, date_time)
+                    }
                     return `<div class="column ${item}">${content}</div>`;
                 }).join('')}
             </div>
