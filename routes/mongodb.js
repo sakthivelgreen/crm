@@ -17,6 +17,11 @@ async function connectToMongo() {
 }
 connectToMongo(); // Initialize the connection to MongoDB
 
+router.use((req, res, next) => {
+    res.setHeader('Content-Security-Policy', "connect-src 'self'");
+    next();
+})
+
 // POST route to insert data into various collections
 router.post('/:module', async (req, res) => {
     try {
