@@ -16,7 +16,12 @@ var zohoRouter = require('./routes/zoho');
 var app = express();
 
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+    origin: 'https://sakthi-crm.vercel.app',
+    methods: 'GET, POST, PUT, DELETE',
+    allowedHeaders: 'Content-Type',
+};
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
