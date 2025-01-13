@@ -17,6 +17,7 @@
 
             const auth_code = urlParams.get('code');
             const location = urlParams.get('location');
+            const error = urlParams.get('error')
             let url = localStorage.getItem('url');
 
             async function main(params) {
@@ -25,6 +26,9 @@
                     let obj = await accessToken()  // Calling function to get Access Token
                     await alert("Tokens Generated")
                     window.open(url, "_self");
+                } else if (error == 'access_denied') {
+                    alert('Access Denied! redirecting to Homepage');
+                    window.location.href = '/';
                 }
 
             }
