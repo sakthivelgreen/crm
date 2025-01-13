@@ -1,32 +1,50 @@
-require('dotenv').config();
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
-
 const router = express.Router();
-const uri = process.env.Mongo_URI;
-const client = new MongoClient(uri);
+
+/* Old Connection Method */
+// const { MongoClient, ObjectId } = require('mongodb'); 
+// require('dotenv').config();
+// const uri = process.env.Mongo_URI;
+// const client = new MongoClient(uri);
 
 // Connect to MongoDB Atlas
-async function connectToMongo() {
-    try {
-        await client.connect();
-        console.log('Connected to MongoDB Atlas');
-    } catch (e) {
-        console.error(e);
-    }
-}
-connectToMongo(); // Initialize the connection to MongoDB
+// async function connectToMongo() {
+//     try {
+//         await client.connect();
+//         console.log('Connected to MongoDB Atlas');
+//     } catch (e) {
+//         console.error(e);
+//     }
+// }
+// connectToMongo(); // Initialize the connection to MongoDB
+// router.use((req, res, next) => {
+//     res.setHeader('Content-Security-Policy', "connect-src 'self'");
+//     next();
+// })  
 
-router.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "connect-src 'self'");
-    next();
+
+/* New Connection Method */
+const { getDB } = require('../models/conn');
+const { ObjectId } = require('mongodb');
+let db;
+
+router.use(async (req, res, next) => {
+    try {
+        if (!db) {
+            db = await getDB();
+        }
+        next();
+    } catch (error) {
+        console.error('Error switching DB:', err);
+        res.status(500).send('Internal Server Error');
+    }
 })
 
 // POST route to insert data into various collections
 router.post('/:module', async (req, res) => {
     try {
         const module = req.params.module;
-        const collection = client.db('crm').collection(module);
+        const collection = db.collection(module);
         const newItem = req.body; // Data from the client
         if (newItem._id) {
             let id = newItem._id;
@@ -47,7 +65,7 @@ router.post('/:module', async (req, res) => {
 router.get('/:module', async (req, res) => {
     try {
         const module = req.params.module;
-        const collection = client.db('crm').collection(module);
+        const collection = db.collection(module);
 
         // Fetch all documents from the collection
         const data = await collection.find({}).toArray();
@@ -65,7 +83,7 @@ router.get('/:module/:id', async (req, res) => {
     try {
         const module = req.params.module;
         const id = req.params.id;
-        const collection = client.db('crm').collection(module);
+        const collection = db.collection(module);
         // Fetch the document by its ID
         const data = await collection.findOne({ _id: new ObjectId(id) });
 
@@ -86,7 +104,7 @@ router.put('/:module/:id', async (req, res) => {
         const module = req.params.module;
         const id = req.params.id;
         const updatedData = req.body;
-        const collection = client.db('crm').collection(module);
+        const collection = db.collection(module);
 
         // Update the document by its ID
         const result = await collection.updateOne(
@@ -110,7 +128,7 @@ router.delete('/:module/:id', async (req, res) => {
     try {
         const module = req.params.module;
         const id = req.params.id;
-        const collection = client.db('crm').collection(module);
+        const collection = db.collection(module);
 
         // Delete the document by its ID
         const result = await collection.deleteOne({ _id: new ObjectId(id) });

@@ -12,9 +12,9 @@ var crmRouter = require('./routes/crm');
 var mailRouter = require('./routes/zohoMail');
 var loginRouter = require('./routes/login');
 var zohoRouter = require('./routes/zoho');
-
+// var connectAndQuery = require('./routes/azure_script');
 var app = express();
-
+// connectAndQuery();
 app.use(express.json());
 const corsOptions = {
     origin: 'https://sakthi-crm.vercel.app',
