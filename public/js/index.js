@@ -38,10 +38,10 @@ function populateData() {
 }
 
 function events() {
-    document.querySelector('.lead-container').addEventListener('click', () => { window.location.href = '/templates/leads.html' })
-    document.querySelector('.contact-container').addEventListener('click', () => { window.location.href = '/templates/contacts.html' })
-    document.querySelector('.account-container').addEventListener('click', () => { window.location.href = '/templates/accounts.html' })
-    document.querySelector('.deal-container').addEventListener('click', () => { window.location.href = '/templates/deals.html' })
+    document.querySelectorAll('.lead-container').forEach(item => item.addEventListener('click', () => { window.location.href = '/templates/leads.html' }))
+    document.querySelectorAll('.contact-container').forEach(item => item.addEventListener('click', () => { window.location.href = '/templates/contacts.html' }))
+    document.querySelectorAll('.account-container').forEach(item => item.addEventListener('click', () => { window.location.href = '/templates/accounts.html' }))
+    document.querySelectorAll('.deal-container').forEach(item => item.addEventListener('click', () => { window.location.href = '/templates/deals.html' }))
     document.querySelector('#select-pipeline').addEventListener('change', (e) => {
         if (Chart_Pipeline) Chart_Pipeline.destroy();
         pipeline();
