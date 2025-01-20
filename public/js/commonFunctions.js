@@ -108,3 +108,22 @@ export async function processMails(id, module) {
     list.redirect = "#";
     Sections.mailSection().appendChild(list)
 }
+
+export async function getData(module) {
+    try {
+        let response = await fetch(`/mongodb/${module}`);
+        if (!response.ok) throw new Error(response.statusText);
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+        throw new Error(error);
+
+    }
+}
+
+export function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);  // Random red value (0-255)
+    const g = Math.floor(Math.random() * 256);  // Random green value (0-255)
+    const b = Math.floor(Math.random() * 256);  // Random blue value (0-255)
+    return `rgb(${r}, ${g}, ${b})`;
+}

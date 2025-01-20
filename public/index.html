@@ -4,8 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sakthi CRM</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <title>Demo CRM</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="./css/root.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="https://poseidon-code.github.io/supacons/dist/supacons.all.css" />
     <script type="module" src="./components/navbar.js"></script>
     <script src="./js/index.js" type="module" defer></script>
 </head>
@@ -14,9 +17,56 @@
     <navbar-element></navbar-element>
     <script type="module">
     </script>
-    <div class="content">
+    <div class="wrapper">
         <div class="container">
-
+            <header class="header-dashboard">
+                <h3>Welcome Admin</h3>
+            </header>
+            <main class="main-dashboard">
+                <div class="component-container lead-container" draggable="true">
+                    <div class="c-title"><span><i class="fa-thin fa-users-rays icon"></i></span>Total Leads</div>
+                    <div class="c-body"><span id="total-leads">0</span></div>
+                </div>
+                <div class="component-container contact-container" draggable="true">
+                    <div class="c-title"><span><i class="fa-duotone fa-thin fa-users-viewfinder icon"></i></span>Total
+                        Contacts</div>
+                    <div class="c-body"><span id="total-contacts">0</span></div>
+                </div>
+                <div class="component-container account-container" draggable="true">
+                    <div class="c-title"><span><i class="fa-sharp-duotone fa-regular fa-buildings icon"></i></span>Total
+                        Accounts</div>
+                    <div class="c-body"><span id="total-accounts">0</span></div>
+                </div>
+                <div class="component-container deal-container" draggable="true">
+                    <div class="c-title"><span><i class="fa-thin fa-handshake icon"></i></span>Total Deals</div>
+                    <div class="c-body"><span id="total-deals">0</span></div>
+                </div>
+                <div class="component-container" id='Pipeline-container' draggable="true">
+                    <div class="c-title">
+                        <label for="select-pipeline">Choose Pipeline</label>
+                        <div class="custom-select">
+                            <select name="select-pipeline" id="select-pipeline"></select>
+                            <!-- <i class="fa-sharp fa-solid fa-chevron-down right-icon down-chevron"></i>
+                            <i class="fa-sharp fa-solid fa-chevron-up right-icon up-chevron"></i> -->
+                        </div>
+                    </div>
+                    <div class="c-body">
+                        <canvas id="pipeline"></canvas>
+                    </div>
+                </div>
+                <div class="component-container" draggable="true">
+                    <div class="c-title"></div>
+                    <div class="c-body"></div>
+                </div>
+                <div class="component-container" draggable="true">
+                    <div class="c-title"></div>
+                    <div class="c-body"></div>
+                </div>
+                <div class="component-container" draggable="true">
+                    <div class="c-title"></div>
+                    <div class="c-body"></div>
+                </div>
+            </main>
         </div>
     </div>
 

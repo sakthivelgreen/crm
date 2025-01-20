@@ -1,0 +1,100 @@
+.wrapper {
+    padding: 15px;
+    width: 100%;
+    height: calc(100% - 3.5em);
+    min-width: 768px;
+    background: url('../static/dash_background.jpg') no-repeat center center;
+    background-size: contain;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto 1fr auto;
+    height: 100%;
+    width: 100%;
+}
+
+.header-dashboard {
+    grid-column: 1 / -1;
+    height: 3.5em;
+    padding: 15px;
+}
+
+.main-dashboard {
+    grid-column: 1 / -1;
+    overflow-y: auto;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 50px;
+    grid-auto-rows: 100px;
+    align-content: flex-start;
+    gap: 15px;
+}
+
+.component-container {
+    background-color: #f9f9f9;
+    padding: 15px;
+    gap: 15px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    grid-column: span 3;
+    grid-row: span 1;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+.component-container .c-body {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.lead-container,
+.contact-container,
+.account-container,
+.deal-container {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    justify-content: space-around;
+}
+
+span .icon {
+    font-size: 20px;
+}
+
+.c-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#Pipeline-container {
+    grid-column: span 6;
+    grid-row: span 4;
+    position: relative;
+}
+
+#Pipeline-container .c-title {
+    height: 5%;
+    width: 100%;
+}
+
+#Pipeline-container .c-body {
+    height: 95%;
+    width: 100%;
+}
+
+#pipeline {
+    height: 100%;
+    width: 100%;
+}
+
+#select-pipeline {
+    cursor: pointer;
+    font-size: 14px;
+    position: relative;
+    padding: 5px 10px;
+}

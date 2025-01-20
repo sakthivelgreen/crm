@@ -40,6 +40,10 @@ export const divElements = {
 
 export const Elements = {
     pageTitle: () => document.querySelector('#pageTitle'),
+    No_of_contacts: () => document.querySelector('#total-contacts'),
+    No_of_accounts: () => document.querySelector('#total-accounts'),
+    No_of_deals: () => document.querySelector('#total-deals'),
+    No_of_leads: () => document.querySelector('#total-leads'),
 }
 export const Sections = {
     meetingsSection: () => document.querySelector("#meetingsSection"),
