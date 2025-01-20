@@ -1,166 +1,124 @@
+import { getData, option_fragment } from '../commonFunctions.js';
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let leadID = urlParams.get('id');
 
-const firstnameInput = document.querySelector("#firstname");
-const lastnameInput = document.querySelector("#lastname");
+const lastNameInput = document.querySelector("#last-name");
 const emailInput = document.querySelector("#email");
-const companynameInput = document.querySelector("#companyname");
 const phoneInput = document.querySelector("#phone");
-const productInput = document.querySelector("#product");
-const addressInput = document.querySelector("#address");
-const designationInput = document.querySelector("#designation");
-const orgPhoneInput = document.querySelector("#orgPhone");
-const orgEmailInput = document.querySelector("#orgEmail");
-const orgIncomeInput = document.querySelector("#orgIncome");
-const orgAddressInput = document.querySelector("#orgAddress");
-const leadSaveandNew = document.querySelector("#btnSaveAndNew");
+const titleElement = document.querySelector('title');
+const cancel = document.querySelector("#cancelBtn");
+const orgForm = document.querySelector('#org-form');
+const leadSaveAndNew = document.querySelector("#btnSaveAndNew");
+const saveLead = document.querySelector("#saveLeadBtn");
+const leadSaveForm = document.querySelector("#createLeadForm");
 
 let url = "/mongodb/leads/" + leadID;
-fetchLeads();
+let Leads, leadSource, clicked = null;
+
+async function main() {
+    Leads = await fetchLeads();
+    leadSource = await getData('lead-sources');
+    setFormData(Leads);
+    events();
+}
+main();
+
 async function fetchLeads() {
-    let leads = [];
     try {
         const response = await fetch(url, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        leads = await response.json();
-        setLeads(leads);
-
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        return await response.json();
     } catch (error) {
         console.error('Error fetching leads:', error);
     }
 }
-const titleElement = document.querySelector('title');
-function setLeads(lead) {
-    titleElement.textContent = `Edit - ${lead.firstname} ${lead.lastname}`;
-    for (const key in lead) {
-        if (key === "id") continue;
-        switch (key) {
-            case "firstname":
-                firstnameInput.value = lead[key];
-                break;
-            case "lastname":
-                lastnameInput.value = lead[key];
-                break;
-            case "email":
-                emailInput.value = lead[key];
-                break;
-            case "phone":
-                phoneInput.value = lead[key];
-                break;
-            case "companyname":
-                companynameInput.value = lead[key];
-                break;
-            case "designation":
-                designationInput.value = lead[key];
-                break;
-            case "product":
-                productInput.value = lead[key];
-                break;
-            case "orgphone":
-                orgPhoneInput.value = lead[key];
-                break;
-            case "orgemail":
-                orgEmailInput.value = lead[key];
-                break;
-            case "orgincome":
-                orgIncomeInput.value = lead[key];
-                break;
-            case "address":
-                addressInput.value = lead[key];
-                break;
-            case "orgaddress":
-                orgAddressInput.value = lead[key];
-                break;
+
+function setFormData(data) {
+    titleElement.textContent = `Edit - ${data['first-name']} ${data['last-name']}`;
+    document.querySelector('#lead-source').appendChild(option_fragment(leadSource, 'name'));
+    Object.keys(data).forEach(key => {
+        const value = data[key];
+        const field = document.querySelector(`[name="${key}"], #${key}`);
+
+        if (field) {
+            // If the field is a checkbox or radio button
+            if (field.type === 'checkbox' || field.type === 'radio') {
+                field.checked = value;
+            } else {
+                // Otherwise, for inputs, textareas, selects, set the value
+                field.value = value;
+                if (field.name === 'org-name') {
+                    enable_disable_form(field);
+                }
+            }
         }
 
-    }
+    });
 }
 
-// cancel Button
-const cancel = document.querySelector("#cancelBtn");
-cancel.addEventListener("click", () => {
-    window.location.href = "/templates/leads/viewleadDetail.html?id=" + leadID;
-})
+function events() {
+    // cancel Button
+    cancel.addEventListener("click", () => {
+        window.location.href = "/templates/leads/viewleadDetail.html?id=" + leadID;
+    })
+    flatpickr('#date-created', {
+        dateFormat: "M d, Y"
+    });
+    document.querySelector('#org-name').addEventListener('input', (e) => {
+        enable_disable_form(e.target);
+    })
+    saveLead.addEventListener("click", () => {
+        clicked = 1;
+        leadSaveForm.requestSubmit();
+    })
+    leadSaveAndNew.addEventListener("click", () => {
+        clicked = 0;
+        leadSaveForm.requestSubmit();
+    })
 
-// Save lead
-const saveLead = document.querySelector("#saveLeadBtn");
-const leadSaveForm = document.querySelector("#createLeadForm");
-
-let clicked = null;
-
-saveLead.addEventListener("click", () => {
-    clicked = 1;
-    leadSaveForm.requestSubmit();
-})
-leadSaveandNew.addEventListener("click", () => {
-    clicked = 0;
-    leadSaveForm.requestSubmit();
-})
-
-leadSaveForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    let lastName = checkRequired(lastnameInput);
-    let Email = checkRequired(emailInput);
-    let Phone = checkRequired(phoneInput)
-    let firstName = firstnameInput.value;
-    let companyName = companynameInput.value;
-    let Address = addressInput.value;
-    let Designation = designationInput.value;
-    let Product = productInput.value;
-    let OrgPhone = orgPhoneInput.value;
-    let OrgEmail = orgEmailInput.value;
-    let OrgIncome = orgIncomeInput.value;
-    let OrgAddress = orgAddressInput.value;
-
-    let updateLead = {
-        firstname: firstName,
-        lastname: lastName,
-        email: Email,
-        phone: Phone,
-        companyname: companyName,
-        address: Address,
-        designation: Designation,
-        product: Product,
-        orgphone: OrgPhone,
-        orgemail: OrgEmail,
-        orgincome: OrgIncome,
-        orgaddress: OrgAddress,
-    }
-    await updateRecord(updateLead);
-})
-
-async function updateRecord(updateLead) {
-    console.log(updateLead);
-
-    try {
-        const leadFetch = await fetch(url, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(updateLead)
-        })
-        if (leadFetch.ok) {
-            showAlert("Updated Added Successfully");
-            clicked ? window.location.href = '/templates/leads/viewleadDetail.html?id=' + leadID : window.location.href = "/templates/leads/createleads.html";
-        } else {
-            throw new Error('Failed to add lead: ' + leadFetch.statusText);
+    leadSaveForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const subFormData = new FormData(orgForm);
+        for (const [key, value] of subFormData.entries()) {
+            formData.append(key, value);
         }
+        let lastName = checkRequired(lastNameInput);
+        let Email = checkRequired(emailInput);
+        let Phone = checkRequired(phoneInput)
+        if (lastName && Email && Phone) {
+            await updateRecord(formData);
+        }
+    })
+}
+function enable_disable_form(item) {
+    if (item.value !== '') {
+        document.querySelector('.org-section').classList.remove('hidden-field')
+        document.querySelector('.org-section').classList.add('reset-hidden')
+    } else {
+        document.querySelector('.org-section').classList.add('hidden-field')
+        document.querySelector('.org-section').classList.remove('reset-hidden')
+        orgForm.reset();
+    }
+}
+// Save lead
+async function updateRecord(updatedLead) {
+    try {
+        const response = await fetch(url, {
+            method: "PUT",
+            body: updatedLead
+        })
+        if (!response.ok) throw new Error(response.statusText);
+        alert("Updated Successfully");
+        clicked ? window.location.href = '/templates/leads/viewleadDetail.html?id=' + leadID : window.location.href = "/templates/leads/createleads.html";
     } catch (error) {
         console.error('Error:', error);
-        showAlert("Failed to add lead. Please try again.")
+        alert("Failed to add lead. Please try again.")
     }
-}
-
-
-function showAlert(message) {
-    window.alert(message);
 }
 
 function checkRequired(tag) {
@@ -181,7 +139,6 @@ function checkRequired(tag) {
             default:
                 console.log("Error");
         }
-
         return val;
     }
 }

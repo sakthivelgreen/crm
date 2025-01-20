@@ -78,7 +78,7 @@ router.get('/:module/:id', async (req, res) => {
 });
 
 // PUT route to update a document by its ID
-router.put('/:module/:id', async (req, res) => {
+router.put('/:module/:id', upload.none(), async (req, res) => {
     try {
         const module = req.params.module;
         const id = req.params.id;

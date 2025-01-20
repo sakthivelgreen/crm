@@ -7,95 +7,359 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/leads.css">
+    <link rel="stylesheet" href="/css/form.css">
     <script type="module" src="/components/navbar.js"></script>
-    <title>Edit Lead</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <title>Create Lead</title>
 </head>
 
 <body>
-    <div class="wrapper"><navbar-element></navbar-element>
-        <div class="topRowDiv">
-            <ul class="topRow1">
-                <li>
-                    <h3>Edit Lead</h3>
-                </li>
-                <li><select name="layout" id="layoutSelect" class="defaultBtn">
-                        <option value="standard">Standard</option>
-                    </select></li>
-                <li><a href="#">Edit Page Layout</a></li>
-            </ul>
-            <ul class="topRow2">
-                <li><button class="defaultBtn" id="cancelBtn">Cancel</button></li>
-                <li><button class="defaultBtn" id="btnSaveAndNew">Save and New</button></li>
-                <li><button id="saveLeadBtn" class="primaryBtn" type="submit">Save</button></li>
-            </ul>
-        </div>
-        <div class="content">
+    <div class="wrapper">
+        <header>
+            <navbar-element></navbar-element>
+            <div class="topRowDiv">
+                <ul class="topRow1">
+                    <li>
+                        <h3>Create Lead</h3>
+                    </li>
+                    <li><select name="layout" id="layoutSelect" class="defaultBtn">
+                            <option value="standard">Standard</option>
+                        </select></li>
+                    <li><a href="#">Edit Page Layout</a></li>
+                </ul>
+                <ul class="topRow2">
+                    <li><button class="defaultBtn" id="cancelBtn">Cancel</button></li>
+                    <li><button class="defaultBtn" id="btnSaveAndNew">Save and New</button></li>
+                    <li><button id="saveLeadBtn" class="primaryBtn" type="submit">Save</button></li>
+                </ul>
+            </div>
+        </header>
 
+        <div class="content">
             <div class="createLeadContainer">
                 <form id="createLeadForm">
-
-                    <div class="individualForm">
-                        <div class="form-elements-div">
-                            <label for="firstname">First Name</label>
-                            <input type="text" name="firstname" id="firstname" class="form-elements">
+                    <div class="section">
+                        <div class="section-head">
+                            <h3>Lead Information</h3>
                         </div>
-
-                        <div class="form-elements-div">
-                            <label for="lastname">Last Name</label>
-                            <input type="text" name="lastname" id="lastname" class="form-elements">
-                        </div>
-
-                        <div class="form-elements-div">
-                            <label for="email">Email ID</label>
-                            <input type="text" name="email" id="email" class="form-elements">
-                        </div>
-                        <div class="form-elements-div">
-                            <label for="phone">Phone</label>
-                            <input type="text" name="phone" id="phone" class="form-elements" maxlength="10">
-                        </div>
-
-                        <div class="form-elements-div">
-                            <label for="product">Product</label>
-                            <input type="text" name="product" id="product" class="form-elements">
-                        </div>
-
-                        <div class="form-elements-div">
-                            <label for="address">Address</label>
-                            <input type="text" name="address" id="address" class="form-elements">
+                        <div class="section-body">
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="lead-owner">Lead Owner</label>
+                                    </div>
+                                    <div class="value">
+                                        <select name="lead-owner" id="lead-owner" class="field">
+                                            <option value="">Select</option>
+                                        </select>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="lead-source">Lead Source</label>
+                                    </div>
+                                    <div class="value">
+                                        <select name="lead-source" id="lead-source" class="field">
+                                            <option value="">Select</option>
+                                        </select>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="org-name">Organization</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="org-name" id="org-name" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="title">Title</label>
+                                    </div>
+                                    <div class="value">
+                                        <select type="text" name="title" id="title" class="field">
+                                            <option value="Mr.">Mr.</option>
+                                            <option value="Ms.">Ms.</option>
+                                            <option value="Mrs.">Mrs.</option>
+                                            <option value="Dr.">Dr.</option>
+                                        </select>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="first-name">First Name</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="first-name" id="first-name" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="last-name">Last Name</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="last-name" id="last-name" class="field" required>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="email">Email</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="email" id="email" class="field" required>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="phone">Phone</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="phone" id="phone" class="field" maxlength="10"
+                                            required>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="date-created">Date</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="date-created" id="date-created" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="fax">Fax</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="fax" id="fax" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="website">Website</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="website" id="website" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="employee-count">No. of Employees</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="employee-count" id="employee-count" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="product">Product</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="product" id="product" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="city">City</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="city" id="city" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="state">State</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="state" id="state" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="country">Country</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="country" id="country" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="pin-code">Postal Code / Zip Code</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="pin-code" id="pin-code" class="field" maxlength="6">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="orgForm">
-                        <div class="form-elements-div">
-                            <label for="companyname">Organization Name</label>
-                            <input type="text" name="companyname" id="companyname" class="form-elements">
+                </form>
+                <form id="org-form">
+                    <div class="section org-section hidden-field">
+                        <div class="section-head">
+                            <h3>Organisation Details</h3>
                         </div>
-                        <div class="form-elements-div">
-                            <label for="orgEmail">Organisation Email</label>
-                            <input type="text" name="orgEmail" id="orgEmail" class="form-elements">
-                        </div>
-                        <div class="form-elements-div">
-                            <label for="designation">Designation / Role</label>
-                            <input type="text" name="designation" id="designation" class="form-elements">
-                        </div>
-                        <div class="form-elements-div">
-                            <label for="orgPhone">Organisation Phone</label>
-                            <input type="tel" name="orgPhone" id="orgPhone" class="form-elements" maxlength="10">
-                        </div>
-                        <div class="form-elements-div">
-                            <label for="orgIncome">Annual Income</label>
-                            <input type="number" name="orgIncome" id="orgIncome" class="form-elements">
-                        </div>
-                        <div class="form-elements-div">
-                            <label for="orgAddress">Organisation Address</label>
-                            <textarea name="orgAddress" id="orgAddress" class="form-elements"></textarea>
+                        <div class="section-body">
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="org-email">Email</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="org-email" id="org-email" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="designation">Designation / Role</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="designation" id="designation" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="org-phone">Tel</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="tel" name="org-phone" id="org-phone" class="field" maxlength="10">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="orgIncome">Annual Revenue</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="number" name="orgIncome" id="orgIncome" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="org-website">Website</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="org-website" id="org-website" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="org-city">City</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="org-city" id="org-city" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="org-state">State</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="org-state" id="org-state" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="org-country">Country</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="org-country" id="org-country" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="org-pin-code">Postal Code / Zip Code</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="org-pin-code" id="org-pin-code" class="field"
+                                            maxlength="6">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
 
         </div>
+
     </div>
-    <script src="/js/leads/editlead.js" defer></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/js/leads/editlead.js" type="module" defer></script>
 </body>
 
 </html>

@@ -17,9 +17,10 @@ const lead_Save_and_New = document.querySelector("#btnSaveAndNew");
 const orgForm = document.querySelector('#org-form');
 
 let clicked = null;
-let leadSource;
+let leadSource, Leads;
 
 async function main() {
+    Leads = await getData('leads');
     leadSource = await getData('/lead-sources');
     document.querySelector('#lead-source').appendChild(option_fragment(leadSource, 'name'))
     events();
@@ -29,6 +30,7 @@ main();
 function events() {
     flatpickr('#date-created', {
         dateFormat: "M d, Y",
+        defaultDate: new Date()
     });
 
     document.querySelector('#org-name').addEventListener('input', (e) => {
@@ -64,33 +66,36 @@ async function createLead(e) {
     for (let [key, value] of subFormData.entries()) {
         formData.append(key, value);
     }
-    let lastName = checkRequired(last_name_Input);
-    let Email = checkRequired(emailInput);
-    let Phone = checkRequired(phoneInput)
-
-    if (lastName && Email && Phone) {
-        try {
-            const response = await fetch("/mongodb/leads", {
-                method: "POST",
-                body: formData
-            })
-            if (!response.ok) throw new Error(response.statusText);
-            alert("Lead Added Successfully");
-            clicked ? window.location.href = '/templates/leads.html' : window.location.href = "/templates/leads/createleads.html";
-        } catch (error) {
-            console.error('Error:', error);
-            showAlert("Failed to add lead. Please try again.")
-        }
+    let isLastNameValid = checkRequired(last_name_Input);
+    let isEmailValid = checkRequired(emailInput);
+    let isPhoneValid = checkRequired(phoneInput)
+    if (!isLastNameValid || !isEmailValid || !isPhoneValid) {
+        console.log('Form validation failed');
+        return; // Stop further submission if there are validation errors
     }
-    else {
-        alert("Please Fill out Required Fields");
+    await PostData(formData);
+}
+async function PostData(formData) {
+    try {
+        const response = await fetch("/mongodb/leads", {
+            method: "POST",
+            body: formData
+        })
+        if (!response.ok) throw new Error(response.statusText);
+        alert("Lead Added Successfully");
+        clicked ? window.location.href = '/templates/leads.html' : window.location.href = "/templates/leads/createleads.html";
+    } catch (error) {
+        console.error('Error:', error);
+        alert("Failed to add lead. Please try again.")
     }
 }
 function checkRequired(tag) {
     let val = tag.value;
     if (val === "") {
-        setError(tag, "required");
-        return;
+        // setError(tag, "required");
+        tag.setCustomValidity('Enter a Value!')
+        tag.reportValidity();
+        return false;
     } else {
         setSuccess(tag);
         switch (tag.id) {
@@ -101,21 +106,23 @@ function checkRequired(tag) {
                 if (!checkemail(val, tag)) return;
                 break;
             default:
-                console.log("switch-case-default");
+                break;
         }
-
-        return val;
+        tag.setCustomValidity('')
+        return true;
     }
 }
 
 
 function setError(tag, message) {
-    tag.placeholder = message;
-    tag.classList.add("errorInput");
+    let Error_tag = tag.parentElement.querySelector('.field-error');
+    Error_tag.textContent = message;
+    Error_tag.classList.remove("hidden-visibility");
 }
 function setSuccess(tag) {
-    tag.placeholder = "";
-    tag.classList.remove("errorInput");
+    let Error_tag = tag.parentElement.querySelector('.field-error');
+    Error_tag.textContent = '';
+    Error_tag.classList.add("hidden-visibility");
 }
 
 function checkphone(phone, tag) {
@@ -134,6 +141,12 @@ function checkemail(email, tag) {
     if (!/^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(email)) {
         setError(tag, "Invalid Email");
         return false;
+    }
+    for (let item of Leads) {
+        if (item.email === email) {
+            setError(tag, "Email Already registered!");
+            return false;
+        }
     }
     setSuccess(tag);
     return true;
