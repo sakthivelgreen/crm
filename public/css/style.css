@@ -356,24 +356,6 @@ input:disabled {
     cursor: no-drop;
 }
 
-input,
-select {
-    background-color: #fff;
-    border: 1px solid #000;
-    border-radius: 5px;
-    outline: 0px;
-    cursor: pointer;
-}
-
-input:required,
-select:required {
-    background-color: #fff;
-    border: 1px solid #000;
-    border-left: 3px solid red;
-    outline: 0px;
-    border-radius: 5px;
-}
-
 .errorInput {
     border: red solid 1px;
 }

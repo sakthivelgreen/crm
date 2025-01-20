@@ -1,3 +1,5 @@
+import { getData, option_fragment } from '../commonFunctions.js'
+
 // Cancel Button
 const cancel = document.querySelector("#cancelBtn");
 cancel.addEventListener("click", () => {
@@ -5,95 +7,85 @@ cancel.addEventListener("click", () => {
 })
 
 // Getting Input box Fields
-const firstnameInput = document.querySelector("#firstname");
-const lastnameInput = document.querySelector("#lastname");
+const last_name_Input = document.querySelector("#last-name");
 const emailInput = document.querySelector("#email");
-const companynameInput = document.querySelector("#companyname");
 const phoneInput = document.querySelector("#phone");
-const productInput = document.querySelector("#product");
-const addressInput = document.querySelector("#address");
-const designationInput = document.querySelector("#designation");
-const orgPhoneInput = document.querySelector("#orgPhone");
-const orgEmailInput = document.querySelector("#orgEmail");
-const orgIncomeInput = document.querySelector("#orgIncome");
-const orgAddressInput = document.querySelector("#orgAddress");
 
 const leadCreateForm = document.querySelector("#createLeadForm");
 const saveLead = document.querySelector("#saveLeadBtn");
-const leadSaveandNew = document.querySelector("#btnSaveAndNew");
+const lead_Save_and_New = document.querySelector("#btnSaveAndNew");
+const orgForm = document.querySelector('#org-form');
 
 let clicked = null;
+let leadSource;
 
-saveLead.addEventListener("click", () => {
-    clicked = 1;
-    leadCreateForm.requestSubmit();
-})
-leadSaveandNew.addEventListener("click", () => {
-    clicked = 0;
-    leadCreateForm.requestSubmit();
-})
-leadCreateForm.addEventListener("submit", createLead)
+async function main() {
+    leadSource = await getData('/lead-sources');
+    document.querySelector('#lead-source').appendChild(option_fragment(leadSource, 'name'))
+    events();
+}
+main();
+
+function events() {
+    flatpickr('#date-created', {
+        dateFormat: "M d, Y",
+    });
+
+    document.querySelector('#org-name').addEventListener('input', (e) => {
+        if (e.target.value !== '') {
+            document.querySelector('.org-section').classList.remove('hidden-field')
+            document.querySelector('.org-section').classList.add('reset-hidden')
+        } else {
+            document.querySelector('.org-section').classList.add('hidden-field')
+            document.querySelector('.org-section').classList.remove('reset-hidden')
+            orgForm.reset();
+        }
+    })
+
+    saveLead.addEventListener("click", () => {
+        clicked = 1;
+        leadCreateForm.requestSubmit();
+    })
+
+    lead_Save_and_New.addEventListener("click", () => {
+        clicked = 0;
+        leadCreateForm.requestSubmit();
+    })
+
+    leadCreateForm.addEventListener("submit", createLead)
+}
+
 
 // Function add lead
 async function createLead(e) {
     e.preventDefault();
-    let lastName = checkRequired(lastnameInput);
+    const formData = new FormData(e.target);
+    const subFormData = new FormData(orgForm);
+    for (let [key, value] of subFormData.entries()) {
+        formData.append(key, value);
+    }
+    let lastName = checkRequired(last_name_Input);
     let Email = checkRequired(emailInput);
     let Phone = checkRequired(phoneInput)
-    let firstName = firstnameInput.value;
-    let companyName = companynameInput.value;
-    let Address = addressInput.value;
-    let Designation = designationInput.value;
-    let Product = productInput.value;
-    let OrgPhone = orgPhoneInput.value;
-    let OrgEmail = orgEmailInput.value;
-    let OrgIncome = orgIncomeInput.value;
-    let OrgAddress = orgAddressInput.value;
 
-    let newLead = {
-        firstname: firstName,
-        lastname: lastName,
-        email: Email,
-        phone: Phone,
-        companyname: companyName,
-        address: Address,
-        designation: Designation,
-        product: Product,
-        orgphone: OrgPhone,
-        orgemail: OrgEmail,
-        orgincome: OrgIncome,
-        orgaddress: OrgAddress,
-    }
     if (lastName && Email && Phone) {
         try {
-            const leadFetch = await fetch("/mongodb/leads", {
+            const response = await fetch("/mongodb/leads", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newLead)
+                body: formData
             })
-            if (leadFetch.ok) {
-                showAlert("Lead Added Successfully");
-                clicked ? window.location.href = '/templates/leads.html' : window.location.href = "/templates/leads/createleads.html";
-            } else {
-                throw new Error('Failed to add lead: ' + leadFetch.statusText);
-            }
+            if (!response.ok) throw new Error(response.statusText);
+            alert("Lead Added Successfully");
+            clicked ? window.location.href = '/templates/leads.html' : window.location.href = "/templates/leads/createleads.html";
         } catch (error) {
             console.error('Error:', error);
             showAlert("Failed to add lead. Please try again.")
         }
     }
     else {
-        showAlert("Please Fill out Required Fields");
+        alert("Please Fill out Required Fields");
     }
-
 }
-function showAlert(message) {
-    return new Promise((resolve) => {
-        window.alert(message);
-        resolve();
-    });
-}
-
 function checkRequired(tag) {
     let val = tag.value;
     if (val === "") {
@@ -109,7 +101,7 @@ function checkRequired(tag) {
                 if (!checkemail(val, tag)) return;
                 break;
             default:
-                console.log("default");
+                console.log("switch-case-default");
         }
 
         return val;
@@ -146,17 +138,3 @@ function checkemail(email, tag) {
     setSuccess(tag);
     return true;
 }
-
-// Dynamic Fields for Individual and Organisation
-let ORG = document.querySelector("#organisation");
-let IND = document.querySelector("#individual");
-const ORGForm = document.querySelector(".orgForm");
-const fieldSet = document.querySelector("fieldset");
-ORGForm.style.display = "none";
-fieldSet.addEventListener("change", () => {
-    if (IND.checked) {
-        ORGForm.style.display = "none";
-    } else if (ORG.checked) {
-        ORGForm.style.display = "block";
-    }
-})

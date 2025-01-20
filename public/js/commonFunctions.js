@@ -127,3 +127,15 @@ export function getRandomColor() {
     const b = Math.floor(Math.random() * 256);  // Random blue value (0-255)
     return `rgb(${r}, ${g}, ${b})`;
 }
+
+export function option_fragment(arr, key) {
+    let fragment = document.createDocumentFragment();
+    arr.forEach(item => {
+        let option = document.createElement('option');
+        option.value = item[key];
+        option.id = item._id;
+        option.textContent = item[key].charAt(0).toUpperCase() + item[key].slice(1).toLowerCase();
+        fragment.appendChild(option);
+    });
+    return fragment;
+}

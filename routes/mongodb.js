@@ -1,29 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const upload = multer();
 
-/* Old Connection Method */
-// const { MongoClient, ObjectId } = require('mongodb'); 
-// require('dotenv').config();
-// const uri = process.env.Mongo_URI;
-// const client = new MongoClient(uri);
-
-// Connect to MongoDB Atlas
-// async function connectToMongo() {
-//     try {
-//         await client.connect();
-//         console.log('Connected to MongoDB Atlas');
-//     } catch (e) {
-//         console.error(e);
-//     }
-// }
-// connectToMongo(); // Initialize the connection to MongoDB
-// router.use((req, res, next) => {
-//     res.setHeader('Content-Security-Policy', "connect-src 'self'");
-//     next();
-// })  
-
-
-/* New Connection Method */
 const { getDB } = require('../models/conn');
 const { ObjectId } = require('mongodb');
 let db;
@@ -41,7 +20,7 @@ router.use(async (req, res, next) => {
 })
 
 // POST route to insert data into various collections
-router.post('/:module', async (req, res) => {
+router.post('/:module', upload.none(), async (req, res) => {
     try {
         const module = req.params.module;
         const collection = db.collection(module);

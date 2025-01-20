@@ -14,15 +14,15 @@ var loginRouter = require('./routes/login');
 var zohoRouter = require('./routes/zoho');
 // var connectAndQuery = require('./routes/azure_script');
 var app = express();
-// connectAndQuery();
-app.use(express.json());
+
+app.use(express.urlencoded({ extended: true })); // Parses form-encoded data
+app.use(express.json()); // Parses JSON data
 const corsOptions = {
     origin: 'https://sakthi-crm.vercel.app',
     methods: 'GET, POST, PUT, DELETE',
     allowedHeaders: 'Content-Type',
 };
 app.use(cors(corsOptions));
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/Auth', express.static(path.join(__dirname, 'Auth')));

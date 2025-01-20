@@ -1,0 +1,114 @@
+@media screen and (max-width: 767px) {
+    .form-field {
+        width: 400px;
+        height: 40px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-items: space-between;
+        gap: 15px;
+    }
+
+    .field-container .label {
+        text-align: right;
+        width: 37.5%;
+    }
+
+    .field-container .value {
+        flex: 1 1 auto;
+    }
+
+    .field-container .value .field {
+        width: 100%;
+        height: 100%;
+        border: 1px solid gray;
+        border-radius: 3px;
+        transition: box-shadow 0.3s ease;
+        padding: 0px 10px;
+    }
+
+    .field-container .value .field:focus {
+        box-shadow: 0 0 5px 1px #4796ED;
+        outline: 0;
+    }
+
+    .field-container .value .field:required {
+        border-left: 3px solid #FF5D5A;
+    }
+
+    .field-container .value .field-error {
+        width: 100%;
+        color: #FF5D5A;
+        height: 15px;
+        font-size: 12px;
+    }
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.hidden-field {
+    position: absolute;
+    left: -9999px;
+}
+
+.reset-hidden {
+    position: relative;
+    left: auto;
+}
+
+@media screen and (min-width: 768px) {
+    .form-field {
+        width: 100%;
+        height: 40px;
+        margin-bottom: 10px;
+    }
+
+    .field-container {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-items: space-between;
+        gap: 15px;
+        padding: 10px;
+    }
+
+    .field-container .label {
+        text-align: right;
+        height: 100%;
+        width: 37.5%;
+        align-self: flex-end;
+    }
+
+    .field-container .value {
+        flex: 1 1 auto;
+        height: 30px;
+    }
+
+    .field-container .value .field {
+        width: 100%;
+        height: 100%;
+        border: 1px solid gray;
+        border-radius: 3px;
+        transition: box-shadow 0.3s ease;
+        padding: 0px 10px;
+    }
+
+    .field-container .value .field:focus {
+        box-shadow: 0 0 5px 1px #4796ED;
+        outline: 0;
+    }
+
+    .field-container .value .field:required {
+        border-left: 3px solid #FF5D5A;
+    }
+
+    .field-container .value .field-error {
+        width: 100%;
+        color: #FF5D5A;
+        height: 15px;
+        font-size: 12px;
+    }
+}
