@@ -1,4 +1,5 @@
-import { getData, option_fragment } from '../commonFunctions.js'
+import { getData, objectToFormData, option_fragment, CreateAccount, PostData, UpdateAccount } from '../commonFunctions.js'
+import { Elements } from '../declarations.js';
 
 // Cancel Button
 const cancel = document.querySelector("#cancelBtn");
@@ -17,12 +18,14 @@ const lead_Save_and_New = document.querySelector("#btnSaveAndNew");
 const orgForm = document.querySelector('#org-form');
 
 let clicked = null;
-let leadSource, Leads;
+let leadSource, Leads, Accounts;
 
 async function main() {
     Leads = await getData('leads');
-    leadSource = await getData('/lead-sources');
-    document.querySelector('#lead-source').appendChild(option_fragment(leadSource, 'name'))
+    Accounts = await getData('accounts');
+    leadSource = await getData('lead-sources');
+    document.querySelector('#lead-source').appendChild(option_fragment(leadSource, 'name'));
+    document.querySelector('#org-option').appendChild(option_fragment(Accounts, 'org-name'));
     events();
 }
 main();
@@ -32,14 +35,36 @@ function events() {
         dateFormat: "M d, Y",
         defaultDate: new Date()
     });
-
-    document.querySelector('#org-name').addEventListener('input', (e) => {
-        if (e.target.value !== '') {
-            document.querySelector('.org-section').classList.remove('hidden-field')
-            document.querySelector('.org-section').classList.add('reset-hidden')
+    document.querySelector('#org-option').addEventListener('change', (e) => {
+        e.preventDefault();
+        let value = e.target.value;
+        enable_disable_form(e.target)
+        if (value === 'new') {
+            if (Accounts.length > 0) {
+                Object.keys(Accounts[0]).forEach(key => {
+                    const field = document.querySelector(`[name="${key}"], #${key}`);
+                    if (field) field.removeAttribute('readonly');
+                });
+            }
+            Elements.orgName().removeAttribute('readonly');
+            Elements.orgName().focus();
+            Elements.orgName().setAttribute('required', '');
+            Elements.orgName().value = '';
+            orgForm.reset();
+        } else if (value !== '') {
+            let org = Accounts.find(acc => acc._id === e.target.selectedOptions[0].id);
+            if (org) AutoFill(org);
+            Object.keys(org).forEach(key => {
+                const field = document.querySelector(`[name="${key}"], #${key}`);
+                if (field) field.setAttribute('readonly', '');
+            });
+            Elements.orgName().setAttribute('readonly', '');
+            document.querySelector('#designation').value = '';
+            document.querySelector('#designation').removeAttribute('readonly');
         } else {
-            document.querySelector('.org-section').classList.add('hidden-field')
-            document.querySelector('.org-section').classList.remove('reset-hidden')
+            Elements.orgName().removeAttribute('required');
+            Elements.orgName().readonly = true;
+            Elements.orgName().value = '';
             orgForm.reset();
         }
     })
@@ -63,32 +88,58 @@ async function createLead(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
     const subFormData = new FormData(orgForm);
-    for (let [key, value] of subFormData.entries()) {
-        formData.append(key, value);
-    }
-    let isLastNameValid = checkRequired(last_name_Input);
-    let isEmailValid = checkRequired(emailInput);
+    let object_lead = Object.fromEntries(formData.entries());
+    let object_account = Object.fromEntries(subFormData.entries());
+
+    object_lead['org-id'] = document.querySelector('#org-option').selectedOptions[0].id
+    object_lead['designation'] = subFormData.get('designation');
+    delete object_account['designation'];
+
     let isPhoneValid = checkRequired(phoneInput)
+    let isEmailValid = checkRequired(emailInput);
+    let isLastNameValid = checkRequired(last_name_Input);
     if (!isLastNameValid || !isEmailValid || !isPhoneValid) {
         console.log('Form validation failed');
         return; // Stop further submission if there are validation errors
     }
-    await PostData(formData);
-}
-async function PostData(formData) {
-    try {
-        const response = await fetch("/mongodb/leads", {
-            method: "POST",
-            body: formData
-        })
-        if (!response.ok) throw new Error(response.statusText);
-        alert("Lead Added Successfully");
-        clicked ? window.location.href = '/templates/leads.html' : window.location.href = "/templates/leads/createleads.html";
-    } catch (error) {
-        console.error('Error:', error);
-        alert("Failed to add lead. Please try again.")
+    let leadID, result;
+    switch (document.querySelector('#org-option').value) {
+        case 'new':
+            let isOrgValid = checkRequired(Elements.orgName());
+            if (!isOrgValid) return;
+            object_account['org-name'] = formData.get('org-name');
+            object_account['leads'] = []
+            object_account['contacts'] = []
+
+            // create new Account
+            let org_id = await CreateAccount(object_account);
+
+            // create new lead
+            object_lead['org-id'] = org_id;
+            leadID = await PostData(object_lead);
+
+            // update lead id to account
+            object_account['leads'].push(leadID);
+            result = await UpdateAccount(org_id, subFormData);
+
+            if (result) clicked ? window.location.href = '/templates/leads/viewleadDetail.html?id=' + leadID : window.location.href = "/templates/leads/createleads.html";
+            break;
+        case '':
+            result = await PostData(object_lead);
+            if (result) clicked ? window.location.href = '/templates/leads/viewleadDetail.html?id=' + result : window.location.href = "/templates/leads/createleads.html";
+            break;
+        default:
+            let acc_id = document.querySelector('#org-option').selectedOptions[0].id;;
+            let data = Accounts.find((acc) => acc._id == acc_id);
+            leadID = await PostData(object_lead);
+            data['leads'].push(leadID);
+            delete data._id;
+            result = await UpdateAccount(acc_id, data)
+            if (result) clicked ? window.location.href = '/templates/leads/viewleadDetail.html?id=' + leadID : window.location.href = "/templates/leads/createleads.html";
+            break;
     }
 }
+
 function checkRequired(tag) {
     let val = tag.value;
     if (val === "") {
@@ -100,10 +151,13 @@ function checkRequired(tag) {
         setSuccess(tag);
         switch (tag.id) {
             case "phone":
-                if (!checkphone(val, tag)) return;
+                if (!checkPhone(val, tag)) return;
                 break;
             case "email":
-                if (!checkemail(val, tag)) return;
+                if (!checkMail(val, tag)) return;
+                break;
+            case 'org-name':
+                if (!checkOrg(val, tag)) return;
                 break;
             default:
                 break;
@@ -125,7 +179,7 @@ function setSuccess(tag) {
     Error_tag.classList.add("hidden-visibility");
 }
 
-function checkphone(phone, tag) {
+function checkPhone(phone, tag) {
     if (/\D/.test(phone)) {
         setError(tag, "Phone Number should contain numbers only.");
         return false;
@@ -137,7 +191,7 @@ function checkphone(phone, tag) {
     setSuccess(tag)
     return true;
 }
-function checkemail(email, tag) {
+function checkMail(email, tag) {
     if (!/^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(email)) {
         setError(tag, "Invalid Email");
         return false;
@@ -150,4 +204,40 @@ function checkemail(email, tag) {
     }
     setSuccess(tag);
     return true;
+}
+function checkOrg(name, tag) {
+    for (const acc of Accounts) {
+        if (acc['org-name'].toLowerCase().includes(name.toLowerCase())) {
+            setError(tag, 'Account Name Already exists! try different')
+            return false;
+        }
+    }
+    setSuccess(tag);
+    return true;
+}
+
+function AutoFill(data) {
+    Object.keys(data).forEach(key => {
+        const value = data[key];
+        const field = document.querySelector(`[name="${key}"], #${key}`);
+        if (field) {
+            // If the field is a checkbox or radio button
+            if (field.type === 'checkbox' || field.type === 'radio') {
+                field.checked = value;
+            } else {
+                // Otherwise, for inputs, textareas, selects, set the value
+                field.value = value;
+            }
+        }
+    })
+}
+
+function enable_disable_form(item) {
+    if (item.value !== '') {
+        Elements.orgName().closest('.form-field').classList.remove('hidden-field');
+        document.querySelector('.org-section').classList.remove('hidden-field')
+    } else {
+        document.querySelector('.org-section').classList.add('hidden-field')
+        Elements.orgName().closest('.form-field').classList.add('hidden-field');
+    }
 }

@@ -75,7 +75,24 @@
                                         <label for="org-name">Organization</label>
                                     </div>
                                     <div class="value">
-                                        <input type="text" name="org-name" id="org-name" class="field">
+                                        <select id="org-option" class="field">
+                                            <option value="" selected>Select</option>
+                                            <option value="new" id="new-acc">Create New Account</option>
+                                        </select>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field hidden-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="org-name">Org Name</label>
+                                    </div>
+                                    <div class="value">
+                                        <div class="value">
+                                            <input type="text" name="org-name" id="org-name" class="field">
+                                            <div class="field-error hidden-visibility">error</div>
+                                        </div>
                                         <div class="field-error hidden-visibility">error</div>
                                     </div>
                                 </div>
@@ -177,17 +194,6 @@
                             <div class="form-field">
                                 <div class="field-container">
                                     <div class="label">
-                                        <label for="employee-count">No. of Employees</label>
-                                    </div>
-                                    <div class="value">
-                                        <input type="text" name="employee-count" id="employee-count" class="field">
-                                        <div class="field-error hidden-visibility">error</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-field">
-                                <div class="field-container">
-                                    <div class="label">
                                         <label for="product">Product</label>
                                     </div>
                                     <div class="value">
@@ -267,6 +273,17 @@
                                     </div>
                                     <div class="value">
                                         <input type="text" name="designation" id="designation" class="field">
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="employee-count">No. of Employees</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="employee-count" id="employee-count" class="field">
                                         <div class="field-error hidden-visibility">error</div>
                                     </div>
                                 </div>

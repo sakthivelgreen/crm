@@ -9,6 +9,7 @@ const noCompanyDiv = document.querySelector(".hasNoCompany");
 const convertBtn1 = document.querySelector("#ConvertBtn1");
 const convertBtn2 = document.querySelector("#ConvertBtn2");
 const contactOnly = document.querySelector("#contact");
+
 const contactAndAccount = document.querySelector("#contactAndaccount");
 const getHeaders = {
     method: "GET",
@@ -20,10 +21,10 @@ async function conversionMain() {
     try {
         let response = await fetch(`${fetchUrl}/leads/${id}`, { getHeaders });
         let lead = await response.json();
-        if (response.status === 404);
+        if (response.status === 404) throw new Error(response.statusText);
         conversionSub(lead);
     } catch (error) {
-
+        throw new Error(error);
     }
 
 }
@@ -33,7 +34,6 @@ function conversionSub(lead) {
         hasCompany(lead)
     } else if (lead.companyname === "") {
         hasNoCompany(lead)
-
     }
 }
 

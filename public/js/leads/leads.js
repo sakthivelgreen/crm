@@ -1,318 +1,206 @@
+import { ContactMap, DealMap, LeadMap, OrgMap } from "../../mappings/keyMap.js";
+import { Delete_Record, getData, table_fragment, option_fragment_array } from "../commonFunctions.js";
+import { buttons, Elements } from '../declarations.js';
 // create a lead (redirects to lead creation page)
 const createLeadBtn = document.querySelector("#createLeadBtn");
-createLeadBtn.addEventListener("click", () => {
-    window.location.href = '/templates/leads/createleads.html';
-})
+const Table = document.querySelector("#ListTable");
 
 // setting table head value from object by converting array
-let Arr = ["firstname", "lastname", "email", "phone", "companyname", "address", "product", "designation"]
-
-// function for retrieving leads
-
-async function fetchLeads() {
-    let leads = [];
-    try {
-        // Fetching leads from db.json
-        const response = await fetch("/mongodb/leads", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        leads = await response.json();
-        filterFunction(leads);
-        processLeads(leads);
-
-    } catch (error) {
-        alert("Please Check the database connection")
-    }
+const table_headers = ["First Name", "Last Name", "Email", "Phone", "Organization", "Date Created"]
+let Leads;
+async function main() {
+    Leads = await getData('leads');
+    Table.appendChild(table_fragment(table_headers, Leads))
+    events();
+    filterFunction();
 }
+main();
 
-fetchLeads(); // Calling the Main function
+function events() {
+    createLeadBtn.addEventListener("click", () => {
+        window.location.href = '/templates/leads/createleads.html';
+    })
+    CheckBox();
+    // delete button click event listener
+    buttons.deleteBtn().addEventListener("click", async () => {
+        checkBoxArray = [...new Set(checkBoxArray)];
+        if (checkBoxArray.length) {
 
-// creating a table to display leads information
+            let confirmDel;
 
-const leadTable = document.querySelector("#ListTable");
-const thead = document.createElement("thead");
-const tbody = document.createElement("tbody");
-leadTable.appendChild(thead);
-leadTable.appendChild(tbody);
-
-// table manipulations
-
-async function processLeads(leads) {
-
-    leadsData = leads;
-    while (tbody.hasChildNodes()) {
-        tbody.removeChild(tbody.firstChild)
-    }
-    while (thead.hasChildNodes()) {
-        thead.removeChild(thead.firstChild)
-    }
-    const checkAll = document.createElement("th");
-    thead.appendChild(checkAll);
-
-    checkAll.innerHTML = `<input type="checkbox" id="checkAll">`;
-
-    // Looping to create table head
-    Arr.forEach(ele => {
-        if (!(ele === "_id")) {
-            const th = document.createElement("th");
-            th.className = ele;
-            th.textContent = ele.toUpperCase();
-            thead.appendChild(th)
-        }
-    });
-
-    // for table body
-    for (const key in leadsData) {
-        let count = 0;
-        let head = Arr.values()
-        const tr = document.createElement("tr"); // creating rows
-        tbody.appendChild(tr);
-        let value = leadsData[key];
-        const checkBoxTd = document.createElement("td"); // td for inserting checkbox
-        tr.appendChild(checkBoxTd);
-
-        // Table td for each row created above
-        for (const lead in value) {
-            count++;
-            if (count > Arr.length) continue;
-            if (!(lead === "_id")) {
-                const td = document.createElement("td"); // creating td element
-                td.className = head.next().value;        // setting class name for correctly display data
-                tr.appendChild(td);                      // appendig to table row
-
-                if (td.className === "email") {
-                    // setting to open email based on class name
-                    td.innerHTML = `<span id="${value._id}" class="${td.className}Span">${value[td.className]}</span>`;
-                }
-                else if (td.className === "phone") {
-                    // setting to open phone based on class name
-                    td.innerHTML = `<span id="${value._id}" class="${td.className}Span">${value[td.className]}</span>`;
-                }
-                else {
-                    td.innerHTML = `<span id="${value._id}" class="${td.className}">${value[td.className]}</span>`;
-                }
+            if (Elements.CheckAll() && Elements.CheckAll().checked) {
+                confirmDel = confirm("Are you sure you want to delete all records?");
+            } else {
+                confirmDel = confirm("Are you sure you want to delete the selected record(s)?");
             }
-            tr.id = `${value._id}`;
-            checkBoxTd.innerHTML = `<input type="checkbox" id=${value._id} class="checkBox">`;
-            checkBoxTd.className = `checkbox`;
-            checkBoxTd.addEventListener("click", (e) => {
-                e.stopPropagation();  // to stop event bubble
-            })
 
-        }
-    }
+            if (confirmDel) {
+                let deletionResults = [];  // To track successes and failures
 
-    const inputCheckBox = document.querySelectorAll(".checkBox");
-    const inputCheckAll = document.querySelector("#checkAll");
+                // Create an array of promises that will delete all records
+                const deletePromises = checkBoxArray.map(id => {
 
-    processCheckBox(inputCheckAll, inputCheckBox);  // Checkbox function
+                    // Create a promise for each deletion and return it
+                    return Delete_Record('leads', id)
+                        .then(() => {
+                            deletionResults.push({ id, status: 'success' });
+                        })
+                        .catch((error) => {
+                            deletionResults.push({ id, status: 'failed', error });
+                        });
+                });
 
-    const tableSpan = leadTable.querySelectorAll("span");
-    const tableRows = leadTable.querySelectorAll("tr");
+                try {
+                    // Wait for all promises to be resolved using Promise.all
+                    await Promise.all(deletePromises);
 
-    viewDetail(tableSpan, tableRows) // Calling Detailed lead view redirect function;
-}
+                    // After all deletion attempts are made, handle the results
+                    let successCount = deletionResults.filter(res => res.status === 'success').length;
+                    let failCount = deletionResults.filter(res => res.status === 'failed').length;
 
+                    // Example of user feedback after attempting to delete
+                    if (successCount > 0) {
+                        alert(`${successCount} record(s) successfully deleted.`);
+                    }
+                    if (failCount > 0) {
+                        alert(`${failCount} record(s) failed to delete.`);
+                    }
+                    location.reload();
+                } catch (error) {
+                    // In case any error occurs outside of individual deletion failures
+                    alert('There was an error attempting to delete records.');
+                }
 
-function viewDetail(allSpan, trElement) {
-    let trArray = Array.from(trElement);
-    let spanArray = Array.from(allSpan);
-    let clicked = "span";
-
-    // leadclick funtion definition for correct redirection of page
-    function leadClick(e) {
-        e.stopPropagation();
-        if (e.target.className === "emailSpan") {
-            window.location.href = `mailto:${e.target.textContent}`;
-        } else if (e.target.className === "phoneSpan") {
-            window.location.href = `tel:${e.target.textContent}`;
+            } else {
+                return;
+            }
         } else {
-            if (clicked === "span") window.location.href = `/templates/leads/viewleadDetail.html?id=${e.target.id}`;
-            else window.location.href = `/templates/leads/viewleadDetail.html?id=${e.target.parentElement.id}`;
+            alert("Please select at least one record to delete.");
         }
-
-    }
-
-
-    // setting redirect function while clicking the text
-    spanArray.forEach(ele => ele.addEventListener("click", (e) => {
-        clicked = "span";
-        leadClick(e);
-    }));
-
-    // setting redirect function while clicking row
-    trArray.forEach(ele => ele.addEventListener("click", (e) => {
-        clicked = "row";
-        leadClick(e);
-    }));
+    });
+    document.querySelector('#ListTable').addEventListener('click', (e) => {
+        const row = e.target.closest('tr');
+        if (row && row.id) {
+            const clickedTd = e.target.closest('td');
+            const checkboxCell = clickedTd && clickedTd.querySelector('.checkBox');
+            if (!checkboxCell) {
+                window.location.href = '/templates/leads/viewleadDetail.html?id=' + row.id;
+            }
+        }
+    })
 }
 
-// checkbox function definition
-function processCheckBox(head, body) {
-    let checkBoxArray = [];             // creating an array store selected items
-    let bodyCheck = Array.from(body);   // getting all checkbox from table body
 
-    bodyCheck.forEach(element => {      // setting event listener for all checkbox in table body
-        element.addEventListener("click", (e) => {
-            e.stopPropagation();
-            if (e.target.checked == true) {         // checked conditon
-                checkBoxArray.push(e.target.id);
-                console.log(checkBoxArray);
-                allcheck()
-                leadoptions()               // updating options while items in checkbox array
-            } else {                                // unchecked condition
-                // checkBoxArray.pop(e.target.id);
-                checkBoxArray = checkBoxArray.filter(ele => ele !== e.target.id)
-                console.log(checkBoxArray);
-                allcheck()
-                leadoptions()               // updating options while items in checkbox
-            }
-        })
-    });
-
-
-    // function to check if all items are checked
-    function allcheck() {
-        for (let i = 0; i < bodyCheck.length; i++) {
-            if (!bodyCheck[i].checked) {
-                head.checked = false;
-                return
-            }
-        }
-        head.checked = true;
-    }
+let checkBoxArray = [];
+function CheckBox() {
+    const tbody_allCheckboxes = Table.querySelectorAll('tbody .checkBox');
 
     // function for checkbox in table head 
-    head.addEventListener("change", (e) => {
-        if (head.checked) {                     // if checked(true)
-            bodyCheck.forEach(e => {
-                e.checked = true;
+    Elements.CheckAll().addEventListener("change", (e) => {
+        if (Elements.CheckAll().checked) {
+            tbody_allCheckboxes.forEach(e => {
+                e.checked = Elements.CheckAll().checked;
                 checkBoxArray.push(e.id);
             })
         }
         else {
-            bodyCheck.forEach(e => {            // if checked(false)
-                e.checked = false;
-                checkBoxArray.pop(e.id);
+            checkBoxArray.length = 0;
+            tbody_allCheckboxes.forEach(e => {
+                e.checked = Elements.CheckAll().checked;
             })
         }
-        leadoptions()                           // options updation
+        leadActions()
     })
 
+    // if all items checked by separately or some items selected
+    tbody_allCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            e.stopPropagation();
+            checkBoxArray = e.target.checked
+                ? [...checkBoxArray, e.target.id] // Create a new array with the added ID
+                : checkBoxArray.filter(id => id !== e.target.id); // Remove the unchecked ID
 
-    // function definiton for leadoptions()
-    function leadoptions() {
-        if (checkBoxArray.length !== 0) {
-            optionRow.style.display = "flex";
-            row1.style.display = "none";
-            row2.style.display = "none";
-        } else {
-            optionRow.style.display = "none";
-            row1.style.display = "flex";
-            row2.style.display = "flex";
-        }
-    }
-
-    const row1 = document.querySelector(".topRow1");
-    const row2 = document.querySelector(".topRow2");
-    const optionRow = document.querySelector(".optionsRow"); // targeting delete button list-item
-    const deleteBtn = document.querySelector("#deleteBtn"); // targetting delete button 
-
-    let confirmDel;         // variable to get confirmation from user
-    let url = `http://localhost:3000/lead/?id=`;
-
-
-    // delete button click event listener
-    deleteBtn.addEventListener("click", () => {
-        if (checkBoxArray.length) {
-            if (head.checked) confirmDel = confirm("Are you Sure to delete all records");  // getting confirmation
-            else confirmDel = confirm("Are you Sure to delete the record");                // getting confirmation
-            if (confirmDel) {
-                checkBoxArray.forEach(ele => {
-                    funDelete(ele)      // calling delete function to delete lead
-                });
-
+            if (checkBoxArray.length == tbody_allCheckboxes.length) {
+                Elements.CheckAll().indeterminate = false;
+                Elements.CheckAll().checked = true;
+            } else if (checkBoxArray.length > 0) {
+                Elements.CheckAll().checked = false;
+                Elements.CheckAll().indeterminate = true;
+            } else {
+                Elements.CheckAll().indeterminate = false;
+                Elements.CheckAll().checked = false
             }
-
-        }
-    })
-}
-
-
-// delete function definition
-async function funDelete(param) {
-    try {
-        let response = await fetch(`/mongodb/leads/${param}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" }
+            leadActions()
         })
-
-        if (!response.ok) throw new Error();
-        else console.log('Delete Success!')
-
-    } catch (error) {
-        alert("Error in deletion " + error)
-        throw new Error("error", error);
-    }
-    finally {
-        alert("Delete Success")
-        location.reload()
-    }
+    })
 
 }
+// Show Hide lead Action ribbon;
+function leadActions() {
+    if (checkBoxArray.length !== 0) {
+        document.querySelector(".optionsRow").style.display = "flex";
+        document.querySelector(".topRow1").style.display = "none";
+        document.querySelector(".topRow2").style.display = "none";
+    } else {
+        document.querySelector(".optionsRow").style.display = "none";
+        document.querySelector(".topRow1").style.display = "flex";
+        document.querySelector(".topRow2").style.display = "flex";
+    }
+}
+
 
 
 // filter Function
-let searchObj = [];
+let FilteredLeads = [];
 const selectElement = document.querySelector("#filterSelect");
-const searcInput = document.querySelector("#searchInput");
-const searchBtn = document.querySelector("#SearchBtn");
+const searchInput = document.querySelector("#search-input");
 
 
-function filterFunction(leads) {
-    Arr.forEach(ele => {
-        const option = document.createElement("option");
-        option.value = ele;
-        option.textContent = ele.toUpperCase()
-        selectElement.appendChild(option)
-    })
+function filterFunction() {
+    selectElement.appendChild(option_fragment_array(table_headers));
 
     selectElement.addEventListener("change", () => {
-        if (searcInput.value !== "") {
-            searchBtn.style.display = "block";
+        if (selectElement.value !== "") {
+            buttons.FilterBtn().classList.remove('hide-display')
+            buttons.ClearFilterBtn().classList.remove('hide-display');
+        } else {
+            buttons.FilterBtn().classList.add('hide-display');
+            buttons.ClearFilterBtn().classList.add('hide-display');
         }
-        searcInput.value = "";
-        searchObj = []
-        processLeads(leads)
+
     })
-
-    searcInput.addEventListener("keyup", () => {
-        searchObj = []
-        if (searcInput.value !== "" && selectElement.value !== "") {
-            let searchKey = searcInput.value;
-            let key = selectElement.value;
-
-            leads.forEach(lead => {
-                let val = lead[key].toLowerCase();
-                searchKey = searchKey.toLowerCase();
-                if (val.includes(searchKey)) {
-                    searchObj.push(lead);
+    buttons.FilterBtn().addEventListener('click', (e) => {
+        e.preventDefault();
+        const key = searchInput.value;
+        const type = selectElement.value;
+        if (key !== '') {
+            FilteredLeads = Leads.filter((lead) => {
+                if (LeadMap[type]) {
+                    return LeadMap[type](lead).toLowerCase().includes(key.toLowerCase())
+                }
+                if (OrgMap[type]) {
+                    return OrgMap[type](lead).toLowerCase().includes(key.toLowerCase())
+                }
+                if (DealMap[type]) {
+                    return DealMap[type](lead).toLowerCase().includes(key.toLowerCase())
+                }
+                if (ContactMap[type]) {
+                    return ContactMap[type](lead).toLowerCase().includes(key.toLowerCase())
                 }
             })
-            processLeads(searchObj)
-            // searchBtn.style.display = "block";
-        } else {
-            searchObj = []
-            processLeads(leads)
+            Table.replaceChildren(table_fragment(table_headers, FilteredLeads))
+            CheckBox();
         }
     })
-
-
+    buttons.ClearFilterBtn().addEventListener('click', (e) => {
+        e.preventDefault();
+        Table.replaceChildren(table_fragment(table_headers, Leads));
+        buttons.FilterBtn().classList.add('hide-display')
+        buttons.ClearFilterBtn().classList.add('hide-display');
+        searchInput.value = '';
+        selectElement.value = '';
+        CheckBox();
+    })
 
 
 }

@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const upload = multer();
 
 const { getDB } = require('../models/conn');
 const { ObjectId } = require('mongodb');
@@ -20,7 +18,7 @@ router.use(async (req, res, next) => {
 })
 
 // POST route to insert data into various collections
-router.post('/:module', upload.none(), async (req, res) => {
+router.post('/:module', async (req, res) => {
     try {
         const module = req.params.module;
         const collection = db.collection(module);
@@ -78,13 +76,12 @@ router.get('/:module/:id', async (req, res) => {
 });
 
 // PUT route to update a document by its ID
-router.put('/:module/:id', upload.none(), async (req, res) => {
+router.put('/:module/:id', async (req, res) => {
     try {
         const module = req.params.module;
         const id = req.params.id;
         const updatedData = req.body;
         const collection = db.collection(module);
-
         // Update the document by its ID
         const result = await collection.updateOne(
             { _id: new ObjectId(id) },
@@ -92,7 +89,7 @@ router.put('/:module/:id', upload.none(), async (req, res) => {
         );
 
         if (result.matchedCount > 0) {
-            res.status(200).json({ message: `${module} updated successfully` });
+            res.status(200).json({ message: `${module} updated successfully`, data: result });
         } else {
             res.status(404).send('Document not found');
         }

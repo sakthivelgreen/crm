@@ -15,7 +15,10 @@ export const buttons = {
     meetingCreateButton: () => document.querySelector("#createMeetingButton"),
     meetingCreateSubmitButton: () => document.querySelector("#createMeetingSubmitButton"),
     sendMail: () => document.querySelector('#sendMail'),
-    createDeal: () => document.querySelector('#createDeal')
+    createDeal: () => document.querySelector('#createDeal'),
+    deleteBtn: () => document.querySelector("#deleteBtn"),
+    FilterBtn: () => document.querySelector('#filter-btn'),
+    ClearFilterBtn: () => document.querySelector('#clear-filter-btn'),
 }
 
 export const anchorTags = {
@@ -44,6 +47,8 @@ export const Elements = {
     No_of_accounts: () => document.querySelector('#total-accounts'),
     No_of_deals: () => document.querySelector('#total-deals'),
     No_of_leads: () => document.querySelector('#total-leads'),
+    CheckAll: () => document.querySelector("#checkAll"),
+    orgName: () => document.querySelector('#org-name'),
 }
 export const Sections = {
     meetingsSection: () => document.querySelector("#meetingsSection"),

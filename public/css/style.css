@@ -35,6 +35,14 @@ body {
     flex: 1 1 auto;
 }
 
+.hide-display {
+    display: none;
+}
+
+.flex-display {
+    display: flex;
+}
+
 #loading {
     top: 1.1em;
     position: fixed;
@@ -121,7 +129,7 @@ body {
 
 #filterContainer {
     background-color: #fff;
-    border-radius: 15px 15px 0px 0px;
+    border-radius: 5px;
     /* border: 2px solid royalblue; */
     width: 30%;
     height: 100%;
@@ -142,12 +150,11 @@ body {
 
 #ListContainer {
     background-color: #fff;
-    border-radius: 15px 15px 0px 0px;
+    border-radius: 5px;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
     height: 100%;
     display: block;
-    /* border: 2px saddlebrown solid; */
 }
 
 #filter {
@@ -180,7 +187,7 @@ body {
     align-items: center;
     box-shadow: 0px 1px 2px rgb(0, 0, 0, 0.7);
     background-color: #fff;
-    z-index: 1;
+    z-index: 10;
 }
 
 .topRow1,
@@ -270,37 +277,68 @@ li {
 }
 
 #ListTable {
-    background-color: #fff;
     border-collapse: collapse;
     width: 100%;
-    max-height: min-content;
 }
 
-#ListTable thead th {
-    background-color: #fff;
+#ListTable thead {
+    position: relative;
+}
+
+#ListTable td {
+    height: 60px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+#ListTable thead tr {
     position: sticky;
     top: 0;
+    height: 50px;
+    z-index: 1;
+    background-color: #B1B5B9;
 }
 
-#ListTable tr,
-#ListTable thead th {
-    box-shadow: 1px 1px 1px rgb(0, 0, 0, 0.1);
+#ListTable thead tr th {
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding: 10px;
 }
 
-#ListTable tr:hover {
-    background-color: #f7f9fb;
-    color: #338cf0;
-}
-
-#ListTable td,
-#ListTable thead th {
-    /* border: 1px solid #ddd; */
-    padding: 8px;
-}
-
-#ListTable span {
+#ListTable .checkBox {
+    min-width: 30px;
+    text-align: center;
+    vertical-align: middle;
+    border: 2px solid black;
     cursor: pointer;
-    padding: 5px;
+    transform: scale(1.1);
+}
+
+#ListTable tbody tr:hover {
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #F7F3F2;
+    color: #3B3B3B;
+    cursor: pointer;
+}
+
+#ListTable td {
+    padding: 10px;
+    max-width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#ListTable td.no-data {
+    height: 200px;
+    text-align: center;
+}
+
+#ListTable td.no-data span {
+    display: block;
+    line-height: 200px;
+    user-select: none;
 }
 
 #searchInput {

@@ -1,4 +1,5 @@
-import { getData, option_fragment } from '../commonFunctions.js';
+import { getData, option_fragment, trackChanges, UpdateAccount } from '../commonFunctions.js';
+import { Elements } from '../declarations.js';
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let leadID = urlParams.get('id');
@@ -14,12 +15,13 @@ const saveLead = document.querySelector("#saveLeadBtn");
 const leadSaveForm = document.querySelector("#createLeadForm");
 
 let url = "/mongodb/leads/" + leadID;
-let Leads, leadSource, clicked = null;
+let Lead, leadSource, clicked = null, Accounts;
 
 async function main() {
-    Leads = await fetchLeads();
+    Lead = await fetchLeads();
+    Accounts = await getData('accounts');
     leadSource = await getData('lead-sources');
-    setFormData(Leads);
+    setFormData(Lead);
     events();
 }
 main();
@@ -40,6 +42,168 @@ async function fetchLeads() {
 function setFormData(data) {
     titleElement.textContent = `Edit - ${data['first-name']} ${data['last-name']}`;
     document.querySelector('#lead-source').appendChild(option_fragment(leadSource, 'name'));
+    document.querySelector('#org-option').appendChild(option_fragment(Accounts, 'org-name'));
+    document.querySelector('#org-option').value = data['org-name'];
+    console.log(data['org-id']);
+    AutoFill(Lead);
+}
+
+function events() {
+    document.querySelector('#org-option').addEventListener('change', (e) => {
+        e.preventDefault();
+        let value = e.target.value;
+        enable_disable_form(e.target)
+        if (value !== '') {
+            let org = Accounts.reduce((found, acc) => {
+                return acc._id === e.target.selectedOptions[0].id ? acc : found;
+            }, null);
+            AutoFill(org)
+            document.querySelector('#designation').value = Lead.designation;
+        } else {
+            Elements.orgName().removeAttribute('required', '');
+            Elements.orgName().value = '';
+            orgForm.reset();
+        }
+    })
+    // cancel Button
+    cancel.addEventListener("click", () => {
+        window.location.href = "/templates/leads/viewleadDetail.html?id=" + leadID;
+    })
+    flatpickr('#date-created', {
+        dateFormat: "M d, Y"
+    });
+    saveLead.addEventListener("click", () => {
+        clicked = 1;
+        leadSaveForm.requestSubmit();
+    })
+    leadSaveAndNew.addEventListener("click", () => {
+        clicked = 0;
+        leadSaveForm.requestSubmit();
+    })
+
+    leadSaveForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const subFormData = new FormData(orgForm);
+        for (const [key, value] of subFormData.entries()) {
+            formData.append(key, value);
+        }
+        let object_lead = Object.fromEntries(formData.entries());
+        let object_account = Object.fromEntries(subFormData.entries());
+        object_lead['org-id'] = document.querySelector('#org-option').selectedOptions[0].id
+        object_lead['designation'] = subFormData.get('designation');
+        delete object_account['designation'];
+
+        let lastName = checkRequired(lastNameInput);
+        let Email = checkRequired(emailInput);
+        let Phone = checkRequired(phoneInput)
+        if (lastName && Email && Phone) {
+            let track = trackChanges(object_lead, Lead);
+            if (Object.keys(track).length > 0) {
+                await handleLeadUpdate(Lead, object_lead, Accounts);
+            } else {
+                alert('No Changes Found!')
+            }
+        }
+    })
+}
+function enable_disable_form(item) {
+    if (item.value !== '') {
+        Elements.orgName().closest('.form-field').classList.remove('hidden-field');
+        document.querySelector('.org-section').classList.remove('hidden-field')
+    } else {
+        document.querySelector('.org-section').classList.add('hidden-field')
+        Elements.orgName().closest('.form-field').classList.add('hidden-field');
+    }
+}
+// Save lead
+async function updateRecord(updatedLead) {
+    try {
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedLead)
+        })
+        if (!response.ok) throw new Error(response.statusText);
+        alert("Updated Successfully");
+        return await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+        alert("Failed to add lead. Please try again.")
+    }
+}
+
+function checkRequired(tag) {
+    let val = tag.value;
+    if (val === "") {
+        // setError(tag, "required");
+        tag.setCustomValidity('Enter a Value!')
+        tag.reportValidity();
+        return false;
+    } else {
+        setSuccess(tag);
+        switch (tag.id) {
+            case "phone":
+                if (!checkPhone(val, tag)) return;
+                break;
+            case "email":
+                if (!checkMail(val, tag)) return;
+                break;
+            case 'org-name':
+                if (!checkOrg(val, tag)) return;
+                break;
+            default:
+                break;
+        }
+        tag.setCustomValidity('')
+        return true;
+    }
+}
+
+
+function setError(tag, message) {
+    tag.placeholder = message;
+    tag.classList.add("errorInput");
+}
+function setSuccess(tag) {
+    tag.placeholder = "";
+    tag.classList.remove("errorInput");
+}
+
+function checkPhone(phone, tag) {
+    if (/\D/.test(phone)) {
+        setError(tag, "Phone Number should contain numbers only.");
+        return false;
+    }
+    if (!/^[6-9]\d{9}/.test(phone)) {
+        setError(tag, "Phone number should start with 6-9.");
+        return false;
+    }
+    setSuccess(tag)
+    return true;
+}
+function checkMail(email, tag) {
+    if (!/^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        setError(tag, "Invalid Email");
+        return false;
+    }
+    setSuccess(tag);
+    return true;
+}
+function checkOrg(name, tag) {
+    for (const acc of Accounts) {
+        if (acc['org-name'].toLowerCase().includes(name.toLowerCase())) {
+            setError(tag, 'Account Name Already exists! try different')
+            return false;
+        }
+    }
+    setSuccess(tag);
+    return true;
+}
+
+function AutoFill(data) {
     Object.keys(data).forEach(key => {
         const value = data[key];
         const field = document.querySelector(`[name="${key}"], #${key}`);
@@ -60,116 +224,52 @@ function setFormData(data) {
     });
 }
 
-function events() {
-    // cancel Button
-    cancel.addEventListener("click", () => {
-        window.location.href = "/templates/leads/viewleadDetail.html?id=" + leadID;
-    })
-    flatpickr('#date-created', {
-        dateFormat: "M d, Y"
-    });
-    document.querySelector('#org-name').addEventListener('input', (e) => {
-        enable_disable_form(e.target);
-    })
-    saveLead.addEventListener("click", () => {
-        clicked = 1;
-        leadSaveForm.requestSubmit();
-    })
-    leadSaveAndNew.addEventListener("click", () => {
-        clicked = 0;
-        leadSaveForm.requestSubmit();
-    })
+// Ensure all necessary updates happen based on the lead and current account changes
+async function handleLeadUpdate(lead, current, accounts) {
+    let success = false;
 
-    leadSaveForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const subFormData = new FormData(orgForm);
-        for (const [key, value] of subFormData.entries()) {
-            formData.append(key, value);
+    // If the org-id is unchanged, update the lead directly
+    if (lead['org-id'] === current['org-id']) {
+        success = await updateRecord(current);
+    }
+    // If the current org-id is empty but the lead has an org-id, remove the lead from the associated account
+    else if (current['org-id'] === '' && lead['org-id'] !== '') {
+        const oldAccount = accounts.find(a => a._id === lead['org-id']);
+        if (oldAccount) {
+            oldAccount.leads = oldAccount.leads.filter(item => item !== leadID);
+            const accountUpdated = await UpdateAccount(lead['org-id'], oldAccount);
+            if (accountUpdated) {
+                success = await updateRecord(current);
+            }
         }
-        let lastName = checkRequired(lastNameInput);
-        let Email = checkRequired(emailInput);
-        let Phone = checkRequired(phoneInput)
-        if (lastName && Email && Phone) {
-            await updateRecord(formData);
+    }
+    // If the org-id has changed
+    else if (lead['org-id'] !== current['org-id']) {
+        // Remove the lead from the old account, if present
+        if (lead['org-id'] !== '') {
+            const oldAccount = accounts.find(a => a._id === lead['org-id']);
+            if (oldAccount) {
+                oldAccount.leads = oldAccount.leads.filter(item => item !== leadID);
+                await UpdateAccount(lead['org-id'], oldAccount);
+            }
         }
-    })
-}
-function enable_disable_form(item) {
-    if (item.value !== '') {
-        document.querySelector('.org-section').classList.remove('hidden-field')
-        document.querySelector('.org-section').classList.add('reset-hidden')
-    } else {
-        document.querySelector('.org-section').classList.add('hidden-field')
-        document.querySelector('.org-section').classList.remove('reset-hidden')
-        orgForm.reset();
-    }
-}
-// Save lead
-async function updateRecord(updatedLead) {
-    try {
-        const response = await fetch(url, {
-            method: "PUT",
-            body: updatedLead
-        })
-        if (!response.ok) throw new Error(response.statusText);
-        alert("Updated Successfully");
-        clicked ? window.location.href = '/templates/leads/viewleadDetail.html?id=' + leadID : window.location.href = "/templates/leads/createleads.html";
-    } catch (error) {
-        console.error('Error:', error);
-        alert("Failed to add lead. Please try again.")
-    }
-}
 
-function checkRequired(tag) {
-    let val = tag.value;
-    if (val === "") {
-        setError(tag, "required");
-        showAlert("Please Fill out Required Fields")
-        return;
-    } else {
-        setSuccess(tag);
-        switch (tag.id) {
-            case "phone":
-                if (!checkphone(val, tag)) return;
-                break;
-            case "email":
-                if (!checkemail(val, tag)) return;
-                break;
-            default:
-                console.log("Error");
+        // Add the lead to the new account
+        if (current['org-id'] !== '') {
+            const newAccount = accounts.find(a => a._id === current['org-id']);
+            if (newAccount) {
+                newAccount.leads.push(leadID);
+                const accountUpdated = await UpdateAccount(current['org-id'], newAccount);
+                if (accountUpdated) {
+                    success = await updateRecord(current);
+                }
+            }
         }
-        return val;
+    }
+
+    // Redirect to lead detail page if the update was successful
+    if (success) {
+        window.location.href = `/templates/leads/viewleadDetail.html?id=${leadID}`;
     }
 }
 
-
-function setError(tag, message) {
-    tag.placeholder = message;
-    tag.classList.add("errorInput");
-}
-function setSuccess(tag) {
-    tag.placeholder = "";
-    tag.classList.remove("errorInput");
-}
-
-function checkphone(phone, tag) {
-    if (/\D/.test(phone)) {
-        setError(tag, "Phone Number should contain numbers only.");
-        return false;
-    }
-    if (!/^[6-9]\d{9}/.test(phone)) {
-        setError(tag, "Phone number should start with 6-9.");
-        return false;
-    }
-    setSuccess(tag)
-    return true;
-}
-function checkemail(email, tag) {
-    if (!/^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(email)) {
-        setError(tag, "Invalid Email");
-        return false;
-    }
-    setSuccess(tag);
-    return true;
-}
