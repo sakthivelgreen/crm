@@ -44,7 +44,6 @@ function setFormData(data) {
     document.querySelector('#lead-source').appendChild(option_fragment(leadSource, 'name'));
     document.querySelector('#org-option').appendChild(option_fragment(Accounts, 'org-name'));
     document.querySelector('#org-option').value = data['org-name'];
-    console.log(data['org-id']);
     AutoFill(Lead);
 }
 
@@ -70,7 +69,12 @@ function events() {
         window.location.href = "/templates/leads/viewleadDetail.html?id=" + leadID;
     })
     flatpickr('#date-created', {
-        dateFormat: "M d, Y"
+        clickOpens: false,
+        dateFormat: "M d, Y H:i"
+    });
+    flatpickr('#last-modified', {
+        clickOpens: false,
+        dateFormat: "M d, Y H:i"
     });
     saveLead.addEventListener("click", () => {
         clicked = 1;
@@ -99,7 +103,7 @@ function events() {
         let Phone = checkRequired(phoneInput)
         if (lastName && Email && Phone) {
             let track = trackChanges(object_lead, Lead);
-            if (Object.keys(track).length > 0) {
+            if (Object.keys(track).length > 1) {
                 await handleLeadUpdate(Lead, object_lead, Accounts);
             } else {
                 alert('No Changes Found!')

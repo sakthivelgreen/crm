@@ -1,4 +1,4 @@
-import { getData, objectToFormData, option_fragment, CreateAccount, PostData, UpdateAccount } from '../commonFunctions.js'
+import { getData, option_fragment, CreateAccount, PostData, UpdateAccount } from '../commonFunctions.js'
 import { Elements } from '../declarations.js';
 
 // Cancel Button
@@ -33,7 +33,8 @@ main();
 function events() {
     flatpickr('#date-created', {
         dateFormat: "M d, Y",
-        defaultDate: new Date()
+        defaultDate: new Date(),
+        clickOpens: false,
     });
     document.querySelector('#org-option').addEventListener('change', (e) => {
         e.preventDefault();
@@ -93,6 +94,7 @@ async function createLead(e) {
 
     object_lead['org-id'] = document.querySelector('#org-option').selectedOptions[0].id
     object_lead['designation'] = subFormData.get('designation');
+
     delete object_account['designation'];
 
     let isPhoneValid = checkRequired(phoneInput)

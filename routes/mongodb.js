@@ -23,6 +23,8 @@ router.post('/:module', async (req, res) => {
         const module = req.params.module;
         const collection = db.collection(module);
         const newItem = req.body; // Data from the client
+        newItem['date-created'] = new Date();
+        newItem['last-modified'] = new Date();
         if (newItem._id) {
             let id = newItem._id;
             newItem._id = new ObjectId(id);
@@ -81,6 +83,7 @@ router.put('/:module/:id', async (req, res) => {
         const module = req.params.module;
         const id = req.params.id;
         const updatedData = req.body;
+        updatedData['last-modified'] = new Date();
         const collection = db.collection(module);
         // Update the document by its ID
         const result = await collection.updateOne(

@@ -24,13 +24,11 @@
                 console.log(localStorage.getItem('url'))
                 if (auth_code !== null) {
                     let obj = await accessToken()  // Calling function to get Access Token
-                    await alert("Tokens Generated")
                     window.open(url, "_self");
                 } else if (error == 'access_denied') {
                     alert('Access Denied! redirecting to Homepage');
                     window.location.href = '/';
                 }
-
             }
             main();
             async function accessToken() {
