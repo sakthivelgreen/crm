@@ -3,7 +3,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .content {
@@ -35,7 +35,50 @@ body {
     padding: 30px;
 }
 
-.container {
-    width: 100%;
+.convert-lead__Main-div {
     height: 100%;
+    width: 100%;
+}
+
+.convert-lead__Main-div .container {
+    padding: 20px;
+}
+
+.convert-lead__Main-div .top-ribbon {
+    height: 3em;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: -1px -0.25px 0px 0.5px rgba(0, 0, 0, 0.3);
+}
+
+.convert-lead__Main-div .top-ribbon .top-ribbon__left {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 15px;
+    font-weight: normal;
+}
+
+.top-ribbon__left h3 {
+    font-weight: 600;
+}
+
+.deal-box {
+    width: 50%;
+}
+
+.cta-btns {
+    margin-top: 20px;
+}
+
+#convert-form #lead-name {
+    margin-left: 15px;
+    background-color: lightslategray;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    user-select: none;
 }

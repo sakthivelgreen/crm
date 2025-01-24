@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/leads.css">
+    <link rel="stylesheet" href="../../css/form.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script type="module" src="/components/navbar.js"></script>
     <title>Convert</title>
 </head>
@@ -15,19 +17,97 @@
         <header>
             <navbar-element></navbar-element>
         </header>
-        <main>
-            <div class="container">
-                <div>
-                    <label for="lead-name">Lead</label>
-                    <input type="text" name="lead-name" id="lead-name" disabled>
-                    <p>Convert to</p>
-                    <button type="button" class="primaryBtn" id="ConvertBtn1">Convert</button>
+        <main class="convert-lead__Main-div">
+            <div class="top-ribbon">
+                <div class="top-ribbon__left">
+                    <h3>Convert Lead</h3>
+                    <span id="name"></span>
                 </div>
+                <div class="top-ribbon__right"></div>
+            </div>
+            <div class="container">
+                <form id="convert-form" novalidate>
+                    <div class="">
+                        <div>
+                            <span>Create New Contact</span>
+                            <span id="lead-name"></span>
+                        </div>
+                        <div>
+                            <br>
+                            <label for="create-deal"><input type="checkbox" name="create-deal" id="create-deal"> Create
+                                New
+                                Deal for this Account</label>
+                        </div>
+                        <div class="deal-box hidden-field">
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="deal-amount">Amount</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="number" name="deal-amount" id="deal-amount" class="field" required>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="deal-name">Deal Name</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="deal-name" id="deal-name" class="field" required>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="closing-date">Closing Date</label>
+                                    </div>
+                                    <div class="value">
+                                        <input type="text" name="closing-date" id="closing-date" class="field" required>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="pipeline">Pipeline</label>
+                                    </div>
+                                    <div class="value">
+                                        <select name="pipeline" id="pipeline" class="field"></select>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-field">
+                                <div class="field-container">
+                                    <div class="label">
+                                        <label for="stage">Stage</label>
+                                    </div>
+                                    <div class="value">
+                                        <select name="stage" id="stage" class="field"></select>
+                                        <div class="field-error hidden-visibility">error</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cta-btns">
+                            <button type="submit" class="primaryBtn" id="cta-convert-to-btn">Convert</button>
+                            <button type="button" class="defaultBtn" id="cta-cancel">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+
             </div>
         </main>
 
     </div>
-    <script src="/js/leads/convertlead.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="/js/leads/convertlead.js" type="module"></script>
 </body>
 
 </html>

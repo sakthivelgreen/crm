@@ -89,9 +89,7 @@ function events() {
         e.preventDefault();
         const formData = new FormData(e.target);
         const subFormData = new FormData(orgForm);
-        for (const [key, value] of subFormData.entries()) {
-            formData.append(key, value);
-        }
+
         let object_lead = Object.fromEntries(formData.entries());
         let object_account = Object.fromEntries(subFormData.entries());
         object_lead['org-id'] = document.querySelector('#org-option').selectedOptions[0].id

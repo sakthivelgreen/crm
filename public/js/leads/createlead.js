@@ -122,7 +122,7 @@ async function createLead(e) {
 
             // update lead id to account
             object_account['leads'].push(leadID);
-            result = await UpdateAccount(org_id, subFormData);
+            result = await UpdateAccount(org_id, object_account);
 
             if (result) clicked ? window.location.href = '/templates/leads/viewleadDetail.html?id=' + leadID : window.location.href = "/templates/leads/createleads.html";
             break;
@@ -220,15 +220,17 @@ function checkOrg(name, tag) {
 
 function AutoFill(data) {
     Object.keys(data).forEach(key => {
-        const value = data[key];
-        const field = document.querySelector(`[name="${key}"], #${key}`);
-        if (field) {
-            // If the field is a checkbox or radio button
-            if (field.type === 'checkbox' || field.type === 'radio') {
-                field.checked = value;
-            } else {
-                // Otherwise, for inputs, textareas, selects, set the value
-                field.value = value;
+        if (key !== 'date-created' || key !== 'last-modified') {
+            const value = data[key];
+            const field = document.querySelector(`[name="${key}"], #${key}`);
+            if (field) {
+                // If the field is a checkbox or radio button
+                if (field.type === 'checkbox' || field.type === 'radio') {
+                    field.checked = value;
+                } else {
+                    // Otherwise, for inputs, textareas, selects, set the value
+                    field.value = value;
+                }
             }
         }
     })

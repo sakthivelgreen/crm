@@ -112,7 +112,10 @@ export async function processMails(id, module) {
 
 export async function getData(module) {
     try {
-        let response = await fetch(`/mongodb/${module}`);
+        let response = await fetch(`/mongodb/${module}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'applications/json' }
+        });
         if (!response.ok) throw new Error(response.statusText);
         return await response.json();
     } catch (error) {

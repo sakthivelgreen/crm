@@ -7,6 +7,7 @@
         align-items: flex-start;
         justify-items: space-between;
         gap: 15px;
+        margin-bottom: 15px;
     }
 
     .field-container .label {
@@ -22,7 +23,7 @@
         width: 100%;
         height: 100%;
         border: 1px solid gray;
-        border-radius: 3px;
+        border-radius: 4px;
         transition: box-shadow 0.3s ease;
         padding: 0px 10px;
     }
@@ -62,7 +63,7 @@
     .form-field {
         width: 100%;
         height: 40px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
 
     .field-container {
@@ -89,9 +90,9 @@
 
     .field-container .value .field {
         width: 100%;
-        height: 100%;
+        height: 32px;
         border: 1px solid gray;
-        border-radius: 3px;
+        border-radius: 4px;
         transition: box-shadow 0.3s ease;
         padding: 0px 10px;
     }
@@ -110,5 +111,10 @@
         color: #FF5D5A;
         height: 15px;
         font-size: 12px;
+    }
+
+    input[type='checkbox'] {
+        cursor: pointer;
+        transform: scale(1.1);
     }
 }
