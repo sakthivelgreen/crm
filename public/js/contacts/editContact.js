@@ -1,220 +1,169 @@
-// import { deleteID } from "./contactModule.js";
-
+import { getData, option_fragment, trackChanges, UpdateAccount } from '../commonFunctions.js';
+import { Elements } from '../declarations.js';
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let contactID = urlParams.get('id');
 
-const orgID = document.getElementById("orgID");
-const oldID = document.getElementById("findID");
-const firstnameInput = document.querySelector("#firstname");
-const lastnameInput = document.querySelector("#lastname");
+const lastNameInput = document.querySelector("#last-name");
 const emailInput = document.querySelector("#email");
-const companynameInput = document.querySelector("#companyname");
 const phoneInput = document.querySelector("#phone");
-const productInput = document.querySelector("#product");
-const addressInput = document.querySelector("#address");
-const designationInput = document.querySelector("#designation");
-const orgPhoneInput = document.querySelector("#orgPhone");
-const orgEmailInput = document.querySelector("#orgEmail");
-const orgIncomeInput = document.querySelector("#orgIncome");
-const orgAddressInput = document.querySelector("#orgAddress");
-let errorSpan = document.querySelector("#accError");
-const contactSaveandNew = document.querySelector("#btnSaveAndNew");
+const titleElement = document.querySelector('title');
+const cancel = document.querySelector("#cancelBtn");
+const orgForm = document.querySelector('#org-form');
+const contactSaveAndNew = document.querySelector("#btnSaveAndNew");
+const saveContact = document.querySelector("#saveContactBtn");
+const contactSaveForm = document.querySelector("#createContactForm");
 
 let url = "/mongodb/contacts/" + contactID;
-fetchContacts();
+let Contact, contactSource, clicked = null, Accounts;
+
+async function main() {
+    Contact = await fetchContacts();
+    Accounts = await getData('accounts');
+    contactSource = await getData('contact-sources');
+    setFormData(Contact);
+    events();
+}
+main();
+
 async function fetchContacts() {
-    let contacts = [];
     try {
         const response = await fetch(url, {
             method: "GET",
             headers: { "Content-Type": "application/json" }
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        contacts = await response.json();
-
-        let orgId = oldID.value = contacts["organisation_id"];
-
-        let response2;
-        if (orgId.length !== 0) {
-            response2 = await fetch("/mongodb/accounts/" + orgId)
-            if (!response2.ok) throw new Error("Error in fetching account " + response2.statusText);
-        }
-        let org = response2 !== undefined ? await response2.json() : 0;
-
-        setContacts(contacts, org);
-
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        return await response.json();
     } catch (error) {
-        console.error('Error fetching leads:', error);
-    }
-}
-const titleElement = document.querySelector('title');
-function setContacts(contact, org) {
-    titleElement.textContent = `Edit - ${contact.firstname} ${contact.lastname}`;
-    if (org !== 0) {
-        orgPhoneInput.value = org["organisation_phone"];
-        orgEmailInput.value = org["organisation_email"];
-        orgIncomeInput.value = org["organisation_income"];
-        orgAddressInput.value = org["organisation_address"];
-        orgID.value = org._id
-    }
-
-    for (const key in contact) {
-        if (key === "id") continue;
-        switch (key) {
-            case "firstname":
-                firstnameInput.value = contact[key];
-                break;
-            case "lastname":
-                lastnameInput.value = contact[key];
-                break;
-            case "email":
-                emailInput.value = contact[key];
-                break;
-            case "phone":
-                phoneInput.value = contact[key];
-                break;
-            case "companyname":
-                companynameInput.value = contact[key];
-                break;
-            case "designation":
-                designationInput.value = contact[key];
-                break;
-            case "product":
-                productInput.value = contact[key];
-                break;
-            case "address":
-                addressInput.value = contact[key];
-                break;
-            default:
-                console.log(key);
-                console.log("default in set Contacts field function")
-        }
-
+        console.error('Error fetching contacts:', error);
     }
 }
 
-// cancel Button
-const cancel = document.querySelector("#cancelBtn");
-cancel.addEventListener("click", () => {
-    window.location.href = "/templates/contacts/viewContactDetail.html?id=" + contactID;
-})
+function setFormData(data) {
+    titleElement.textContent = `Edit - ${data['first-name']} ${data['last-name']}`;
+    document.querySelector('#contact-source').appendChild(option_fragment(contactSource, 'name'));
+    document.querySelector('#org-option').appendChild(option_fragment(Accounts, 'org-name'));
+    document.querySelector('#org-option').value = data['org-name'];
+    AutoFill(Contact);
+}
 
-// Save contact
-const saveContact = document.querySelector("#saveContactBtn");
-const contactSaveForm = document.querySelector("#createContactForm");
-
-let clicked = null;
-
-saveContact.addEventListener("click", () => {
-    clicked = 1;
-    contactSaveForm.requestSubmit();
-})
-contactSaveandNew.addEventListener("click", () => {
-    clicked = 0;
-    contactSaveForm.requestSubmit();
-})
-
-contactSaveForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    let lastName = checkRequired(lastnameInput);
-    let Email = checkRequired(emailInput);
-    let Phone = checkRequired(phoneInput)
-    let firstName = firstnameInput.value;
-    let companyName = companynameInput.value;
-    let Address = addressInput.value;
-    let Designation = designationInput.value;
-    let Product = productInput.value;
-
-    let updateContact = {
-        firstname: firstName,
-        lastname: lastName,
-        email: Email,
-        phone: Phone,
-        address: Address,
-        designation: Designation,
-        product: Product,
-        organisation_id: [],
-        companyname: ""
-    }
-
-    if ((lastName && Email && Phone !== "") && oldID.value === "" && orgID.value !== "") {
-        updateContact.companyname = companyName;
-        updateContact["organisation_id"].push(orgID.value);
-        await funPostAccount(contactID, orgID.value, "PUT", "PUSH");
-        await updateRecord(updateContact);
-    }
-    if (lastName && Email && Phone !== "") {
-        if ((oldID.value !== "") && oldID.value !== orgID.value && (orgID.value !== "")) {
-            updateContact.companyname = companyName;
-            updateContact["organisation_id"].push(orgID.value);
-            await funPostAccount(contactID, orgID.value, "PUT", "PUSH");
-            await funPostAccount(contactID, oldID.value, "PUT", "POP");
-            await updateRecord(updateContact);
-        }
-    }
-    if ((lastName && Email && Phone !== "") && (oldID.value === "") && (orgID === "")) {
-        await updateRecord(updateContact);
-    }
-    if ((lastName && Email && Phone !== "") && (oldID.value !== "") && (orgID.value === "")) {
-        await funPostAccount(contactID, oldID.value, "PUT", "POP");
-        await updateRecord(updateContact);
-    }
-    // if (lastName && Email && Phone !== "") await updateRecord(updateContact);
-})
-
-async function updateRecord(updateContact) {
-    let obj = {};
-    obj = Object.assign(obj, updateContact);
-    delete obj._id;
-    try {
-        const contactFetch = await fetch(url, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(obj)
-        })
-        if (contactFetch.ok) {
-            showAlert("Updated Successfully");
-            clicked ? window.location.href = '/templates/contacts/viewContactDetail.html?id=' + contactID : window.location.href = "/templates/contacts/createContact.html";
+function events() {
+    document.querySelector('#org-option').addEventListener('change', (e) => {
+        e.preventDefault();
+        let value = e.target.value;
+        enable_disable_form(e.target)
+        if (value !== '') {
+            let org = Accounts.reduce((found, acc) => {
+                return acc._id === e.target.selectedOptions[0].id ? acc : found;
+            }, null);
+            delete org['last-modified']
+            delete org['date-created']
+            AutoFill(org)
+            document.querySelector('#designation').value = Contact.designation;
         } else {
-            throw new Error('Failed to add contact: ' + contactFetch.statusText);
+            Elements.orgName().removeAttribute('required', '');
+            Elements.orgName().value = '';
+            orgForm.reset();
         }
+    })
+    // cancel Button
+    cancel.addEventListener("click", () => {
+        window.location.href = "/templates/contacts/viewcontactDetail.html?id=" + contactID;
+    })
+    flatpickr('#date-created', {
+        clickOpens: false,
+        dateFormat: "M d, Y H:i"
+    });
+    flatpickr('#last-modified', {
+        clickOpens: false,
+        dateFormat: "M d, Y H:i"
+    });
+    saveContact.addEventListener("click", () => {
+        clicked = 1;
+        contactSaveForm.requestSubmit();
+    })
+    contactSaveAndNew.addEventListener("click", () => {
+        clicked = 0;
+        contactSaveForm.requestSubmit();
+    })
+
+    contactSaveForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const subFormData = new FormData(orgForm);
+
+        let object_contact = Object.fromEntries(formData.entries());
+        let object_account = Object.fromEntries(subFormData.entries());
+        object_contact['org-id'] = document.querySelector('#org-option').selectedOptions[0].id
+        object_contact['designation'] = subFormData.get('designation');
+        object_contact['email-opt'] = formData.get('email-opt') === 'on' ? true : false;
+        delete object_account['designation'];
+
+        let lastName = checkRequired(lastNameInput);
+        let Email = checkRequired(emailInput);
+        let Phone = checkRequired(phoneInput)
+        if (lastName && Email && Phone) {
+            let track = trackChanges(object_contact, Contact);
+            if (Object.keys(track).length > 1) {
+                await handleContactUpdate(Contact, object_contact, Accounts);
+            } else {
+                alert('No Changes Found!')
+            }
+        }
+    })
+}
+function enable_disable_form(item) {
+    if (item.value !== '') {
+        Elements.orgName().closest('.form-field').classList.remove('hidden-field');
+        document.querySelector('.org-section').classList.remove('hidden-field')
+    } else {
+        document.querySelector('.org-section').classList.add('hidden-field')
+        Elements.orgName().closest('.form-field').classList.add('hidden-field');
+    }
+}
+// Save contact
+async function updateRecord(updatedContact) {
+    try {
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedContact)
+        })
+        if (!response.ok) throw new Error(response.statusText);
+        alert("Updated Successfully");
+        return await response.json();
     } catch (error) {
         console.error('Error:', error);
-        showAlert("Failed to add contact. Please try again.")
+        alert("Failed to add contact. Please try again.")
     }
-}
-
-
-
-function showAlert(message) {
-    window.alert(message);
 }
 
 function checkRequired(tag) {
     let val = tag.value;
     if (val === "") {
-        setError(tag, "required");
-        showAlert("Please Fill out Required Fields")
+        // setError(tag, "required");
+        tag.setCustomValidity('Enter a Value!')
+        tag.reportValidity();
         return false;
     } else {
         setSuccess(tag);
         switch (tag.id) {
             case "phone":
-                if (!checkphone(val, tag)) return;
+                if (!checkPhone(val, tag)) return;
                 break;
             case "email":
-                if (!checkemail(val, tag)) return;
+                if (!checkMail(val, tag)) return;
+                break;
+            case 'org-name':
+                if (!checkOrg(val, tag)) return;
                 break;
             default:
-                return tag.value;
+                break;
         }
-
-        return val;
+        tag.setCustomValidity('')
+        return true;
     }
 }
 
@@ -228,7 +177,7 @@ function setSuccess(tag) {
     tag.classList.remove("errorInput");
 }
 
-function checkphone(phone, tag) {
+function checkPhone(phone, tag) {
     if (/\D/.test(phone)) {
         setError(tag, "Phone Number should contain numbers only.");
         return false;
@@ -240,7 +189,7 @@ function checkphone(phone, tag) {
     setSuccess(tag)
     return true;
 }
-function checkemail(email, tag) {
+function checkMail(email, tag) {
     if (!/^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/.test(email)) {
         setError(tag, "Invalid Email");
         return false;
@@ -248,216 +197,90 @@ function checkemail(email, tag) {
     setSuccess(tag);
     return true;
 }
-
-//  companyname dropDown
-let searchAccount;
-let accountExist = false;
-const dropDownDiv = document.createElement("div");
-const parentDiv = companynameInput.parentElement;
-const divNewAccount = document.createElement("div");
-const newAccountAnchor = document.createElement("a");
-newAccountAnchor.textContent = `New Account`;
-divNewAccount.appendChild(newAccountAnchor);
-divNewAccount.style.cssText = `
-border-bottom : 1px solid black;
-
-text-align: center;
-`;
-newAccountAnchor.style.cssText = `
-cursor:pointer;
-padding: 15px;
-margin:10px;
-color: rgba(51, 140, 240, 0.7)
-`;
-const ulAccount = document.createElement("ul");
-dropDownDiv.appendChild(divNewAccount);
-dropDownDiv.appendChild(ulAccount);
-ulAccount.style.cssText = `
-overflow: "auto",
-height : 200px; 
-`;
-
-companynameInput.addEventListener("click", () => {
-    parentDiv.appendChild(dropDownDiv)
-    dropDownDiv.className = "dropdownmenu";
-})
-companynameInput.addEventListener("blur", () => {
-    setTimeout(() => {
-        parentDiv.removeChild(dropDownDiv);
-    }, 400);
-})
-
-// account fetch and add data to the list
-let accounts = async () => {
-
-    try {
-        let response = await fetch("/mongodb/accounts", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        if (!response.ok) {
-            throw new Error("Error in fetching accounts");
-
+function checkOrg(name, tag) {
+    for (const acc of Accounts) {
+        if (acc['org-name'].toLowerCase().includes(name.toLowerCase())) {
+            setError(tag, 'Account Name Already exists! try different')
+            return false;
         }
-        let result = await response.json();
-        filterContent(result)
-        dropDown(result)
-        return;
-    } catch (error) {
-
     }
+    setSuccess(tag);
+    return true;
 }
 
-function dropDown(result) {
-    while (ulAccount.hasChildNodes()) {
-        ulAccount.removeChild(ulAccount.firstChild)
-    }
-    result.forEach(object => {
-        const li = document.createElement("li");
-        li.textContent = object.organisation_name;
-        ulAccount.appendChild(li);
-        li.addEventListener("click", () => {
-            accountExist = true;
-            errorSpan.style.display = "none";
-            companynameInput.value = object.organisation_name;
-            orgID.value = object._id;
-            orgAddressInput.value = object.organisation_address;
-            orgEmailInput.value = object.organisation_email;
-            orgPhoneInput.value = object.organisation_phone;
-            orgIncomeInput.value = object.organisation_income;
-        })
+function AutoFill(data) {
+    Object.keys(data).forEach(key => {
+        const value = data[key];
+        const field = document.querySelector(`[name="${key}"], #${key}`);
+
+        if (field) {
+            // If the field is a checkbox or radio button
+            if (field.type === 'checkbox' || field.type === 'radio') {
+                field.checked = value;
+            } else {
+                // Otherwise, for inputs, textareas, selects, set the value
+                field.value = value;
+                if (field.name === 'org-name') {
+                    enable_disable_form(field);
+                }
+            }
+            if (key.includes('date') || key.includes('last-modified')) {
+                flatpickr(field, {
+                    clickOpens: false,
+                    dateFormat: "M d, Y H:i"
+                })
+            }
+        }
+
     });
 }
-accounts()
 
+// Ensure all necessary updates happen based on the contact and current account changes
+async function handleContactUpdate(contact, current, accounts) {
+    let success = false;
 
-let noMatches = document.createElement("li"); // for displaying "no match found" text
-function filterContent(accounts) {
-
-    companynameInput.addEventListener("keyup", () => {
-        let value = companynameInput.value;
-        if (value === "") {
-            companynameInput.value = "";
-            orgID.value = "";
-            orgAddressInput.value = "";
-            orgEmailInput.value = "";
-            orgPhoneInput.value = "";
-            orgIncomeInput.value = "";
-            errorSpan.style.display = "none";
-        }
-        searchAccount = accounts.filter(item => item.organisation_name.toLowerCase().includes(value))
-        if (searchAccount.length === 0) {
-            while (ulAccount.hasChildNodes()) {
-                ulAccount.removeChild(ulAccount.firstChild)
+    // If the org-id is unchanged, update the contact directly
+    if (contact['org-id'] === current['org-id']) {
+        success = await updateRecord(current);
+    }
+    // If the current org-id is empty but the contact has an org-id, remove the contact from the associated account
+    else if (current['org-id'] === '' && contact['org-id'] !== '') {
+        const oldAccount = accounts.find(a => a._id === contact['org-id']);
+        if (oldAccount) {
+            oldAccount.contacts = oldAccount.contacts.filter(item => item !== contactID);
+            const accountUpdated = await UpdateAccount(contact['org-id'], oldAccount);
+            if (accountUpdated) {
+                success = await updateRecord(current);
             }
-            accountExist = false;
-            noMatches.textContent = `No results found`;
-            ulAccount.appendChild(noMatches);
-        }
-        else dropDown(searchAccount)
-    })
-
-}
-
-// for creating account in pop-up menu
-const accPopup = document.querySelector("#popupAcc");
-const cancelPopup = document.getElementById("cancelPopup");
-cancelPopup.onclick = () => accPopup.close()
-
-
-newAccountAnchor.addEventListener("click", (e) => {
-    e.preventDefault();
-    document.querySelector(".dialogContainer").style.display = "block";
-    accPopup.showModal()
-});
-
-const accCreateAnchor = document.querySelector("#createAccount");
-accCreateAnchor.addEventListener("click", (e) => {
-    e.preventDefault();
-    document.querySelector(".dialogContainer").style.display = "block";
-    accPopup.showModal()
-})
-
-// inputs
-const accNameInput = document.querySelector("#accName")
-const accEmailInput = document.querySelector("#accEmail")
-const accIncomeInput = document.querySelector("#accIncome")
-
-const createAccount = document.querySelector("#quickAcc");
-createAccount.addEventListener("submit", (e) => {
-    e.preventDefault();
-    let accObj = {};
-    let accName = checkRequired(accNameInput);
-    let accEmail = checkRequired(accEmailInput);
-    let accIncome = checkRequired(accIncomeInput);
-    if (accName && accEmail && accIncome !== "") {
-        accObj = {
-            organisation_name: accName,
-            organisation_email: accEmail,
-            organisation_phone: "",
-            organisation_address: "",
-            organisation_income: accIncome,
-            contacts: []
-        }
-        let success = funPostAccount(accObj, 200, "POST", null);
-        if (success) {
-            accPopup.close()
         }
     }
-})
-
-async function funPostAccount(obj, account, method, operation) {
-    let res = {};
-    res = Object.assign(res, obj);
-    delete res._id;
-    if (method === "POST") {
-        try {
-            let response = await fetch("/mongodb/accounts", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(res)
-            })
-            if (account === 200) return true;
-            let result = await response.json();
-            return result.id;
-        } catch (error) {
-            alert("Error Creating Account!")
-            throw new Error(error);
-        }
-    } else if (method === "PUT") {
-        try {
-            let response = await fetch("/mongodb/accounts/" + account, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            if (!response.ok) throw new Error("Error in updating contacts id accounts module " + response.statusText);
-            let result = await response.json();
-            if (operation === "PUSH") result["contacts"].push(obj);
-            else if (operation === "POP") result["contacts"].pop(obj);
-            try {
-                delete result._id;
-                console.log(result);
-                let response2 = await fetch("/mongodb/accounts/" + account, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(result)
-                })
-                if (!response2.ok) throw new Error("Error in updating contacts id accounts module " + response2.statusText);
-
-            } catch (error) {
-                throw new Error(error);
+    // If the org-id has changed
+    else if (contact['org-id'] !== current['org-id']) {
+        // Remove the contact from the old account, if present
+        if (contact['org-id'] !== '') {
+            const oldAccount = accounts.find(a => a._id === contact['org-id']);
+            if (oldAccount) {
+                oldAccount.contacts = oldAccount.contacts.filter(item => item !== contactID);
+                await UpdateAccount(contact['org-id'], oldAccount);
             }
-        } catch (error) {
-            throw new Error(error);
         }
-        // clicked ? window.location.href = '/templates/contacts.html' : window.location.href = "/templates/leads/createleads.html";
+
+        // Add the contact to the new account
+        if (current['org-id'] !== '') {
+            const newAccount = accounts.find(a => a._id === current['org-id']);
+            if (newAccount) {
+                newAccount.contacts.push(contactID);
+                const accountUpdated = await UpdateAccount(current['org-id'], newAccount);
+                if (accountUpdated) {
+                    success = await updateRecord(current);
+                }
+            }
+        }
+    }
+
+    // Redirect to contact detail page if the update was successful
+    if (success) {
+        window.location.href = `/templates/contacts/viewcontactDetail.html?id=${contactID}`;
     }
 }
+
