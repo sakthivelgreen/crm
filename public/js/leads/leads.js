@@ -1,5 +1,5 @@
 import { ContactMap, DealMap, LeadMap, OrgMap } from "../../mappings/keyMap.js";
-import { Delete_Record, getData, table_fragment, option_fragment_array } from "../commonFunctions.js";
+import { Delete_Record, getData, table_fragment, option_fragment_array, Filter_ID, UpdateAccount } from "../commonFunctions.js";
 import { buttons, Elements } from '../declarations.js';
 // create a lead (redirects to lead creation page)
 const createLeadBtn = document.querySelector("#createLeadBtn");
@@ -7,9 +7,10 @@ const Table = document.querySelector("#ListTable");
 
 // setting table head value from object by converting array
 const table_headers = ["First Name", "Last Name", "Email", "Phone", "Organization", "Date Created"]
-let Leads;
+let Leads, Accounts;
 async function main() {
     Leads = await getData('leads');
+    Accounts = await getData('accounts')
     Table.appendChild(table_fragment(table_headers, Leads))
     events();
     filterFunction();
@@ -37,6 +38,10 @@ function events() {
             if (confirmDel) {
                 let deletionResults = [];  // To track successes and failures
 
+                const updateAccounts = checkBoxArray.map(id => {
+                    let obj = Filter_ID(Accounts, id, 'leads');
+                    return UpdateAccount(obj._id, obj)
+                })
                 // Create an array of promises that will delete all records
                 const deletePromises = checkBoxArray.map(id => {
 
@@ -52,6 +57,7 @@ function events() {
 
                 try {
                     // Wait for all promises to be resolved using Promise.all
+                    await Promise.all(updateAccounts);
                     await Promise.all(deletePromises);
 
                     // After all deletion attempts are made, handle the results

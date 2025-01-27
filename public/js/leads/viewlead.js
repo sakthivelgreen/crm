@@ -1,17 +1,20 @@
 import { declarations } from './leadDeclarations.js';
 import rightPopUp from '../../components/rightPopup.js';
-import { processMails } from "../commonFunctions.js";
+import { processMails, UpdateAccount, getData, Filter_ID } from "../commonFunctions.js";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let leadID = urlParams.get('id');
 let isRunning = false;
-let leads;
+let leads, Accounts;
 const backBtn = document.querySelector("#backArrowBtn");
 backBtn.addEventListener("click", () => {
     window.location.href = `/templates/leads.html`;
 })
-
+main();
+async function main() {
+    Accounts = await getData('accounts');
+}
 
 let url = "/mongodb/leads/" + leadID;
 
@@ -90,9 +93,16 @@ optionBtn.onblur = () => {
 
 // Delete Lead 
 const deleteLead = document.querySelector("#deleteBtn");
-deleteLead.addEventListener("click", (e) => {
+deleteLead.addEventListener("click", async (e) => {
     let confirmation = confirm("Are you sure? Delete Lead");
     if (confirmation) {
+        try {
+            let obj = Filter_ID(Accounts, leadID, 'leads');
+            await UpdateAccount(obj._id, obj)
+        } catch (error) {
+            console.error(error)
+            throw new Error(error);
+        }
         try {
             fetch(url, {
                 method: "DELETE"

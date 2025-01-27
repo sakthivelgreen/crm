@@ -313,3 +313,15 @@ export async function UpdateAccount(id, data) {
         alert("Failed to Update Account. Please try again.")
     }
 }
+
+export function Filter_ID(object, id, key) {
+    if (Array.isArray(object)) {
+        let result = object.find(item => item[key] == id);
+        if (result && Array.isArray(result[key])) result[key] = result[key].filter(itemID => id !== itemID)
+        return result;
+    } else if (typeof object === 'object' && object !== null) {
+        if (Array.isArray(object[key])) object[key] = object[key].filter(itemID => itemID != id)
+        return object;
+    }
+    return null;
+}
