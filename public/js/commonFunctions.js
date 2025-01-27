@@ -259,9 +259,9 @@ export async function Delete_Record(module, id) {
     }
 }
 
-export async function PostData(data) {
+export async function PostData(data, module) {
     try {
-        const response = await fetch("/mongodb/leads", {
+        const response = await fetch(`/mongodb/${module}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

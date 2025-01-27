@@ -57,7 +57,7 @@ function getContacts(contact) {
 
     titleElement.textContent = `${keyMap.name(contact)} (contact) - Zoho CRM`;
     for (const key in contact) {
-        if (key === "_id" || key === 'organisation_id') continue;
+        // if (key === "_id" || key === 'organisation_id') continue;
         const tr = document.createElement("tr");
         const td1 = document.createElement("td");
         const td2 = document.createElement("td");

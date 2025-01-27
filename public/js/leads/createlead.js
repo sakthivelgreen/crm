@@ -118,7 +118,7 @@ async function createLead(e) {
 
             // create new lead
             object_lead['org-id'] = org_id;
-            leadID = await PostData(object_lead);
+            leadID = await PostData(object_lead, 'leads');
 
             // update lead id to account
             object_account['leads'].push(leadID);
@@ -127,13 +127,13 @@ async function createLead(e) {
             if (result) clicked ? window.location.href = '/templates/leads/viewleadDetail.html?id=' + leadID : window.location.href = "/templates/leads/createleads.html";
             break;
         case '':
-            result = await PostData(object_lead);
+            result = await PostData(object_lead, 'leads');
             if (result) clicked ? window.location.href = '/templates/leads/viewleadDetail.html?id=' + result : window.location.href = "/templates/leads/createleads.html";
             break;
         default:
             let acc_id = document.querySelector('#org-option').selectedOptions[0].id;;
             let data = Accounts.find((acc) => acc._id == acc_id);
-            leadID = await PostData(object_lead);
+            leadID = await PostData(object_lead, 'leads');
             data['leads'].push(leadID);
             delete data._id;
             result = await UpdateAccount(acc_id, data)

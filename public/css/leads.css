@@ -31,20 +31,24 @@ body {
     grid-template-columns: 1fr 1fr;
 }
 
-.createLeadContainer {
+.createLeadContainer,
+.createContactContainer {
     padding: 30px;
 }
 
-.convert-lead__Main-div {
+.convert-lead__Main-div,
+.convert-contact__Main-div {
     height: 100%;
     width: 100%;
 }
 
-.convert-lead__Main-div .container {
+.convert-lead__Main-div .container,
+.convert-contact__Main-div .container {
     padding: 20px;
 }
 
-.convert-lead__Main-div .top-ribbon {
+.convert-lead__Main-div .top-ribbon,
+.convert-contact__Main-div .top-ribbon {
     height: 3em;
     width: 100%;
     display: flex;
@@ -54,7 +58,8 @@ body {
     box-shadow: -1px -0.25px 0px 0.5px rgba(0, 0, 0, 0.3);
 }
 
-.convert-lead__Main-div .top-ribbon .top-ribbon__left {
+.convert-lead__Main-div .top-ribbon .top-ribbon__left,
+.convert-contact__Main-div .top-ribbon .top-ribbon__left {
     display: flex;
     align-items: center;
     justify-content: left;

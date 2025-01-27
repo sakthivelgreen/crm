@@ -97,6 +97,17 @@
         padding: 0px 10px;
     }
 
+    .field-container .value:has([type='checkbox']) {
+        display: flex;
+        align-items: last baseline;
+        justify-content: left;
+    }
+
+    .field-container .value [type='checkbox']:only-of-type {
+        height: 15px;
+        width: 15px;
+    }
+
     .field-container .value .field:focus {
         box-shadow: 0 0 5px 1px #4796ED;
         outline: 0;
