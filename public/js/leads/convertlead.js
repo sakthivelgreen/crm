@@ -57,6 +57,9 @@ function events() {
     document.querySelector('#convert-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         // create new contact
+        Lead['contact-owner'] = Lead['lead-owner'];
+        Lead['contact-source'] = Lead['lead-source'];
+        delete Lead['lead-owner']; delete Lead['lead-source'];
         let contact_id = await createContact(Lead);
         await deleteLead(Lead['_id']);
         // update the account
