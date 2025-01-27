@@ -220,7 +220,7 @@ function checkOrg(name, tag) {
 
 function AutoFill(data) {
     Object.keys(data).forEach(key => {
-        if (key !== 'date-created' || key !== 'last-modified') {
+        if (key !== 'date-created' && key !== 'last-modified') {
             const value = data[key];
             const field = document.querySelector(`[name="${key}"], #${key}`);
             if (field) {
@@ -228,7 +228,7 @@ function AutoFill(data) {
                 if (field.type === 'checkbox' || field.type === 'radio') {
                     field.checked = value;
                 } else {
-                    // Otherwise, for inputs, textareas, selects, set the value
+                    // Otherwise, for inputs, text-areas, selects, set the value
                     field.value = value;
                 }
             }

@@ -56,6 +56,8 @@ function events() {
             let org = Accounts.reduce((found, acc) => {
                 return acc._id === e.target.selectedOptions[0].id ? acc : found;
             }, null);
+            delete org['last-modified']
+            delete org['date-created']
             AutoFill(org)
             document.querySelector('#designation').value = Lead.designation;
         } else {
@@ -220,6 +222,12 @@ function AutoFill(data) {
                 if (field.name === 'org-name') {
                     enable_disable_form(field);
                 }
+            }
+            if (key.includes('date') || key.includes('last-modified')) {
+                flatpickr(field, {
+                    clickOpens: false,
+                    dateFormat: "M d, Y H:i"
+                })
             }
         }
 
