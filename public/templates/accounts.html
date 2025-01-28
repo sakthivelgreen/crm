@@ -5,13 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/leads.css">
     <script type="module" src="/components/navbar.js"></script>
     <title>Accounts</title>
-    <style>
-        td[class="checkbox"] {
-            text-align: center;
-        }
-    </style>
 </head>
 
 <body id="body">
@@ -59,17 +55,17 @@
             <div class="Container">
                 <div id="filterContainer">
                     <ul>
-                        <li><label for="searchInput">Search</label>
+                        <li><label for="search-input">Search</label>
                             <select name="selectFilter" id="filterSelect">
-                                <option value="" disabled selected>Choose Filter to Search</option>
+                                <option value="" selected>Select</option>
                             </select>
                         </li>
                         <li>
-                            <input type="search" name="search" id="searchInput" placeholder="Search...">
+                            <input type="search" name="search" id="search-input" placeholder="Search...">
                         </li>
                         <li>
-                            <button type="button" id="SearchBtn" class="primaryBtn"
-                                style="display: none;">Search</button>
+                            <button type="button" id="filter-btn" class="primaryBtn hide-display">Filter</button>
+                            <button type="button" id="clear-filter-btn" class="defaultBtn hide-display">Clear</button>
                         </li>
                     </ul>
                 </div>
@@ -79,7 +75,7 @@
             </div>
         </div>
     </div>
-    <script src="/js/accounts/accounts.js" defer></script>
+    <script src="/js/accounts/accounts.js" type="module" defer></script>
     <script src="/js/module.js"></script>
 </body>
 

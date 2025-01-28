@@ -24,6 +24,7 @@ export const keyMap = {
     Summary: (key) => key['summary']
 }
 export const LeadMap = {
+    'map_name': 'lead',
     'First Name': (key) => `${key['first-name']}`,
     'Last Name': (key) => `${key['last-name']}`,
     'Email': (key) => `${key['email']}`,
@@ -42,11 +43,35 @@ export const LeadMap = {
     'Pin Code': (key) => `${key['pin-code']}`,
     'Postal Code': (key) => `${key['pin-code']}`,
 }
-export const ContactMap = {}
+export const ContactMap = {
+    'map_name': 'contact',
+    'First Name': (key) => `${key['first-name']}`,
+    'Last Name': (key) => `${key['last-name']}`,
+    'Email': (key) => `${key['email']}`,
+    'Phone': (key) => `${key['phone']}`,
+    'Date Created': (key) => `${key['date-created']}`,
+    'Lead Owner': (key) => `${key['lead-owner']}`,
+    'Lead Source': (key) => `${key['lead-source']}`,
+    'Title': (key) => `${key['title']}`,
+    'Fax': (key) => `${key['fax']}`,
+    'Website': (key) => `${key['website']}`,
+    'Employee Count': (key) => `${key['employee-count']}`,
+    'Product': (key) => `${key['product']}`,
+    'City': (key) => `${key['city']}`,
+    'State': (key) => `${key['state']}`,
+    'Country': (key) => `${key['country']}`,
+    'Pin Code': (key) => `${key['pin-code']}`,
+    'Postal Code': (key) => `${key['pin-code']}`,
+}
 export const OrgMap = {
+    'map_name': 'org',
     'Organisation': (key) => `${key['org-name']}`,
     'Organization': (key) => `${key['org-name']}`,
     'Name': (key) => `${key['org-name']}`,
+    'Date': (key) => `${key['date-created']}`,
+    'Account Name': (key) => `${key['org-name']}`,
+    'Email': (key) => `${key['org-email']}`,
+    'Phone': (key) => `${key['tel']}`,
     'Revenue': (key) => `${key['org-income']}`,
     'Income': (key) => `${key['org-income']}`,
     'Designation': (key) => `${key['designation']}`,
@@ -59,4 +84,6 @@ export const OrgMap = {
     'Pin Code': (key) => `${key['org-pin-code']}`,
     'Postal Code': (key) => `${key['org-pin-code']}`,
 }
-export const DealMap = {}
+export const DealMap = {
+    'map_name': 'deal',
+}

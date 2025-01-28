@@ -170,14 +170,14 @@ export function option_fragment_array(arr) {
     return fragment;
 }
 
-export function table_fragment(head, body) {
+export function table_fragment(head, body, module) {
     const fragment = document.createDocumentFragment();
     const thead = document.createElement("thead");
     const tbody = document.createElement("tbody");
     fragment.appendChild(thead);
     fragment.appendChild(tbody);
     thead.appendChild(table_head(head));
-    tbody.appendChild(table_body(head, body));
+    tbody.appendChild(table_body(head, body, module));
     return fragment;
 }
 
@@ -190,7 +190,7 @@ export function table_head(table_headers) {
     return tr;
 }
 
-export function table_body(table_headers, data) {
+export function table_body(table_headers, data, module) {
     const fragment = document.createDocumentFragment();
     if (data.length == 0) {
         const tr = document.createElement('tr');
@@ -209,33 +209,41 @@ export function table_body(table_headers, data) {
 
             // Loop through the headers to append table data cells
             table_headers.forEach(item => {
-                if (typeof LeadMap[item] === 'function') {
-                    const td = document.createElement('td');
-                    td.className = item;
-                    td.innerHTML = `<span id="${key._id}" class="${item}">${LeadMap[item](key)}</span>`;
-                    tr.appendChild(td);
-                } else if (typeof OrgMap[item] === 'function') {
-                    const td = document.createElement('td');
-                    td.className = item;
-                    td.innerHTML = `<span id="${key._id}" class="${item}">${OrgMap[item](key)}</span>`;
-                    tr.appendChild(td);
-                } else if (typeof ContactMap[item] === 'function') {
-                    const td = document.createElement('td');
-                    td.className = item;
-                    td.innerHTML = `<span id="${key._id}" class="${item}">${ContactMap[item](key)}</span>`;
-                    tr.appendChild(td);
-                } else if (typeof DealMap[item] === 'function') {
-                    const td = document.createElement('td');
-                    td.className = item;
-                    td.innerHTML = `<span id="${key._id}" class="${item}">${DealMap[item](key)}</span>`;
-                    tr.appendChild(td);
-                } else {
-                    const td = document.createElement('td');
+                const createTableCell = (map, key, item) => {
+                    if (typeof map[item] === 'function') {
+                        let value = map[item](key);
+                        if (value !== undefined && value !== null) {
+                            const td = document.createElement('td');
+                            td.className = item;
+                            if (value !== '') {
+                                if (item.toLowerCase().includes('date')) {
+                                    const dateValue = new Date(value);
+                                    if (!isNaN(dateValue)) {
+                                        value = dateFormat(dateValue, dateOptions);
+                                    }
+                                }
+                                td.innerHTML = `<span id="${key._id}" class="${item}">${value}</span>`;
+                            }
+                            else if (value == '') td.innerHTML = `<span id="${key._id}" class="${item}">-</span>`;
+                            return td;
+                        }
+                    }
+                    return null; // If no valid value found, return null
+                };
+                const result = [LeadMap, OrgMap, ContactMap, DealMap].find(map =>
+                    map.map_name && map.map_name.toLowerCase().includes(module.toLowerCase())
+                );
+                let td = createTableCell(result, key, item);
+
+                // If no value found from any map, create a default cell
+                if (!td) {
+                    td = document.createElement('td');
                     td.className = item;
                     td.innerHTML = `<span id="${key._id}" class="${item}">-</span>`;
-                    tr.appendChild(td);
                 }
+                tr.appendChild(td);
             });
+
             // Append the row to the document fragment
             fragment.appendChild(tr);
         }
@@ -311,6 +319,25 @@ export async function UpdateAccount(id, data) {
     } catch (error) {
         console.error('Error:', error);
         alert("Failed to Update Account. Please try again.")
+    }
+}
+export async function updateContact(id, data) {
+    if (data['_id']) delete data['_id'];
+    try {
+        const response = await fetch("/mongodb/contacts/" + id, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        if (!response.ok) throw new Error(response.statusText);
+        let result = await response.json();
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error('Error:', error);
+        alert("Failed to Update Contact. Please try again.")
     }
 }
 

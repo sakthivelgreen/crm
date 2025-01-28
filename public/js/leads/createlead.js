@@ -4,7 +4,11 @@ import { Elements } from '../declarations.js';
 // Cancel Button
 const cancel = document.querySelector("#cancelBtn");
 cancel.addEventListener("click", () => {
-    window.location.href = "/templates/leads.html";
+    if (document.referrer !== '') {
+        window.location.assign(document.referrer)
+    } else {
+        window.location.href = "/templates/leads.html";
+    }
 })
 
 // Getting Input box Fields

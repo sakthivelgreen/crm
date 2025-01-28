@@ -6,12 +6,12 @@ const createLeadBtn = document.querySelector("#createLeadBtn");
 const Table = document.querySelector("#ListTable");
 
 // setting table head value from object by converting array
-const table_headers = ["First Name", "Last Name", "Email", "Phone", "Organization", "Date Created"]
+const table_headers = ["First Name", "Last Name", "Email", "Phone", "Date Created"]
 let Leads, Accounts;
 async function main() {
     Leads = await getData('leads');
     Accounts = await getData('accounts')
-    Table.appendChild(table_fragment(table_headers, Leads))
+    Table.appendChild(table_fragment(table_headers, Leads, 'lead'))
     events();
     filterFunction();
 }
@@ -194,13 +194,13 @@ function filterFunction() {
                     return ContactMap[type](lead).toLowerCase().includes(key.toLowerCase())
                 }
             })
-            Table.replaceChildren(table_fragment(table_headers, FilteredLeads))
+            Table.replaceChildren(table_fragment(table_headers, FilteredLeads, 'lead'))
             CheckBox();
         }
     })
     buttons.ClearFilterBtn().addEventListener('click', (e) => {
         e.preventDefault();
-        Table.replaceChildren(table_fragment(table_headers, Leads));
+        Table.replaceChildren(table_fragment(table_headers, Leads, 'lead'));
         buttons.FilterBtn().classList.add('hide-display')
         buttons.ClearFilterBtn().classList.add('hide-display');
         searchInput.value = '';

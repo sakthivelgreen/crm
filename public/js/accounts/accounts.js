@@ -1,359 +1,218 @@
+import { ContactMap, DealMap, LeadMap, OrgMap } from "../../mappings/keyMap.js";
+import { Delete_Record, getData, table_fragment, option_fragment_array, Filter_ID } from "../commonFunctions.js";
+import { buttons, Elements } from '../declarations.js';
+// create a lead (redirects to lead creation page)
+const createAccountBtn = document.querySelector("#createAccountBtn");
+const Table = document.querySelector("#ListTable");
+
 // setting table head value from object by converting array
-let Arr = ["organisation_name", "contacts"]
-
-async function fetchAccounts() {
-    let Accounts = [];
-    try {
-        // Fetching Contacts from db.json
-        const response = await fetch("/mongodb/accounts", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        Accounts = await response.json();
-        await filterFunction(Accounts);
-        processAccounts(Accounts);
-
-    } catch (error) {
-        alert("Please Check the database connection")
-    }
+const table_headers = ["Account Name", "Email", "Phone", "Date"]
+let Accounts, Leads, Contacts, Deals;
+async function main() {
+    Accounts = await getData('accounts');
+    Leads = await getData('leads');
+    Contacts = await getData('contacts');
+    Deals = await getData('deals');
+    Table.appendChild(table_fragment(table_headers, Accounts, 'org'))
+    events();
+    filterFunction();
 }
+main();
 
-fetchAccounts(); // Calling the Main function
+function events() {
+    createAccountBtn.addEventListener("click", () => {
+        window.location.href = '/templates/accounts/createAccount.html';
+    })
+    CheckBox();
+    // delete button click event listener
+    buttons.deleteBtn().addEventListener("click", async () => {
+        checkBoxArray = [...new Set(checkBoxArray)];
+        if (checkBoxArray.length) {
 
-const contactTable = document.querySelector("#ListTable");
-const thead = document.createElement("thead");
-const tbody = document.createElement("tbody");
-contactTable.appendChild(thead);
-contactTable.appendChild(tbody);
+            let confirmDel;
 
-async function processAccounts(accountsData) {
+            if (Elements.CheckAll() && Elements.CheckAll().checked) {
+                confirmDel = confirm("Are you sure you want to delete all records?");
+            } else {
+                confirmDel = confirm("Are you sure you want to delete the selected record(s)?");
+            }
 
-    while (tbody.hasChildNodes()) {
-        tbody.removeChild(tbody.firstChild)
-    }
-    while (thead.hasChildNodes()) {
-        thead.removeChild(thead.firstChild)
-    }
+            if (confirmDel) {
+                let deletionResults = [];  // To track successes and failures
 
-    const checkAll = document.createElement("th");
-    thead.appendChild(checkAll);
-    checkAll.innerHTML = `<input type="checkbox" id="checkAll">`;
-    Arr.forEach(ele => {
-        if (!(ele === "id")) {
-            const th = document.createElement("th");
-            th.className = ele;
-            th.textContent = ele.toUpperCase();
-            thead.appendChild(th)
-        }
-    });
-    for (const obj in accountsData) {
-        let head = Arr.values()
-        // console.log(head);
-
-        const tr = document.createElement("tr");
-        tbody.appendChild(tr);
-        let value = accountsData[obj];
-        const checkBoxTd = document.createElement("td");
-        tr.appendChild(checkBoxTd);
-        tr.id = value._id;
-        for (const account in Arr) {
-            if (!(Arr[account] === "contacts")) {
-                const td = document.createElement("td");
-                td.className = head.next().value;
-                tr.appendChild(td);
-                if (td.className === "email") td.innerHTML = `<span id="${value._id}" class="${td.className}Span">${value[td.className]}</span>`;
-                else if (td.className === "phone") td.innerHTML = `<span id="${value._id}" class="${td.className}Span">${value[td.className]}</span>`;
-                else td.innerHTML = `<span id="${value._id}" class="${td.className}">${value[td.className]}</span>`;
-                checkBoxTd.innerHTML = `<input type="checkbox" id=${value["_id"]} class ="checkBox">`;
-                checkBoxTd.className = `checkbox`;
-                checkBoxTd.addEventListener("click", (e) => {
-                    e.stopPropagation();
+                const deleteContacts = checkBoxArray.map(id => {
+                    let obj = Filter_ID(Contacts, id, 'org-id');
+                    if (obj && obj !== null) return Delete_Record('contacts', obj._id);
                 })
-            } else if (Arr[account] === "contacts") {
-                const arrid = value.contacts;
-                const names = await Promise.all(arrid.map(id => getContactName(id)));
-                const nameString = names.join(' ,');
-                const td = document.createElement("td");
-                td.className = "contacts";
-                td.textContent = nameString;
-                tr.appendChild(td);
-            }
-        }
-    }
+                const deleteDeals = checkBoxArray.map(id => {
+                    let obj = Deals.filter(deal => deal['org-id'] === id);
+                    if (obj && obj.length > 0) {
+                        return Promise.all(
+                            obj.map(item => {
+                                return Delete_Record('deals', item._id); // Assuming Delete_Record is a promise-based function
+                            })
+                        );
+                    }
+                });
+                const deleteLeads = checkBoxArray.map(id => {
+                    let obj = Filter_ID(Leads, id, 'org-id');
+                    if (obj && obj !== null) return Delete_Record('leads', obj._id);
+                })
+                // Create an array of promises that will delete all records
+                const deletePromises = checkBoxArray.map(id => {
+                    // Create a promise for each deletion and return it
+                    return Delete_Record('accounts', id)
+                        .then(() => {
+                            deletionResults.push({ id, status: 'success' });
+                        })
+                        .catch((error) => {
+                            deletionResults.push({ id, status: 'failed', error });
+                        });
+                });
 
-    async function getContactName(id) {
-        try {
-            let response = await fetch(`/mongodb/contacts/${id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json"
+                try {
+                    // Wait for all promises to be resolved using Promise.all
+                    await Promise.all(deleteContacts);
+                    await Promise.all(deleteLeads);
+                    await Promise.all(deleteDeals);
+                    await Promise.all(deletePromises);
+
+                    // After all deletion attempts are made, handle the results
+                    let successCount = deletionResults.filter(res => res.status === 'success').length;
+                    let failCount = deletionResults.filter(res => res.status === 'failed').length;
+
+                    // Example of user feedback after attempting to delete
+                    if (successCount > 0) {
+                        alert(`${successCount} record(s) successfully deleted.`);
+                    }
+                    if (failCount > 0) {
+                        alert(`${failCount} record(s) failed to delete.`);
+                    }
+                    location.reload();
+                } catch (error) {
+                    // In case any error occurs outside of individual deletion failures
+                    alert('There was an error attempting to delete records.');
                 }
-            });
-            let data = await response.json();
 
-            return `${data.firstname} ${data.lastname}`; // Assuming the API returns an object with a `name` property
-        } catch (error) {
-            console.error('Error fetching contact name:', error);
-            return 'Unknown'; // Return a default value in case of an error
-        }
-    }
-
-    const inputCheckBox = document.querySelectorAll(".checkBox");
-    const inputCheckAll = document.querySelector("#checkAll");
-    processCheckBox(inputCheckAll, inputCheckBox);
-    const tableSpan = contactTable.querySelectorAll("span");
-    const tableRows = contactTable.querySelectorAll("tr");
-    viewDetail(tableSpan, tableRows) // Calling Detailed accounts view redirect function;
-}
-
-
-function viewDetail(allSpan, trElement) {
-    let trArray = Array.from(trElement);
-    let spanArray = Array.from(allSpan);
-    let clicked = "span";
-    function contactClick(e) {
-        e.stopPropagation();
-        if (e.target.className === "emailSpan") {
-            window.location.href = `mailto:${e.target.textContent}`;
-        } else if (e.target.className === "phoneSpan") {
-            window.location.href = `tel:${e.target.textContent}`;
+            } else {
+                return;
+            }
         } else {
-            if (clicked === "span") window.location.href = `/templates/accounts/viewAccounts.html?id=${e.target.id}`;
-            else window.location.href = `/templates/accounts/viewAccounts.html?id=${e.target.parentElement.id}`;
+            alert("Please select at least one record to delete.");
         }
-
-    }
-
-    spanArray.forEach(ele => ele.addEventListener("click", (e) => {
-        clicked = "span";
-        contactClick(e);
-    }));
-    trArray.forEach(ele => ele.addEventListener("click", (e) => {
-        clicked = "row";
-        contactClick(e);
-    }));
+    });
+    document.querySelector('#ListTable').addEventListener('click', (e) => {
+        const row = e.target.closest('tr');
+        if (row && row.id) {
+            const clickedTd = e.target.closest('td');
+            const checkboxCell = clickedTd && clickedTd.querySelector('.checkBox');
+            if (!checkboxCell) {
+                window.location.href = '/templates/accounts/viewAccounts.html?id=' + row.id;
+            }
+        }
+    })
 }
 
-// checkbox function definition
-function processCheckBox(head, body) {
-    let checkBoxArray = [];             // creating an array store selected items
-    let bodyCheck = Array.from(body);   // getting all checkbox from table body
 
-    bodyCheck.forEach(element => {      // setting event listener for all checkbox in table body
-        element.addEventListener("click", (e) => {
-            e.stopPropagation();
-            if (e.target.checked == true) {         // checked conditon
-                checkBoxArray.push(e.target.id);
-                console.log(checkBoxArray);
-                allcheck()
-                contactOptions()               // updating options while items in checkbox array
-            } else {                                // unchecked condition
-                // checkBoxArray.pop(e.target.id);
-                checkBoxArray = checkBoxArray.filter(ele => ele !== e.target.id)
-                console.log(checkBoxArray);
-                allcheck()
-                contactOptions()               // updating options while items in checkbox
-            }
-        })
-    });
+let checkBoxArray = [];
+function CheckBox() {
+    const tbody_allCheckboxes = Table.querySelectorAll('tbody .checkBox');
 
-
-    // funtion to check if all items are checked
-    function allcheck() {
-        for (let i = 0; i < bodyCheck.length; i++) {
-            if (!bodyCheck[i].checked) {
-                head.checked = false;
-                return
-            }
-        }
-        head.checked = true;
-    }
-
-    // fuction for checkbox in table head 
-    head.addEventListener("change", (e) => {
-        if (head.checked) {                     // if checked(true)
-            bodyCheck.forEach(e => {
-                e.checked = true;
+    // function for checkbox in table head 
+    Elements.CheckAll().addEventListener("change", (e) => {
+        if (Elements.CheckAll().checked) {
+            tbody_allCheckboxes.forEach(e => {
+                e.checked = Elements.CheckAll().checked;
                 checkBoxArray.push(e.id);
             })
         }
         else {
-            bodyCheck.forEach(e => {            // if checked(false)
-                e.checked = false;
-                checkBoxArray.pop(e.id);
+            checkBoxArray.length = 0;
+            tbody_allCheckboxes.forEach(e => {
+                e.checked = Elements.CheckAll().checked;
             })
         }
-        contactOptions()                           // options updation
+        leadActions()
     })
 
+    // if all items checked by separately or some items selected
+    tbody_allCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            e.stopPropagation();
+            checkBoxArray = e.target.checked
+                ? [...checkBoxArray, e.target.id] // Create a new array with the added ID
+                : checkBoxArray.filter(id => id !== e.target.id); // Remove the unchecked ID
 
-    // function definiton for contactOptions()
-    function contactOptions() {
-        if (checkBoxArray.length !== 0) {
-            optionRow.style.display = "flex";
-            row1.style.display = "none";
-            row2.style.display = "none";
-        } else {
-            optionRow.style.display = "none";
-            row1.style.display = "flex";
-            row2.style.display = "flex";
-        }
-    }
-
-    const row1 = document.querySelector(".topRow1");
-    const row2 = document.querySelector(".topRow2");
-    const optionRow = document.querySelector(".optionsRow"); // targeting delete button list-item
-    const deleteBtn = document.querySelector("#deleteBtn"); // targetting delete button 
-
-    let confirmDel;         // variable to get confirmation from user
-
-
-    // delete button click event listener
-    deleteBtn.addEventListener("click", async () => {
-        if (checkBoxArray.length) {
-            const message = head.checked ?
-                "Are you sure you want to delete all records?" :
-                "Are you sure you want to delete the record?";
-
-            const confirmDel = confirm(message);
-            if (confirmDel) {
-                try {
-                    await Promise.all(checkBoxArray.map(ele => funDelete(ele)));
-                    alert("Delete Success");
-                    window.location.reload();
-                } catch (error) {
-                    alert("Error in deletion: " + error.message);
-                }
+            if (checkBoxArray.length == tbody_allCheckboxes.length) {
+                Elements.CheckAll().indeterminate = false;
+                Elements.CheckAll().checked = true;
+            } else if (checkBoxArray.length > 0) {
+                Elements.CheckAll().checked = false;
+                Elements.CheckAll().indeterminate = true;
+            } else {
+                Elements.CheckAll().indeterminate = false;
+                Elements.CheckAll().checked = false
             }
-        }
-    });
+            leadActions()
+        })
+    })
+
 }
-
-async function funDelete(param) {
-    try {
-        // Fetch all contacts
-        let response = await fetch("/mongodb/contacts");
-        if (!response.ok) throw new Error(response.statusText);
-        let contacts = await response.json();
-
-        // Update each contact
-        await Promise.all(contacts.map(async (contact) => {
-            if (contact['organisation_id'].includes(param)) {
-                contact['organisation_id'] = contact['organisation_id'].filter(id => id !== param);
-                contact['companyname'] = "";
-                let obj = {};
-                obj = Object.assign(obj, contact);
-                delete obj._id;
-                let updateResponse = await fetch(`/mongodb/contacts/${contact["_id"]}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(obj)
-                });
-                if (!updateResponse.ok) throw new Error(`Error updating contact ${contact["id"]}: ${updateResponse.statusText}`);
-            }
-        }));
-
-        // Delete the account
-        let delFetch = await fetch(`/mongodb/accounts/${param}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" }
-        });
-        if (!delFetch.ok) throw new Error(`Error deleting account ${param}: ${delFetch.statusText}`);
-
-    } catch (error) {
-        throw new Error(error.message);
+// Show Hide lead Action ribbon;
+function leadActions() {
+    if (checkBoxArray.length !== 0) {
+        document.querySelector(".optionsRow").style.display = "flex";
+        document.querySelector(".topRow1").style.display = "none";
+        document.querySelector(".topRow2").style.display = "none";
+    } else {
+        document.querySelector(".optionsRow").style.display = "none";
+        document.querySelector(".topRow1").style.display = "flex";
+        document.querySelector(".topRow2").style.display = "flex";
     }
 }
 
-const optionRow = document.querySelector(".optionsRow");
-
-
-// New Account Creation
-
-const newAccountBtn = document.getElementById("createAccountBtn");
-newAccountBtn.onclick = () => window.location.href = "/templates/accounts/createAccount.html";
 
 
 // filter Function
-let searchObj = [];
+let FilteredAccounts = [];
 const selectElement = document.querySelector("#filterSelect");
-const searcInput = document.querySelector("#searchInput");
-const searchBtn = document.querySelector("#SearchBtn");
+const searchInput = document.querySelector("#search-input");
 
 
-async function filterFunction(leads) {
-    Arr.forEach(ele => {
-        const option = document.createElement("option");
-        option.value = ele;
-        option.textContent = ele.toUpperCase()
-        selectElement.appendChild(option)
-    })
+function filterFunction() {
+    selectElement.appendChild(option_fragment_array(table_headers));
 
     selectElement.addEventListener("change", () => {
-        searcInput.value = "";
-        searchObj = []
-        processAccounts(leads)
-    })
-
-    searcInput.addEventListener("keyup", () => {
-        searchObj = []
-        if (searcInput.value !== "" && selectElement.value !== "") {
-            let searchKey = searcInput.value;
-            let key = selectElement.value;
-
-            if (selectElement.value === "contacts") {
-                getContactid(searchKey).then(result => {
-                    leads.forEach(lead => {
-                        result.forEach(res => {
-                            if (lead["contacts"].includes(res)) {
-                                searchObj.push(lead);
-                            }
-                        })
-
-                    })
-                    processAccounts(searchObj);
-                })
-
-            } else {
-                leads.forEach(lead => {
-                    let val = lead[key].toLowerCase();
-                    searchKey = searchKey.toLowerCase();
-                    if (val.includes(searchKey)) {
-                        searchObj.push(lead);
-                    }
-                })
-            }
-
-            processAccounts(searchObj)
-            // searchBtn.style.display = "block";
+        if (selectElement.value !== "") {
+            buttons.FilterBtn().classList.remove('hide-display')
+            buttons.ClearFilterBtn().classList.remove('hide-display');
         } else {
-            searchObj = []
-            processAccounts(leads)
+            buttons.FilterBtn().classList.add('hide-display');
+            buttons.ClearFilterBtn().classList.add('hide-display');
+        }
+
+    })
+    buttons.FilterBtn().addEventListener('click', (e) => {
+        e.preventDefault();
+        const key = searchInput.value;
+        const type = selectElement.value;
+        if (key !== '') {
+            FilteredAccounts = Accounts.filter((acc) => {
+                if (OrgMap[type]) {
+                    return OrgMap[type](acc).toLowerCase().includes(key.toLowerCase())
+                }
+            })
+            Table.replaceChildren(table_fragment(table_headers, FilteredAccounts, 'org'))
+            CheckBox();
         }
     })
-}
-async function getContactid(keys) {
-    keys = keys.toLowerCase();
-    let arr = [];
-    try {
-        let response = await fetch("/mongodb/contacts/")
-        if (!response.ok) {
-            throw new Error("Error Fetching Contacts");
-        }
-        let resp = await response.json();
-        for (const res of resp) {
-            if ((res["firstname"].toLowerCase()).includes(keys) || (res["lastname"].toLowerCase()).includes(keys)) {
-                arr.push(res.id)
-            }
-        }
-        return arr;
-    } catch (error) {
-
-    }
+    buttons.ClearFilterBtn().addEventListener('click', (e) => {
+        e.preventDefault();
+        Table.replaceChildren(table_fragment(table_headers, Accounts, 'org'));
+        buttons.FilterBtn().classList.add('hide-display')
+        buttons.ClearFilterBtn().classList.add('hide-display');
+        searchInput.value = '';
+        selectElement.value = '';
+        CheckBox();
+    })
 }

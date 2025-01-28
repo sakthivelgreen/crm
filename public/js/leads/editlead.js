@@ -68,7 +68,11 @@ function events() {
     })
     // cancel Button
     cancel.addEventListener("click", () => {
-        window.location.href = "/templates/leads/viewleadDetail.html?id=" + leadID;
+        if (document.referrer !== '') {
+            window.location.assign(document.referrer)
+        } else {
+            window.location.href = "/templates/leads/viewleadDetail.html?id=" + leadID;
+        }
     })
     flatpickr('#date-created', {
         clickOpens: false,
