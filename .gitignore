@@ -3,4 +3,5 @@ node_modules/
 .vercel
 .vscode
 db.json
+test.json
 /public/components/test.html

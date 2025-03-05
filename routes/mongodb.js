@@ -23,7 +23,9 @@ router.post('/:module', async (req, res) => {
         const module = req.params.module;
         const collection = db.collection(module);
         const newItem = req.body; // Data from the client
-        newItem['date-created'] = new Date();
+        if (newItem['date-created'] == '') {
+            newItem['date-created'] = new Date();
+        }
         newItem['last-modified'] = new Date();
         if (newItem._id) {
             let id = newItem._id;

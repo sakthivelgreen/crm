@@ -39,7 +39,8 @@ function events() {
                 let deletionResults = [];  // To track successes and failures
                 const updateAccounts = checkBoxArray.map(id => {
                     let obj = Filter_ID(Accounts, id, 'contacts');
-                    return UpdateAccount(obj._id, obj)
+                    if (obj && Object.keys(obj).length > 0)
+                        return UpdateAccount(obj._id, obj)
                 })
                 // Create an array of promises that will delete all records
                 const deletePromises = checkBoxArray.map(id => {

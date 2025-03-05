@@ -6,9 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/leads.css">
     <link rel="stylesheet" href="/css/form.css">
+    <link rel="stylesheet" href="/css/leads.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script type="module" src="/components/navbar.js"></script>
     <title>New Account</title>
@@ -33,6 +34,18 @@
             </ul>
         </div>
         <div class="content">
+            <div class="Contacts_Popup hidden">
+                <div class="popup-head">
+                    <h2>Choose Contacts</h2>
+                </div>
+                <div class="popup-body">
+                    <div class="check-list_container"></div>
+                    <div class="cta-btn_container">
+                        <button id="cancel-contact-popup" class="cta-btns cancel">Reset and Close</button>
+                        <button id="contact-associate-btn" class="cta-btns success" disabled>Associate</button>
+                    </div>
+                </div>
+            </div>
             <div class="createAccountContainer">
                 <form id="createAccountForm" novalidate>
                     <div class="section">
@@ -83,9 +96,7 @@
                                     </div>
                                     <div class="value">
                                         <div class="value">
-                                            <select name="contact" id="contact" class="field">
-                                                <option value="">-None-</option>
-                                            </select>
+                                            <input id="contact" class="field" readonly>
                                             <div class="field-error hidden-visibility">error</div>
                                         </div>
                                         <div class="field-error hidden-visibility">error</div>

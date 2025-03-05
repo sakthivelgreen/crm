@@ -47,6 +47,7 @@ export const ContactMap = {
     'map_name': 'contact',
     'First Name': (key) => `${key['first-name']}`,
     'Last Name': (key) => `${key['last-name']}`,
+    'Full Name': (key) => `${key['first-name']} ${key['last-name']}`,
     'Email': (key) => `${key['email']}`,
     'Phone': (key) => `${key['phone']}`,
     'Date Created': (key) => `${key['date-created']}`,
