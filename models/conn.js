@@ -13,7 +13,7 @@ const connectDB = async (db_name = 'crm') => {
         db = conn.db(db_name);
         return db;
     } catch (error) {
-        console.error(e);
+        console.error(error);
     }
 }
 connectDB();

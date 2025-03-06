@@ -87,27 +87,68 @@ function events() {
         e.preventDefault();
         const formData = new FormData(e.target);
         let object_account = Object.fromEntries(formData.entries());
-        object_account['contacts'] = Array.from(contacts_id_array);
-        console.log(object_account);
-        return;
-        let success;
-        let track = trackChanges(object_account, Curr_Acc);
-        if (Object.keys(track).length > 0) {
-            console.log(track);
-            console.log(Curr_Acc['contacts'], object_account['contacts']);
+        let IsValidName = checkRequired(Acc_Name);
+        let IsValidEmail = checkRequired(Acc_Email);
+        if (IsValidEmail && IsValidName) {
+            object_account['contacts'] = Array.from(contacts_id_array);
+            let success;
+            let track = trackChanges(object_account, Curr_Acc);
+            if (Object.keys(track).length > 0) {
+                if (JSON.stringify(Curr_Acc['contacts']) != JSON.stringify(object_account['contacts'])) {
+                    let contains_previous_contacts = Curr_Acc.contacts.some(id => object_account.contacts.includes(id));
 
-            if (JSON.stringify(Curr_Acc['contacts']) == JSON.stringify(object_account['contacts'])) {
-                console.log(object_account, Curr_Acc);
-                return;
-                success = await UpdateAccount(Curr_Acc._id, object_account)
+                    if (contains_previous_contacts) {
+                        let filtered_contact_ids = object_account.contacts.filter(id => !Curr_Acc.contacts.includes(id));
+                        await updatePromise_contact(filtered_contact_ids);
+                    } else {
+                        if (Curr_Acc.contacts.length > 0) {
+                            let unlinkContacts = Curr_Acc.contacts.map(id => Contacts.filter(item => item['org-id'].includes(id)));
+                            if (unlinkContacts.length > 0) {
+                                let unlinkAccounts = unlinkContacts.map(contact => {
+                                    contact['org-id'] = contact['org-id'].filter(id => id != Curr_Acc._id);
+                                    return updateContact(contact._id, contact);
+                                });
+                                await Promise.all(unlinkAccounts);
+                            }
+                        }
+
+                        let contactMap = Contacts.reduce((acc, contact) => {
+                            acc[contact._id] = contact;
+                            return acc;
+                        }, {});
+
+                        let linkContacts = contacts_id_array.map(id => contactMap[id]).filter(contact => contact);
+                        if (linkContacts.length > 0) {
+                            let link_Contacts = linkContacts.map(contact => {
+                                contact['org-id'] = contact['org-id'] ? [...new Set([...contact['org-id'], Curr_Acc._id])] : [Curr_Acc._id];
+                                return updateContact(contact._id, contact);
+                            });
+                            await Promise.all(link_Contacts);
+                        }
+                    }
+                }
+                success = await UpdateAccount(Curr_Acc._id, object_account);
             }
-        }
-        if (success) {
-            window.location.href = clicked
-                ? `/templates/accounts/viewAccounts.html?id=${Curr_Acc._id}`
-                : "/templates/accounts/createAccount.html";
+
+            if (success) {
+                window.location.href = clicked
+                    ? `/templates/accounts/viewAccounts.html?id=${Curr_Acc._id}`
+                    : "/templates/accounts/createAccount.html";
+            }
+
         }
 
+        async function updatePromise_contact(arr) {
+            let updateContactPromise = arr.map(id => {
+                let contact = Contacts.find(item => item._id == id);
+                if (contact) {
+                    contact['org-id'] = contact['org-id'] ? [...contact['org-id'], Curr_Acc._id] : [Curr_Acc._id];
+                    return updateContact(contact._id, contact);
+                }
+            })
+            let success = await Promise.all(updateContactPromise);
+            return success;
+        }
     })
 }
 
@@ -130,9 +171,6 @@ function checkRequired(tag) {
             case 'org-name':
                 if (!checkOrg(val, tag)) return;
                 break;
-            case 'contacts':
-                if (!checkContact(id, tag)) return;
-                break;
             default:
                 break;
         }
@@ -146,7 +184,7 @@ function checkMail(email, tag) {
         return false;
     }
     for (let item of Accounts) {
-        if (item['org-email'] === email) {
+        if (item._id !== Curr_Acc._id && item['org-email'] === email) {
             setError(tag, "Email Already registered!");
             return false;
         }
@@ -156,19 +194,10 @@ function checkMail(email, tag) {
 }
 function checkOrg(name, tag) {
     for (const acc of Accounts) {
-        if (Curr_Acc['org-name'].toLowerCase() !== name.toLowerCase() && acc['org-name'].toLowerCase().includes(name.toLowerCase())) {
+        if (acc._id !== Curr_Acc._id && Curr_Acc['org-name'].toLowerCase() !== name.toLowerCase() && acc['org-name'].toLowerCase().includes(name.toLowerCase())) {
             setError(tag, 'Account Name Already exists! try different')
             return false;
         }
-    }
-    setSuccess(tag);
-    return true;
-}
-function checkContact(id, tag) {
-    let contact = Contacts.find(item => item._id == id);
-    if (contact && contact['org-id'] !== '') {
-        setError(tag, 'Contact Associated with Another Account!');
-        return false;
     }
     setSuccess(tag);
     return true;
